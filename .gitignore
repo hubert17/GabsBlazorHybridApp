@@ -1,0 +1,232 @@
+############################
+# OS / Editor miscellany
+############################
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.orig
+*.rej
+
+# VS Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/
+
+# JetBrains Rider / IntelliJ
+.idea/
+*.sln.iml
+
+############################
+# .NET / Visual Studio
+############################
+# VS solution cache
+.vs/
+
+# Build results
+[Bb]in/
+[Oo]bj/
+[Rr]elease*/
+[Dd]ebug*/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+[Ll]og/
+*.tlog
+
+# Publish / artifacts
+**/publish/
+artifacts/
+
+# User files
+*.user
+*.suo
+*.userosscache
+*.rsuser
+*.sln.docstates
+
+# NuGet
+*.nupkg
+*.snupkg
+# If you use a local packages/ folder (old pattern), ignore it
+packages/
+# NuGet v3 cache (global; usually outside repo, included just in case)
+.nuget/
+
+# MSBuild
+*.cache
+*.msp
+*.msi
+*.msm
+*.dbmdl
+
+# Temporary
+*.tmp
+*.temp
+*.bak
+*.old
+
+# DotCover / coverage / test
+TestResults/
+*.trx
+*.coverage
+*.coveragexml
+coverage/
+.coverage*
+.vscode/.coverage
+
+# Resharper
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
+
+# StyleCop
+StyleCopReport.xml
+
+############################
+# ASP.NET Core / Web API
+############################
+# Logs & runtime
+*.log
+logs/
+wwwroot/dist/
+wwwroot/**/bundle*
+wwwroot/**/*.map
+
+# User secrets (dotnet user-secrets lives outside repo, but keep this if you mirror)
+secrets.json
+
+# Kestrel dev certs (don’t commit your private keys)
+*.pfx
+*.p12
+
+# Publishing profiles (often contain secrets)
+**/Properties/PublishProfiles/*.pubxml
+**/Properties/PublishProfiles/*.pubxml.user
+*.publishsettings
+
+# (Optional) Uncomment if you don’t want environment-specific launch settings in git
+# **/Properties/launchSettings.json
+
+# EF Core
+*.db
+*.db-shm
+*.db-wal
+migrations/**/obj/
+
+############################
+# Blazor (Server/Hybrid/WebView)
+############################
+# Hot reload & intermediate
+*.hotreload
+
+# Node (if you use tooling under wwwroot or a client project)
+node_modules/
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+############################
+# .NET MAUI (all platforms)
+############################
+# Common
+**/*.apk
+**/*.ap_
+**/*.aab
+**/*.ipa
+**/*.app
+**/*.dSYM
+**/*.msix
+**/*.msixbundle
+**/*.appx
+**/*.appxbundle
+**/AppPackages/
+**/*.msixupload
+**/*.appxupload
+# Signing artifacts (never commit your keys)
+**/*.keystore
+**/*.jks
+**/*.keystore.*
+**/*.jks.*
+
+# Generated resources
+Resources/Raw/**/._*
+Platforms/**/Resources/Raw/**/._*
+
+############
+# Android
+############
+# Gradle / Android build cache
+Platforms/Android/.gradle/
+Platforms/Android/local.properties
+# Captured outputs beyond bin/obj (already ignored, but belt & suspenders)
+Platforms/Android/**/captures/
+# Google services (often private). Comment out if you intend to commit them.
+Platforms/Android/google-services.json
+
+############
+# iOS
+############
+# Xcode
+Platforms/iOS/build/
+Platforms/iOS/DerivedData/
+Platforms/iOS/*.pbxuser
+Platforms/iOS/*.mode1v3
+Platforms/iOS/*.mode2v3
+Platforms/iOS/*.perspectivev3
+Platforms/iOS/xcuserdata/
+Platforms/iOS/*.xccheckout
+Platforms/iOS/*.moved-aside
+Platforms/iOS/*.xcuserstate
+# Provisioning
+*.mobileprovision
+*.provisionprofile
+
+############
+# Mac Catalyst / macOS
+############
+Platforms/MacCatalyst/build/
+Platforms/MacCatalyst/DerivedData/
+*.dmg
+*.pkg
+
+############
+# Windows (WinUI)
+############
+# Packaging artifacts (in addition to bin/obj)
+**/AppxPackages/
+**/BundleArtifacts/
+**/Package.StoreAssociation.xml
+**/Package.appxmanifest.bak
+**/AppxBundle/
+**/AppxLogs/
+# VS-generated certificate files
+**/*.pfx
+**/*.p12
+
+############################
+# Misc frameworks & tools
+############################
+# Azure
+csx/
+*.azurePubxml
+# Docker
+**/.dockerignore
+**/.containerignore
+# Terraform / Pulumi (if present)
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+
+############################
+# Environment files
+############################
+.env
+.env.*
+*.local
