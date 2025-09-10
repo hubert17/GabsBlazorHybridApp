@@ -1,12 +1,18 @@
+using GabsHybridApp.Shared.Data;
 using GabsHybridApp.Shared.Services;
 using GabsHybridApp.Web.Components;
+using GabsHybridApp.Web.Extensions;
 using GabsHybridApp.Web.Services;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+builder.Services.AddDbContextFactory<HybridAppDbContext>(opt =>
+    opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"), builder.Environment.ContentRootPath));
 
 // Add device-specific services used by the GabsHybridApp.Shared project
 builder.Services.AddSingleton<IFormFactor, FormFactor>();
@@ -22,6 +28,8 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.MigrateDb<HybridAppDbContext>(true);
 
 app.UseStaticFiles();
 app.UseAntiforgery();

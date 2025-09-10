@@ -1,0 +1,69 @@
+﻿@page "/products"
+@using GabsHybridApp.Shared.Data
+@using GabsHybridApp.Shared.Models
+@using Microsoft.EntityFrameworkCore
+@inject IDbContextFactory<HybridAppDbContext> DbFactory
+
+<h3 class="mb-3">Products</h3>
+
+<div class="input-group mb-3">
+    <input class="form-control" @bind="searchText" placeholder="Search by name or description…" />
+    <button class="btn btn-primary" @onclick="Load">Search</button>
+</div>
+
+<table class="table table-striped table-hover table-sm">
+    <thead class="table-light">
+        <tr>
+            <th style="width:70px">#</th>
+            <th>Name</th>
+            <th class="text-end" style="width:140px">Price</th>
+            <th style="width:120px">Unit</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (items is null)
+        {
+            <tr><td colspan="5">Loading…</td></tr>
+        }
+        else if (items.Count == 0)
+        {
+            <tr><td colspan="5" class="text-muted">No products found.</td></tr>
+        }
+        else
+        {
+            @foreach (var p in items)
+            {
+                <tr>
+                    <td>@p.Id</td>
+                    <td>@p.Name</td>
+                    <td class="text-end">@p.UnitPrice.ToString("N2")</td>
+                    <td>@p.Unit</td>
+                    <td>@p.Description</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+@code {
+    private List<Models.Product>? items;
+    private string? searchText;
+
+    protected override async Task OnInitializedAsync() => await Load();
+
+    private async Task Load()
+    {
+        using var _db = await DbFactory.CreateDbContextAsync();
+
+        var query = _db.Products.AsNoTracking();
+
+        if (!string.IsNullOrWhiteSpace(this.searchText))
+        {
+            var term = this.searchText.Trim();
+            query = query.Where(x => x.Name!.ToLower().Contains(searchText.ToLower()));
+        }
+
+        items = await query.OrderBy(p => p.Id).ToListAsync();
+    }
+}
