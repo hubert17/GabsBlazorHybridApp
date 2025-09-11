@@ -4,9 +4,132 @@
 
 <PageTitle>Home</PageTitle>
 
-<h1>Hello, world!</h1>
+<MudContainer MaxWidth="MaxWidth.Medium" Class="mt-6">
+    <MudText Typo="Typo.h3" GutterBottom="true">Hello, world!</MudText>
+    <MudText Class="mb-8">Welcome to your new hybrid app running on <em>@factor</em> using <em>@platform</em>.</MudText>
+    <MudText Class="mb-6">
+        This app is powered by <MudLink Href="https://learn.microsoft.com/en-us/aspnet/core/blazor/?view=aspnetcore-8.0" Target="_blank" Color="Color.Primary">Blazor</MudLink> and styled with <MudLink Href="https://mudblazor.com" Target="_blank" Color="Color.Primary">MudBlazor</MudLink>, making modern, fast, and beautiful web applications easier than ever.
+    </MudText>
 
-Welcome to your new app running on <em>@factor</em> using <em>@platform</em>.
+    <MudDivider Class="mb-4" />
+
+    <MudText Typo="Typo.h5" GutterBottom="true">What is Blazor?</MudText>
+
+    <MudText Typo="Typo.body2" Class="mb-4">
+        Blazor is a framework for building interactive web UIs using C# instead of JavaScript. It enables full-stack web development with .NET, allowing you to share code, libraries, and APIs between client and server.
+        <br /><br />
+        Blazor supports multiple hosting models:
+        <ul>
+            <li><b>Blazor Server</b>: Components are rendered on the server, with UI interactions handled over SignalR.</li>
+            <li><b>Blazor WebAssembly (WASM)</b>: Runs client-side directly in the browser using WebAssembly.</li>
+            <li><b>Blazor Hybrid</b>: Embed Blazor into native apps via .NET MAUI or WPF/WinForms.</li>
+            <li><b>Blazor Web App (New in .NET 8)</b>: A flexible project type for creating SSR-enabled apps that can light up interactivity progressively.</li>
+        </ul>
+    </MudText>
+
+    <MudDivider Class="mb-4" />
+
+    <MudText Typo="Typo.h5" GutterBottom="true">Why Use Blazor?</MudText>
+
+    <MudText Typo="Typo.body2" Class="mb-4">
+        <ul>
+            <li><b>Full Stack Development with .NET</b> — no need to rely on JavaScript frameworks.</li>
+            <li><b>Code Sharing</b> between client, server, and mobile apps (MAUI).</li>
+            <li><b>Modern Web Standards</b> — leverage WebAssembly, SignalR, and HTTP/2.</li>
+            <li><b>Productivity Boost</b> — use existing .NET libraries, tools, and IDEs.</li>
+            <li><b>Great Performance</b> with improved prerendering and streaming rendering in .NET 8.</li>
+        </ul>
+    </MudText>
+
+    <MudDivider Class="mb-4" />
+
+    <MudText Typo="Typo.h5" GutterBottom="true">What's New in Blazor with .NET 8</MudText>
+
+    <MudText Typo="Typo.h6" GutterBottom="true">Unified Blazor Web App Project</MudText>
+
+    <MudText Typo="Typo.body2" Class="mb-4">
+        .NET 8 introduces a new default project template called "Blazor Web App".<br /><br />
+        This template combines server-side rendering (SSR) and client-side interactivity, offering flexibility to dynamically decide how pages and components are rendered.<br /><br />
+        You can prerender content on the server for fast page loads, then optionally enable interactivity either through SignalR (server) or WebAssembly (client).
+    </MudText>
+
+    <MudText Typo="Typo.h6" GutterBottom="true">New Render Modes</MudText>
+
+    <MudText Typo="Typo.body2" Class="mb-4">
+        You can now choose specific render modes per component or page:
+        <ul>
+            <li><b>Static SSR</b> — Render-only, no interactivity.</li>
+            <li><b>Interactive SSR</b> — Server interactivity using SignalR.</li>
+            <li><b>Interactive WebAssembly</b> — Download and run on browser.</li>
+            <li><b>Auto</b> — Smart switch between modes for best performance.</li>
+        </ul>
+        These fine-grained options give you maximum control over performance and user experience.
+    </MudText>
+
+    <MudText Typo="Typo.h6" GutterBottom="true">Improved Streaming Rendering</MudText>
+
+    <MudText Typo="Typo.body2" Class="mb-4">
+        Components can now stream HTML chunks while rendering, improving perceived load time.<br /><br />
+        This is especially beneficial for dynamic, data-heavy pages and when working with slow backend responses.
+    </MudText>
+
+    <MudText Typo="Typo.h6" GutterBottom="true">Enhanced Authentication & Authorization</MudText>
+
+    <MudText Typo="Typo.body2" Class="mb-4">
+        Blazor Web Apps now support authentication directly with ASP.NET Core Identity.<br /><br />
+        New built-in templates streamline setting up secure login, logout, and authentication flows across server and client.
+    </MudText>
+
+    <MudDivider Class="mb-4" />
+
+    <MudText Typo="Typo.h5" GutterBottom="true">Introduction to MudBlazor</MudText>
+
+    <MudText Typo="Typo.body2" Class="mb-4">
+        MudBlazor is a Blazor component library built entirely in C# and based on Google's Material Design specification.<br /><br />
+        It focuses on simplicity, clean API, and performance — helping you quickly create beautiful and consistent UIs without complex setup.
+    </MudText>
+
+    <MudDivider Class="mb-4" />
+
+    <MudText Typo="Typo.h5" GutterBottom="true">Why Use MudBlazor?</MudText>
+
+    <MudText Typo="Typo.body2" Class="mb-4">
+        <ul>
+            <li><b>Fast and Lightweight</b> — minimal JavaScript dependencies.</li>
+            <li><b>Fully Open Source</b> — actively maintained and community-driven.</li>
+            <li><b>Consistent Look and Feel</b> — adheres to Material Design.</li>
+            <li><b>Huge Range of Components</b> — everything from simple buttons to complex data tables, charts, and dialogs.</li>
+            <li><b>SSR-Ready</b> — built with Server-Side Rendering scenarios in mind.</li>
+        </ul>
+    </MudText>
+
+    <MudDivider Class="mb-4" />
+
+    <MudText Typo="Typo.h5" GutterBottom="true">Getting Started with MudBlazor</MudText>
+
+    <MudText Typo="Typo.body2" Class="mb-4">
+        <ul>
+            <li>Install MudBlazor NuGet Package: <b>Install-Package MudBlazor</b>.</li>
+            <li>Register MudServices in your <b>Program.cs</b> via <code>builder.Services.AddMudServices();</code>.</li>
+            <li>Add providers (Popover, Dialog, Snackbar) to your layout or app shell.</li>
+            <li>Start building beautiful and functional UI components rapidly!</li>
+        </ul>
+    </MudText>
+
+    <MudDivider Class="mb-4" />
+
+    <MudText Typo="Typo.h5" GutterBottom="true">Helpful Links</MudText>
+
+    <MudText Typo="Typo.body2">
+        <ul>
+            <li><MudLink Href="https://learn.microsoft.com/en-us/aspnet/core/blazor/?view=aspnetcore-8.0" Target="_blank" Color="Color.Primary">Blazor Documentation (.NET 8)</MudLink></li>
+            <li><MudLink Href="https://learn.microsoft.com/en-us/aspnet/core/release-notes/aspnetcore-8.0?view=aspnetcore-8.0" Target="_blank" Color="Color.Primary">What's New in ASP.NET Core 8.0</MudLink></li>
+            <li><MudLink Href="https://mudblazor.com/" Target="_blank" Color="Color.Primary">MudBlazor Official Website</MudLink></li>
+            <li><MudLink Href="https://mudblazor.com/mud/introduction" Target="_blank" Color="Color.Primary">MudBlazor Introduction</MudLink></li>
+        </ul>
+    </MudText>
+</MudContainer>
+
 
 @code {
     private string factor => FormFactor.GetFormFactor();

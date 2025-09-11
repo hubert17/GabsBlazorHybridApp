@@ -3,23 +3,34 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-    <title>GabsHybridApp.Maui</title>
+    <title>GabsHybridApp</title>
     <base href="/" />
-    <link rel="stylesheet" href="_content/GabsHybridApp.Shared/bootstrap/bootstrap.min.css" />
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
+    <link href="_content/MudBlazor/MudBlazor.min.css" rel="stylesheet" />
+    <link href="_content/CodeBeam.MudBlazor.Extensions/MudExtensions.min.css" rel="stylesheet" />
+    <link href="_content/GabsHybridApp.Shared/MudBlazor.app.css" rel="stylesheet" />
+
     <link rel="stylesheet" href="_content/GabsHybridApp.Shared/app.css" />
     <link rel="stylesheet" href="app.css" />
-    <link rel="stylesheet" href="GabsHybridApp.Maui.styles.css" />
+    <link rel="stylesheet" href="GabsHybridApp.styles.css" />
     <link rel="icon" href="data:,">
+
 </head>
 
 <body>
 
     <div class="status-bar-safe-area"></div>
 
-    <div id="app">Loading...</div>
+    <div id="app">
+        <div id="preloading-logo">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><circle fill="#607D8B" stroke="#607D8B" stroke-width="2" r="15" cx="40" cy="100"><animate attributeName="opacity" calcMode="spline" dur="2" values="1;0;1;" keySplines=".5 0 .5 1;.5 0 .5 1" repeatCount="indefinite" begin="-.4"></animate></circle><circle fill="#607D8B" stroke="#607D8B" stroke-width="2" r="15" cx="100" cy="100"><animate attributeName="opacity" calcMode="spline" dur="2" values="1;0;1;" keySplines=".5 0 .5 1;.5 0 .5 1" repeatCount="indefinite" begin="-.2"></animate></circle><circle fill="#607D8B" stroke="#607D8B" stroke-width="2" r="15" cx="160" cy="100"><animate attributeName="opacity" calcMode="spline" dur="2" values="1;0;1;" keySplines=".5 0 .5 1;.5 0 .5 1" repeatCount="indefinite" begin="0"></animate></circle></svg>                
+        </div>
+    </div>
 
     <script src="_framework/blazor.webview.js" autostart="false"></script>
-
+    <script src="_content/MudBlazor/MudBlazor.min.js"></script>
+    <script src="_content/CodeBeam.MudBlazor.Extensions/MudExtensions.min.js"></script>
 </body>
 
 </html>

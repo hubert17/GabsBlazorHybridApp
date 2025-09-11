@@ -4,12 +4,15 @@ using GabsHybridApp.Web.Components;
 using GabsHybridApp.Web.Extensions;
 using GabsHybridApp.Web.Services;
 using Microsoft.EntityFrameworkCore;
+using GabsHybridApp.Shared;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+builder.Services.AddSharedCore();
 
 builder.Services.AddDbContextFactory<HybridAppDbContext>(opt =>
     opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"), builder.Environment.ContentRootPath));

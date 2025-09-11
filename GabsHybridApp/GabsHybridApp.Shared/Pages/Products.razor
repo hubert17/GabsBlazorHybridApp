@@ -1,0 +1,60 @@
+﻿@page "/products"
+@using GabsHybridApp.Shared.Data
+@using GabsHybridApp.Shared.Models
+@using Microsoft.EntityFrameworkCore
+@inject IDbContextFactory<HybridAppDbContext> DbFactory
+
+<PageTitle>Products</PageTitle>
+<h1>Products (Crud Demo)</h1>
+
+<MudTextField T="string" ValueChanged="@(s => OnSearch(s))" Placeholder="Search" Variant="Variant.Outlined" Adornment=" Adornment.Start"
+              AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0" Clearable="true"></MudTextField>
+
+<MudSimpleTable Hover="true" Class="products-css mb-5" Style="overflow-x: auto;">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th class="text-right">Price</th>
+            <th>Unit</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var productRow in products)
+        {
+            <tr>
+                <td>@productRow.Id</td>
+                <td>@productRow.Name</td>
+                <td class="text-right">@productRow.UnitPrice</td>
+                <td>@productRow.Unit</td>
+            </tr>
+        }
+    </tbody>
+</MudSimpleTable>
+
+@code {
+    List<Product> products = new();
+    Product product = new();
+    string strSearch = string.Empty;
+
+    private void LoadProducts()
+    {
+        var _db = DbFactory.CreateDbContext();  
+        if (!string.IsNullOrEmpty(strSearch))
+            products = _db.Products.Where(x => x.Name!.ToLower().Contains(strSearch.ToLower())).ToList();
+        else
+            products = _db.Products.ToList();
+    }
+
+    protected override void OnInitialized()
+    {
+        LoadProducts();
+    }
+
+    private void OnSearch(string text)
+    {
+        strSearch = text;
+        LoadProducts();
+    }
+
+}

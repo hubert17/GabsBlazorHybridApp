@@ -1,36 +1,62 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">GabsHybridApp.Maui</a>
-    </div>
-</div>
+﻿@inherits BlazorStateComponent
+@using BlazorState
+@using GabsHybridApp.Shared.States
 
-<input type="checkbox" title="Navigation menu" class="navbar-toggler" />
+@if (!IsDarkMode)
+{
+    <style>
+        .my-custom-navmenu.mud-navmenu.mud-navmenu-default .mud-nav-link.active:not(.mud-nav-link-disabled) {
+            background-color: #90A4AE;
+        }
 
-<div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
-    <nav class="flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
-            </NavLink>
-        </div>
+            .my-custom-navmenu.mud-navmenu.mud-navmenu-default .mud-nav-link.active:not(.mud-nav-link-disabled) .mud-nav-link-text {
+                color: #fff;
+            }
+    </style>
+}
 
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
-                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Counter
-            </NavLink>
-        </div>
+<MudList T="String">
+    <MudListItem>
+        <MudNavMenu Class="my-custom-navmenu">
+            <MudNavLink Href="/" Match="NavLinkMatch.All" Icon="@Icons.Material.Outlined.Home" Class="rounded">Home</MudNavLink>
+            <MudNavLink Href="weather" Match="NavLinkMatch.All" Icon="@Icons.Material.Outlined.WaterDrop" Class="rounded">Weather</MudNavLink>
+            <MudNavLink Href="counter" Match="NavLinkMatch.All" Icon="@Icons.Material.Outlined.PlusOne" Class="rounded">Counter (@currentCount)</MudNavLink>
+            <MudNavLink Href="auth" Match="NavLinkMatch.All" Icon="@Icons.Material.Outlined.VerifiedUser" Class="rounded">Auth</MudNavLink>
+            <MudNavLink Href="products" Match="NavLinkMatch.All" Icon="@Icons.Material.Outlined.ViewList" Class="rounded">Products</MudNavLink>
+            <MudNavLink Href="orders" Match="NavLinkMatch.All" Icon="@Icons.Material.Outlined.PointOfSale" Class="rounded">Orders</MudNavLink>
+            <MudNavLink Href="purchases" Match="NavLinkMatch.All" Icon="@Icons.Material.Outlined.MonetizationOn" Class="rounded">Purchases</MudNavLink>
+            <MudDivider Class="mb-4" />
 
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="weather">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Weather
-            </NavLink>
-        </div>
+            <MudText Typo="Typo.subtitle2" Color="Color.Inherit" Class="ml-4 my-3">Links</MudText>
+            <MudNavLink Href="https://mudblazor.com" Icon="@Icons.Custom.Brands.MudBlazor" Target="_blank">MudBlazor</MudNavLink>
+            <MudNavLink Href="https://dotnet.microsoft.com/en-us/apps/aspnet/web-apps/blazor" Icon="@Icons.Custom.Brands.MicrosoftVisualStudio" Target="_blank">Blazor</MudNavLink>
+            <MudNavLink Href="https://dotnet.microsoft.com/en-us/apps/aspnet" Icon="@Icons.Custom.Brands.Microsoft" Target="_blank">ASP.NET</MudNavLink>
 
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="products">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Products
-            </NavLink>
-        </div>
-    </nav>
-</div>
+            <MudNavGroup Title="About Me" Icon="@Icons.Material.Outlined.Person" HideExpandIcon="true">
+                <MudNavLink Href="https://github.com/hubert17" Icon="@Icons.Material.Outlined.Code">Github</MudNavLink>
+                <MudNavLink Href="https://bernardgabon.com" Icon="@Icons.Material.Outlined.Web">BernardGabon.com</MudNavLink>
+            </MudNavGroup>
+            <MudDivider Class="mb-4" />
+           
+            <MudHidden Breakpoint="Breakpoint.SmAndUp">
+                <MudText Typo="Typo.subtitle2" Color="Color.Inherit" Class="ml-4 my-3">Small Screen Menu</MudText>
+                <MudNavGroup Title="Support" Icon="@Icons.Material.Filled.KeyboardArrowDown" HideExpandIcon="true">
+                    <MudNavLink>Community</MudNavLink>
+                    <MudNavLink>Resources</MudNavLink>
+                    <MudNavLink Href="https://mudblazor.com/docs/overview">MudBlazor Documentation</MudNavLink>
+                    <MudNavLink Href="https://mudblazor.com/getting-started/installation">Quick-Start Guide</MudNavLink>
+                </MudNavGroup>
+                <MudNavLink Href="https://github.com/hubert17/EdwillJSystem" Icon="@Icons.Custom.Brands.GitHub" Target="_blank">EdwillJSystem</MudNavLink>
+            </MudHidden>
+
+        </MudNavMenu>
+    </MudListItem>
+</MudList>
+
+@code {
+    [Parameter] public bool IsDarkMode { get; set; }
+
+    CounterState CounterState => GetState<CounterState>();
+    private int currentCount => CounterState.Count;
+}
 
