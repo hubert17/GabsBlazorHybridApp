@@ -6,7 +6,6 @@ using GabsHybridApp.Shared.Services;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using System.Security.Claims;
 
 namespace GabsHybridApp.Maui;
 
@@ -29,12 +28,14 @@ public static class MauiProgram
 
         // Add device-specific services used by the GabsHybridApp.Shared project
         builder.Services.AddSingleton<IFormFactor, FormFactor>();
+        builder.Services.AddScoped<IHostCapabilities, MauiHostCapabilities>();
+        builder.UseStatusBarTheme("#607D8B", lightContent: true);
 
         builder.Services.AddMauiBlazorWebView();
 
-        builder.Services.AddOptions();
-        builder.Services.AddAuthorizationCore();
-        builder.Services.AddScoped<AuthenticationStateProvider, MauiAuthStateProvider>();
+        builder.Services.AddAuthorizationCore(); // not AddAuthorization()
+        builder.Services.AddScoped<IAuthService, MauiLocalAuthService>();
+        builder.Services.AddScoped<AuthenticationStateProvider, HostedAuthStateProvider>();
 
 #if DEBUG
         builder.Services.AddBlazorWebViewDeveloperTools();
@@ -48,12 +49,4 @@ public static class MauiProgram
 
         return app;
     }
-}
-
-public sealed class MauiAuthStateProvider : AuthenticationStateProvider
-{
-    private ClaimsPrincipal _user = new(new ClaimsIdentity()); // anonymous
-
-    public override Task<AuthenticationState> GetAuthenticationStateAsync()
-        => Task.FromResult(new AuthenticationState(_user));
 }

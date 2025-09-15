@@ -1,9 +1,10 @@
 ﻿ <CascadingAuthenticationState>
-    <Router AppAssembly="@typeof(Layout.MainLayout).Assembly">
+    <Router AppAssembly="@typeof(_Imports).Assembly">
         <Found Context="routeData">
             <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(Layout.MainLayout)">
                 <NotAuthorized>
                     <p>Sorry dude, but you're not authorized!</p>
+                    <GabsHybridApp.Shared.Pages.Account.RedirectToLogin />
                 </NotAuthorized>
             </AuthorizeRouteView>
             <FocusOnNavigate RouteData="@routeData" Selector="h1" />

@@ -1,8 +1,9 @@
 ﻿@inherits LayoutComponentBase
 
-
 @using GabsHybridApp.Shared.Components
 @using GabsHybridApp.Shared.Layout
+
+@inject IHostCapabilities Caps
 
 @* @inject ILocalStorageService localStorage
  *@
@@ -64,6 +65,22 @@
             </MudTooltip>
         </MudHidden>
 
+        <!-- 👤 User Menu -->
+        <AuthorizeView>
+            <MudMenu AnchorOrigin="Origin.TopLeft" Dense="true" Class="mt-1 ml-4">
+                <ActivatorContent>
+                    <MudAvatar Size="Size.Medium">
+                        <MudImage Src="https://avatars.githubusercontent.com/u/7923889?v=4" />
+                    </MudAvatar>
+                </ActivatorContent>
+                <ChildContent>
+                    <MudListItem T="string" Text="My Account" Icon="@Icons.Material.Outlined.Person" Href="/account/changepassword" />
+                    <MudListItem T="string" Text="Settings" Icon="@Icons.Material.Filled.Settings" />
+                    <MudListItem T="string" Text="Logout" Icon="@Icons.Material.Filled.Logout" OnClick='() => NavManager.NavigateTo("/account/logout", Caps.RequiresFullReloadAfterAuth)' />
+                    <MudDivider />
+                </ChildContent>
+            </MudMenu>
+        </AuthorizeView>
 
     </MudAppBar>
 

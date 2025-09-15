@@ -1,0 +1,68 @@
+﻿@page "/account/login"
+@layout Layout.LoginLayout
+@attribute [AllowAnonymous]
+
+@inject IAuthService Auth
+@inject IHostCapabilities Caps
+@inject HostedAuthStateProvider AuthProvider
+@inject NavigationManager Nav
+@inject ISnackbar Snack
+
+<PageTitle>GabsHybridApp - Login</PageTitle>
+
+@if(Credential != null)
+{
+    <EditForm Model="Credential" OnValidSubmit="OnLogin" FormName="Credential">
+        <MudLoading Class="ml-15 pl-15" @bind-Loading="wakingUpDb" Overlap="@false" LoaderType="LoaderType.Circular" Text="I am awakening the paused Azure database...">
+
+            <MudText Typo="Typo.h4" GutterBottom="true">Login</MudText>
+
+            <MudText>Don't have an account? <MudLink Href="/account/register">Sign Up</MudLink></MudText>
+
+            <MudTextField T="string" @bind-Value="@Credential.Username" name="Credential.Username" ShrinkLabel Label="E-mail" Variant="Variant.Outlined" Class="my-6"></MudTextField>
+
+            <MudTextField T="string" @bind-Value="@Credential.Password" name="Credential.Password" ShrinkLabel Label="Password" InputType="InputType.Password" Variant="Variant.Outlined" IconSize="Size.Medium" />
+
+            <div Class="d-flex justify-space-between align-center">
+                @* <label class="ml-1 my-3 mud-typography mud-primary-text"><input type="checkbox" name="checkbox" value="value"> Remember me?</label> *@
+                <MudSpacer />
+                <MudLink Href="#" Class="my-2">Forgot password?</MudLink>
+            </div>
+
+            <MudLoadingButton FullWidth="true" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Large" LoadingAdornment="Adornment.Start" @bind-Loading="isSubmitting" ButtonType="ButtonType.Submit">Sign In</MudLoadingButton>
+        </MudLoading>
+    </EditForm>
+}
+
+@code {
+    [SupplyParameterFromForm] public LoginDTO Credential { get; set; } = new LoginDTO();
+    [SupplyParameterFromQuery(Name = "ReturnUrl")] public string? ReturnUrl { get; set; }
+
+    bool isSubmitting;
+
+    async Task OnLogin()
+    {
+        isSubmitting = true;
+        if (await Auth.SignInAsync(Credential.Username, Credential.Password, ReturnUrl))
+        {
+            AuthProvider.Notify();
+            if (Credential.Username.Equals(UserAccount.DEFAULT_ADMIN_LOGIN, StringComparison.OrdinalIgnoreCase) &&
+                Credential.Password == UserAccount.DEFAULT_ADMIN_LOGIN)
+                Nav.NavigateToAfterAuth($"/account/changepassword?ReturnUrl={Uri.EscapeDataString(ReturnUrl ?? "/")}", Caps.RequiresFullReloadAfterAuth);
+            else
+                Nav.NavigateToAfterAuth(ReturnUrl ?? "/", Caps.RequiresFullReloadAfterAuth);
+        }
+        else
+        {
+            Snack.Clear();
+            Snack.Configuration.PositionClass = Defaults.Classes.Position.TopCenter;
+            Snack.Add("Invalid login. Please try again.", Severity.Error);
+        }
+        isSubmitting = false;
+    }
+
+    // Waking up paused Azure database
+    bool wakingUpDb = false;
+
+    public class LoginDTO { public string Username { get; set; } = ""; public string Password { get; set; } = ""; }
+}

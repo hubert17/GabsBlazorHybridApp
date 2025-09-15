@@ -1,0 +1,31 @@
+﻿@page "/auth"
+@attribute [Authorize]
+
+@inject NavigationManager NavManager
+
+<PageTitle>Authorized Page</PageTitle>
+
+<h1>Auth</h1>
+<h3>Hello @username! [ @userid ]</h3>
+<h3>Role: @roles</h3>
+
+@code {
+    [CascadingParameter]
+    Task<AuthenticationState>? AuthState { get; set; }
+
+    string? username;
+    string? userid;
+    string roles = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (AuthState is not null)
+        {
+            var state = await AuthState;
+            username = state?.User?.Identity?.Name ?? string.Empty;
+            userid = state?.User?.Claims.Where(c => c.Type == System.Security.Claims.ClaimTypes.NameIdentifier).FirstOrDefault()?.Value;
+            var crole = state?.User?.Claims.Where(c => c.Type == System.Security.Claims.ClaimTypes.Role).ToList();
+            roles = string.Join(',', crole!.Select(s => s.Value));
+        }
+    }
+}
