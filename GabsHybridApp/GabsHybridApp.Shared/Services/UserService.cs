@@ -1,10 +1,8 @@
 ﻿using GabsHybridApp.Shared.Data;
 using GabsHybridApp.Shared.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 
@@ -44,6 +42,7 @@ namespace GabsHybridApp.Shared.Services
                 user.LastLogin = DateTime.Now;
                 _db.Entry(user).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                 _db.SaveChanges();
+                _db.Entry(user).State = Microsoft.EntityFrameworkCore.EntityState.Detached;
                 user.PasswordHash = null;
                 user.PasswordSalt = null;
                 return user;

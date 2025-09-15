@@ -51,7 +51,10 @@
             AuthProvider.Notify();
             if (Credential.Username.Equals(UserAccount.DEFAULT_ADMIN_LOGIN, StringComparison.OrdinalIgnoreCase) &&
                 Credential.Password == UserAccount.DEFAULT_ADMIN_LOGIN)
-                Nav.NavigateToAfterAuth($"account/changepassword?ReturnUrl={Uri.EscapeDataString(ReturnUrl ?? "/")}", Caps.RequiresFullReloadAfterAuth);
+            {
+                var target = $"account/changepassword?{(!Caps.RequiresFullReloadAfterAuth ? ($"username={Credential.Username}&") : "")}ReturnUrl={Uri.EscapeDataString(ReturnUrl ?? "/")}";
+                Nav.NavigateToAfterAuth(target, Caps.RequiresFullReloadAfterAuth);
+            }
             else
                 Nav.NavigateTo(ReturnUrl ?? "/", true);
         }
