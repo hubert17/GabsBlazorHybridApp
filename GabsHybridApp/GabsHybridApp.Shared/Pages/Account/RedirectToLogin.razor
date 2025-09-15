@@ -4,6 +4,6 @@
 @code {
     protected override void OnInitialized()
     {
-        NavigationManager.NavigateToAfterAuth($"Account/Login?returnUrl={Uri.EscapeDataString(NavigationManager.Uri)}", Caps.RequiresFullReloadAfterAuth);
+        NavigationManager.NavigateToAfterAuth($"/Account/Login?returnUrl={Uri.EscapeDataString(NavigationManager.Uri)}", Caps.RequiresFullReloadAfterAuth);
     }
 }

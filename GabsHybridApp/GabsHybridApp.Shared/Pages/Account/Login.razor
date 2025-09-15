@@ -35,8 +35,11 @@
 }
 
 @code {
-    [SupplyParameterFromForm] public LoginDTO Credential { get; set; } = new LoginDTO();
-    [SupplyParameterFromQuery(Name = "ReturnUrl")] public string? ReturnUrl { get; set; }
+    [SupplyParameterFromForm] 
+    public LoginDTO Credential { get; set; } = new LoginDTO();
+
+    [SupplyParameterFromQuery(Name = "ReturnUrl")] 
+    public string? ReturnUrl { get; set; }
 
     bool isSubmitting;
 
@@ -48,9 +51,9 @@
             AuthProvider.Notify();
             if (Credential.Username.Equals(UserAccount.DEFAULT_ADMIN_LOGIN, StringComparison.OrdinalIgnoreCase) &&
                 Credential.Password == UserAccount.DEFAULT_ADMIN_LOGIN)
-                Nav.NavigateToAfterAuth($"/account/changepassword?ReturnUrl={Uri.EscapeDataString(ReturnUrl ?? "/")}", Caps.RequiresFullReloadAfterAuth);
+                Nav.NavigateToAfterAuth($"account/changepassword?ReturnUrl={Uri.EscapeDataString(ReturnUrl ?? "/")}", Caps.RequiresFullReloadAfterAuth);
             else
-                Nav.NavigateToAfterAuth(ReturnUrl ?? "/", Caps.RequiresFullReloadAfterAuth);
+                Nav.NavigateTo(ReturnUrl ?? "/", true);
         }
         else
         {

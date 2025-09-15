@@ -9,11 +9,13 @@ public interface IHostCapabilities
 
 public static class HostCapabilitiesExtensions
 {
-    public static void NavigateToAfterAuth(this NavigationManager nav, string? target, bool requiresFullReloadAfterAuth)
+    public static void NavigateToAfterAuth(this NavigationManager nav, string target, bool? requiresFullReloadAfterAuth = null)
     {
-        target = NormalizeTarget(target);
-
-        if (requiresFullReloadAfterAuth)
+        if(requiresFullReloadAfterAuth == null)
+        {
+            nav.NavigateTo(target);
+        }
+        else if (requiresFullReloadAfterAuth == true)
         {
             // Web: full GET so the cookie is seen; also replace history
             nav.NavigateTo(target, new NavigationOptions
@@ -22,7 +24,7 @@ public static class HostCapabilitiesExtensions
                 ReplaceHistoryEntry = true
             });
         }
-        else
+        else if (requiresFullReloadAfterAuth == false)
         {
             // MAUI: no full reload; replace to avoid back to login
             nav.NavigateTo(target, replace: true);
@@ -38,11 +40,5 @@ public static class HostCapabilitiesExtensions
 
         var target = $"/account/login?ReturnUrl={Uri.EscapeDataString(rel)}";
         nav.NavigateToAfterAuth(target, requiresFullReloadAfterAuth);
-    }
-
-    private static string NormalizeTarget(string? target)
-    {
-        if (string.IsNullOrWhiteSpace(target)) return "/";
-        return target!.StartsWith("/") ? target : "/" + target;
     }
 }

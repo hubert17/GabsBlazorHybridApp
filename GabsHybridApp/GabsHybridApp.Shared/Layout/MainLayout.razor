@@ -76,7 +76,7 @@
                 <ChildContent>
                     <MudListItem T="string" Text="My Account" Icon="@Icons.Material.Outlined.Person" Href="/account/changepassword" />
                     <MudListItem T="string" Text="Settings" Icon="@Icons.Material.Filled.Settings" />
-                    <MudListItem T="string" Text="Logout" Icon="@Icons.Material.Filled.Logout" OnClick='() => NavManager.NavigateTo("/account/logout", Caps.RequiresFullReloadAfterAuth)' />
+                    <MudListItem T="string" Text="Logout" Icon="@Icons.Material.Filled.Logout" OnClick='() => NavManager.NavigateToAfterAuth("/account/logout", Caps.RequiresFullReloadAfterAuth)' />
                     <MudDivider />
                 </ChildContent>
             </MudMenu>
