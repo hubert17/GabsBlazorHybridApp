@@ -34,6 +34,7 @@ builder.Services.AddDbContextFactory<HybridAppDbContext>(opt =>
 builder.Services.AddSingleton<IFormFactor, FormFactor>();
 builder.Services.AddScoped<IHostCapabilities, WebHostCapabilities>();
 builder.Services.AddScoped<IAuthService, ServerCookieAuthService>();
+builder.Services.AddScoped<NotificationService>();
 
 var app = builder.Build();
 
@@ -64,5 +65,7 @@ app.MapPost("/_internal/logout", async (HttpContext ctx) =>
     await ctx.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
     return Results.Redirect("/account/login");
 }).AllowAnonymous().DisableAntiforgery();
+
+app.MapHub<NotificationHub>("/notificationhub");
 
 app.Run();

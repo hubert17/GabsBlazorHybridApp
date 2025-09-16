@@ -19,6 +19,7 @@ public class HybridAppDbContext : DbContext
     }
 
     public DbSet<UserAccount> UserAccounts { get; set; }
+    public DbSet<Notification> Notifications { get; set; }
     public DbSet<Product> Products { get; set; }
 
 }

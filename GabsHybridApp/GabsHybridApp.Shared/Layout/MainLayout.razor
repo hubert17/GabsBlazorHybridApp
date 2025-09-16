@@ -3,6 +3,7 @@
 @using GabsHybridApp.Shared.Components
 @using GabsHybridApp.Shared.Layout
 
+@inject IFormFactor FormFactor
 @inject IHostCapabilities Caps
 @inject ILocalStorageService localStorage
 
@@ -44,8 +45,11 @@
             </MudMenu>
         </MudHidden>
 
-        <!-- 🔔 Notification Panel (handles SignalR & user data internally) -->
-        @* <NotificationPanel IncludeSample="true" /> *@
+        @if (FormFactor.GetFormFactor() == "Web")
+        {
+            <!-- 🔔 Notification Panel (handles SignalR & user data internally) -->
+            <NotificationPanel IncludeSample="true" />
+        }
 
         <!-- 🌙 Dark Mode Toggle -->
         <MudTooltip Text="Toggle Dark Mode">
