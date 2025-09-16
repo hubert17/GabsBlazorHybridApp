@@ -1,4 +1,5 @@
 ﻿// GabsHybridApp.Shared/DependencyInjection.cs
+using Blazored.LocalStorage;
 using BlazorState;
 using GabsHybridApp.Shared.Services;
 using GabsHybridApp.Shared.States;
@@ -16,6 +17,7 @@ public static class DependencyInjection
     {
         services.AddOptions();
 
+        services.AddBlazoredLocalStorage();
         services.AddBlazorState(opts => opts.Assemblies = new[] { typeof(CounterState).GetTypeInfo().Assembly });
 
         // Auth state provider (used by both hosts)

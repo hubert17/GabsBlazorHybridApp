@@ -33,11 +33,29 @@
 </html>
 
 @code {
-    [CascadingParameter]
-    private HttpContext HttpContext { get; set; } = default!;
+    [CascadingParameter] private HttpContext HttpContext { get; set; } = default!;
 
-    private IComponentRenderMode? RenderModeForPage => HttpContext.Request.Path.StartsWithSegments("/account/login") || HttpContext.Request.Path.StartsWithSegments("/account/logout")
-        ? null
-        : new InteractiveServerRenderMode(prerender: false);
+    // Keep auth pages server-rendered; elsewhere use Interactive Server without prerender
+    private IComponentRenderMode? RenderModeForPage => IsNonInteractive(HttpContext?.Request.Path ?? default)
+            ? null : new InteractiveServerRenderMode(prerender: false);
 
+    // List any routes that must be pure server-rendered (no circuit)
+    private static readonly string[] _nonInteractivePrefixes = new[]
+    {
+        "/account/login",
+        "/account/logout"
+    };
+
+    private static bool IsNonInteractive(PathString path)
+    {
+        if (!path.HasValue) return false;
+        // Compare case-insensitively and only on the prefix
+        var span = path.Value.AsSpan();
+        foreach (var prefix in _nonInteractivePrefixes)
+        {
+            if (span.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
+                return true;
+        }
+        return false;
+    }
 }

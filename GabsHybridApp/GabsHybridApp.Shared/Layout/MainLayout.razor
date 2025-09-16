@@ -4,9 +4,8 @@
 @using GabsHybridApp.Shared.Layout
 
 @inject IHostCapabilities Caps
+@inject ILocalStorageService localStorage
 
-@* @inject ILocalStorageService localStorage
- *@
  @inject NavigationManager NavManager
 
 <AntiforgeryToken />
@@ -115,21 +114,12 @@
     {
         _isDarkMode = !_isDarkMode;
         StorageConstants.IsDarkMode = _isDarkMode;
-        //await localStorage.SetItemAsync("isDarkMode", _isDarkMode);
-        StateHasChanged();
+        await localStorage.SetItemAsync("isDarkMode", _isDarkMode);
     }
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    protected override async Task OnInitializedAsync()
     {
-        if (!firstRender) return;
-
-        // JS interop is available now
-        //bool hasKey = await localStorage.ContainKeyAsync("isDarkMode");
-        //_isDarkMode = hasKey ? await localStorage.GetItemAsync<bool>("isDarkMode") : false;
-
+        _isDarkMode = await localStorage.GetItemAsync<bool>("isDarkMode");
         StorageConstants.IsDarkMode = _isDarkMode;
-
-        // We changed state after first render -> re-render
-        StateHasChanged();
     }
 }
