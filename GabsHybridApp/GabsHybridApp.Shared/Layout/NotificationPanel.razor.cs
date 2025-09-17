@@ -1,5 +1,4 @@
 ﻿using GabsHybridApp.Shared.Models;
-using GabsHybridApp.Shared.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.SignalR.Client;
@@ -8,6 +7,7 @@ namespace GabsHybridApp.Shared.Layout
 {
     public partial class NotificationPanel
     {
+        [Parameter] public string? NotificationHubUrl { get; set; } // https://host/notificationhub
         [Parameter] public bool IncludeSample { get; set; } = false;
 
         [CascadingParameter] public Task<AuthenticationState>? AuthState { get; set; }
@@ -45,6 +45,8 @@ namespace GabsHybridApp.Shared.Layout
         {
             string GetNotificationHubUrl()
             {
+                if(!string.IsNullOrWhiteSpace(NotificationHubUrl)) return NotificationHubUrl;
+
                 var baseUri = NavManager.BaseUri;
 
                 bool isRunningInDocker =

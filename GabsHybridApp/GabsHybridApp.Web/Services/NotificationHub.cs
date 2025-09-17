@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using System.Security.Claims;
 
-namespace GabsHybridApp.Shared.Services;
+namespace GabsHybridApp.Web.Services;
 
 public class NotificationHub : Hub
 {

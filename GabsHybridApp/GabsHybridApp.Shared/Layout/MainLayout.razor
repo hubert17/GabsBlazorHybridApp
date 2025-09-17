@@ -45,11 +45,8 @@
             </MudMenu>
         </MudHidden>
 
-        @if (FormFactor.GetFormFactor() == "Web")
-        {
-            <!-- 🔔 Notification Panel (handles SignalR & user data internally) -->
-            <NotificationPanel IncludeSample="true" />
-        }
+        <!-- 🔔 Notification Panel (handles SignalR & user data internally) -->
+        <NotificationPanel IncludeSample="true" NotificationHubUrl="" />
 
         <!-- 🌙 Dark Mode Toggle -->
         <MudTooltip Text="Toggle Dark Mode">

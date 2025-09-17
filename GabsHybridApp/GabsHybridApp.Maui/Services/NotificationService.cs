@@ -1,19 +1,17 @@
 ﻿using GabsHybridApp.Shared.Data;
 using GabsHybridApp.Shared.Models;
-using Microsoft.AspNetCore.SignalR;
+using GabsHybridApp.Shared.Services;
 using Microsoft.EntityFrameworkCore;
 
-namespace GabsHybridApp.Shared.Services;
+namespace GabsHybridApp.Maui.Services;
 
-public class NotificationService
+public class NotificationService : INotificationService
 {
-    private readonly IHubContext<NotificationHub> _hubContext;
     private readonly HybridAppDbContext _db;
 
-    public NotificationService(IHubContext<NotificationHub> hubContext, HybridAppDbContext db)
+    public NotificationService(IDbContextFactory<HybridAppDbContext> DbFactory)
     {
-        _hubContext = hubContext;
-        _db = db;
+        _db = DbFactory.CreateDbContext();
     }
 
     public async Task PushNotificationAsync(Notification notification)
@@ -21,9 +19,6 @@ public class NotificationService
         notification.CreatedOn = DateTime.Now;
         _db.Notifications.Add(notification);
         await _db.SaveChangesAsync();
-
-        // Push to all users
-        await _hubContext.Clients.All.SendAsync("ReceiveNotification", notification);
     }
 
     public async Task<List<Notification>> GetUserNotificationsAsync(Guid excludeSenderUserId)
