@@ -68,4 +68,6 @@ app.MapPost("/_internal/logout", async (HttpContext ctx) =>
 
 app.MapHub<NotificationHub>("/notificationhub");
 
+app.UseStatusCodePagesWithRedirects("/404");
+
 app.Run();
