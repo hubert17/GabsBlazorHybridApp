@@ -4,9 +4,9 @@
 
 <PageTitle>Home</PageTitle>
 
-<MudContainer MaxWidth="MaxWidth.Medium" Class="mt-6">
+<MudContainer MaxWidth="MaxWidth.Medium">
     <MudText Typo="Typo.h3" GutterBottom="true">Hello, world!</MudText>
-    <MudText Class="mb-8">Welcome to your new hybrid app running on <em>@factor</em> using <em>@platform</em>.</MudText>
+    <MudText Class="mb-8">Welcome to your new hybrid app running on <em>@FormFactor.GetFormFactor()</em> using <em>@FormFactor.GetPlatform()</em>.</MudText>
     <MudText Class="mb-6">
         This app is powered by <MudLink Href="https://learn.microsoft.com/en-us/aspnet/core/blazor/?view=aspnetcore-8.0" Target="_blank" Color="Color.Primary">Blazor</MudLink> and styled with <MudLink Href="https://mudblazor.com" Target="_blank" Color="Color.Primary">MudBlazor</MudLink>, making modern, fast, and beautiful web applications easier than ever.
     </MudText>
@@ -124,14 +124,9 @@
         <ul>
             <li><MudLink Href="https://learn.microsoft.com/en-us/aspnet/core/blazor/?view=aspnetcore-8.0" Target="_blank" Color="Color.Primary">Blazor Documentation (.NET 8)</MudLink></li>
             <li><MudLink Href="https://learn.microsoft.com/en-us/aspnet/core/release-notes/aspnetcore-8.0?view=aspnetcore-8.0" Target="_blank" Color="Color.Primary">What's New in ASP.NET Core 8.0</MudLink></li>
+            <li><MudLink Href="https://medium.com/dogus-teknoloji/blazor-the-net-worlds-shining-star-or-just-a-fleeting-fad-a-detailed-review-06e6495dce3e" Target="_blank" Color="Color.Primary">Why Blazor?</MudLink></li>
             <li><MudLink Href="https://mudblazor.com/" Target="_blank" Color="Color.Primary">MudBlazor Official Website</MudLink></li>
             <li><MudLink Href="https://mudblazor.com/mud/introduction" Target="_blank" Color="Color.Primary">MudBlazor Introduction</MudLink></li>
         </ul>
     </MudText>
 </MudContainer>
-
-
-@code {
-    private string factor => FormFactor.GetFormFactor();
-    private string platform => FormFactor.GetPlatform();
-}

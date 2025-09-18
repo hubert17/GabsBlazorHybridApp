@@ -17,82 +17,126 @@
 <PageTitle>GabsHybridApp</PageTitle>
 
 <MudLayout>
-    <MudAppBar Elevation="4">
-        <MudHidden Breakpoint="Breakpoint.SmAndDown">
-            <MudIcon Icon="@Icons.Custom.Brands.MudBlazor" Size="Size.Large" />
-        </MudHidden>
-        <MudHidden Breakpoint="Breakpoint.MdAndUp">
-            <MudIconButton Icon="@Icons.Material.Outlined.Menu"
-                           Color="Color.Inherit"
-                           Edge="Edge.Start"
-                           OnClick="DrawerToggle" />
-        </MudHidden>
-        <MudText Typo="Typo.h6" Class="ml-3">GabsHybridApp</MudText>
-
-        <MudSpacer />
-
-        <!-- Support Links -->
-        <MudHidden Breakpoint="Breakpoint.SmAndUp" Invert="true">
-            <MudMenu EndIcon="@Icons.Material.Filled.KeyboardArrowDown"
-                     Label="Support"
-                     Color="Color.Inherit"
-                     Dense="true"
-                     AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight">
-                <MudText Typo="Typo.body2" Class="px-4 py-2"><b>Community</b></MudText>
-                <MudText Typo="Typo.body2" Class="px-4 py-2"><b>Resources</b></MudText>
-                <MudMenuItem Href="https://mudblazor.com/docs/overview" Target="_blank">MudBlazor Documentation</MudMenuItem>
-                <MudMenuItem Href="https://mudblazor.com/getting-started/installation" Target="_blank">Quick-Start Guide</MudMenuItem>
-            </MudMenu>
-        </MudHidden>
-
-        <!-- 🔔 Notification Panel (handles SignalR & user data internally) -->
-        <NotificationPanel IncludeSample="true" NotificationHubUrl="" />
-
-        <!-- 🌙 Dark Mode Toggle -->
-        <MudTooltip Text="Toggle Dark Mode">
-            <MudIconButton Icon="@(_isDarkMode ? Icons.Material.Filled.Brightness3 : Icons.Material.Filled.WbSunny)"
-                           Color="Color.Inherit"
-                           OnClick="ToggleDarkMode" />
-        </MudTooltip>
-
-        <MudHidden Breakpoint="Breakpoint.SmAndUp" Invert="true">
-            <!-- 💻 GitHub Link -->
-            <MudTooltip Text="Github">
-                <MudIconButton Icon="@Icons.Custom.Brands.GitHub"
+    @if (IsWebOrDesktop())
+    {
+        <MudAppBar Elevation="4">
+            <MudHidden Breakpoint="Breakpoint.SmAndDown">
+                <MudIcon Icon="@Icons.Custom.Brands.MudBlazor" Size="Size.Large" />
+            </MudHidden>
+            <MudHidden Breakpoint="Breakpoint.MdAndUp">
+                <MudIconButton Icon="@Icons.Material.Outlined.Menu"
                                Color="Color.Inherit"
-                               Href="https://github.com/hubert17/EdwillJSystem"
-                               Target="_blank" />
+                               Edge="Edge.Start"
+                               OnClick="DrawerToggle" />
+            </MudHidden>
+            <MudText Typo="Typo.h6" Class="ml-3">GabsHybridApp</MudText>
+
+            <MudSpacer />
+
+            <!-- Support Links -->
+            <MudHidden Breakpoint="Breakpoint.SmAndUp" Invert="true">
+                <MudMenu EndIcon="@Icons.Material.Filled.KeyboardArrowDown"
+                         Label="Support"
+                         Color="Color.Inherit"
+                         Dense="true"
+                         AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight">
+                    <MudText Typo="Typo.body2" Class="px-4 py-2"><b>Community</b></MudText>
+                    <MudText Typo="Typo.body2" Class="px-4 py-2"><b>Resources</b></MudText>
+                    <MudMenuItem Href="https://mudblazor.com/docs/overview" Target="_blank">MudBlazor Documentation</MudMenuItem>
+                    <MudMenuItem Href="https://mudblazor.com/getting-started/installation" Target="_blank">Quick-Start Guide</MudMenuItem>
+                </MudMenu>
+            </MudHidden>
+
+            <!-- 🔔 Notification Panel (handles SignalR & user data internally) -->
+            <NotificationPanel IncludeSample="true" NotificationHubUrl="" />
+
+            <!-- 🌙 Dark Mode Toggle -->
+            <MudTooltip Text="Toggle Dark Mode">
+                <MudIconButton Icon="@(_isDarkMode? Icons.Material.Filled.Brightness3 : Icons.Material.Filled.WbSunny)"
+                               Color="Color.Inherit"
+                               OnClick="ToggleDarkMode" />
             </MudTooltip>
-        </MudHidden>
 
-        <!-- 👤 User Menu -->
-        <AuthorizeView>
-            <MudMenu AnchorOrigin="Origin.TopLeft" Dense="true" Class="mt-1 ml-4">
-                <ActivatorContent>
-                    <MudAvatar Size="Size.Medium">
-                        <MudImage Src="https://avatars.githubusercontent.com/u/7923889?v=4" />
-                    </MudAvatar>
-                </ActivatorContent>
-                <ChildContent>
-                    <MudListItem T="string" Text="My Account" Icon="@Icons.Material.Outlined.Person" Href="/account/changepassword" />
-                    <MudListItem T="string" Text="Settings" Icon="@Icons.Material.Filled.Settings" />
-                    <MudListItem T="string" Text="Logout" Icon="@Icons.Material.Filled.Logout" OnClick='() => NavManager.NavigateToAfterAuth("/account/logout", Caps.RequiresFullReloadAfterAuth)' />
-                    <MudDivider />
-                </ChildContent>
-            </MudMenu>
-        </AuthorizeView>
+            <MudHidden Breakpoint="Breakpoint.SmAndUp" Invert="true">
+                <!-- 💻 GitHub Link -->
+                <MudTooltip Text="Github">
+                    <MudIconButton Icon="@Icons.Custom.Brands.GitHub"
+                                   Color="Color.Inherit"
+                                   Href="https://github.com/hubert17/EdwillJSystem"
+                                   Target="_blank" />
+                </MudTooltip>
+            </MudHidden>
 
-    </MudAppBar>
+            <!-- 👤 User Menu -->
+            <AuthorizeView>
+                <MudMenu AnchorOrigin="Origin.TopLeft" Dense="true" Class="mt-1 ml-4">
+                    <ActivatorContent>
+                        <MudAvatar Size="Size.Medium">
+                            <MudImage Src="https://avatars.githubusercontent.com/u/7923889?v=4" />
+                        </MudAvatar>
+                    </ActivatorContent>
+                    <ChildContent>
+                        <MudListItem T="string" Text="My Account" Icon="@Icons.Material.Outlined.Person" Href="/account/changepassword" />
+                        <MudListItem T="string" Text="Settings" Icon="@Icons.Material.Filled.Settings" />
+                        <MudListItem T="string" Text="Logout" Icon="@Icons.Material.Filled.Logout" OnClick='() => NavManager.NavigateToAfterAuth("/account/logout", Caps.RequiresFullReloadAfterAuth)' />
+                        <MudDivider />
+                    </ChildContent>
+                </MudMenu>
+            </AuthorizeView>
+
+        </MudAppBar>
+    }
+    else
+    {
+        <MudAppBar Bottom="true" Elevation="2" Dense="true" Class="d-flex justify-center align-center pa-0">
+            <MudNavLink Href="/" Match="NavLinkMatch.All" Class="mud-bottom-nav-item">
+                <div class="d-flex flex-column align-center gap-1">
+                    <MudIcon Icon="@Icons.Material.Filled.House" />
+                    <span class="mud-typography-caption my-n1">Home</span>
+                </div>
+            </MudNavLink>
+
+            <MudNavLink Href="/counter" Match="NavLinkMatch.Prefix" Class="mud-bottom-nav-item">
+                <div class="d-flex flex-column align-center gap-1">
+                    <MudIcon Icon="@Icons.Material.Filled.PlusOne" />
+                    <span class="mud-typography-caption my-n1">Counter</span>
+                </div>
+            </MudNavLink>
+
+            @* Placeholder for the FAB to keep the spacing right *@
+            <div style="width: 56px;"></div>
+
+            <MudNavLink Href="/products" Class="mud-bottom-nav-item">
+                <div class="d-flex flex-column align-center gap-1">
+                    <MudIcon Icon="@Icons.Material.Filled.ShoppingBag" />
+                    <span class="mud-typography-caption my-n1">Products</span>
+                </div>
+            </MudNavLink>
+
+            <MudNavLink Class="mud-bottom-nav-item" OnClick="DrawerToggle">
+                <div class="d-flex flex-column align-center gap-1">
+                    <MudIcon Icon="@Icons.Material.Filled.Menu" />
+                    <span class="mud-typography-caption my-n1">Menu</span>
+                </div>
+            </MudNavLink>
+        </MudAppBar>
+
+        <MudFab StartIcon="@Icons.Material.Filled.QrCodeScanner"
+                Color="Color.Primary"
+                Size="Size.Large"
+                OnClick="@OnFabClick"
+                Class="mud-custom-fab-position" />
+    }
 
     <MudDrawer @bind-Open="_drawerOpen"
-               ClipMode="DrawerClipMode.Always"
+               ClipMode="IsWebOrDesktop() ? DrawerClipMode.Always : DrawerClipMode.Never"
                Variant="@DrawerVariant.Responsive"
                Elevation="6">
         <NavMenu IsDarkMode="_isDarkMode" />
     </MudDrawer>
 
     <MudMainContent>
-        <MudContainer Class="mt-6">
+        <MudContainer Class="@(IsWebOrDesktop() ? "mt-6 mb-6" : "mt-n5 mb-20")">
             @Body
         </MudContainer>
     </MudMainContent>
@@ -110,6 +154,8 @@
     private bool _isDarkMode = false;
 
     private void DrawerToggle() => _drawerOpen = !_drawerOpen;
+    private bool IsWebOrDesktop() => FormFactor.GetFormFactor() == "Web" || FormFactor.GetPlatform().Contains("WinUI", StringComparison.OrdinalIgnoreCase);
+
 
     private async Task ToggleDarkMode()
     {
@@ -122,5 +168,10 @@
     {
         _isDarkMode = await localStorage.GetItemAsync<bool>("isDarkMode");
         StorageConstants.IsDarkMode = _isDarkMode;
+    }
+
+    void OnFabClick()
+    {
+        // TODO: your action here
     }
 }
