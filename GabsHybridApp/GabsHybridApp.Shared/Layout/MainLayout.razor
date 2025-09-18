@@ -88,7 +88,26 @@
     }
     else
     {
-        <MudAppBar Bottom="true" Elevation="2" Dense="true" Class="d-flex justify-center align-center pa-0">
+        <MudAppBar Fixed Dense Color="Color.Transparent" Class="pt-2" Elevation="0">
+            <MudSpacer />
+            <NotificationPanel IncludeSample="true" NotificationHubUrl="" />
+            <AuthorizeView>
+                <MudMenu AnchorOrigin="Origin.TopLeft" Dense>
+                    <ActivatorContent>
+                        <MudAvatar Size="Size.Medium" Elevation="2">
+                            <MudImage Src="https://avatars.githubusercontent.com/u/7923889?v=4" />
+                        </MudAvatar>
+                    </ActivatorContent>
+                    <ChildContent>
+                        <MudListItem T="string" Text="My Account" Icon="@Icons.Material.Outlined.Person" Href="/account/changepassword" />
+                        <MudListItem T="string" Text="Settings" Icon="@Icons.Material.Filled.Settings" />
+                        <MudListItem T="string" Text="Logout" Icon="@Icons.Material.Filled.Logout" OnClick='() => NavManager.NavigateToAfterAuth("/account/logout", Caps.RequiresFullReloadAfterAuth)' />
+                        <MudDivider />
+                    </ChildContent>
+                </MudMenu>
+            </AuthorizeView>
+        </MudAppBar>
+        <MudAppBar Bottom Elevation="2" Dense="false" Class="d-flex justify-center align-center pa-0">
             <MudNavLink Href="/" Match="NavLinkMatch.All" Class="mud-bottom-nav-item">
                 <div class="d-flex flex-column align-center gap-1">
                     <MudIcon Icon="@Icons.Material.Filled.House" />
@@ -132,7 +151,7 @@
                ClipMode="IsWebOrDesktop() ? DrawerClipMode.Always : DrawerClipMode.Never"
                Variant="@DrawerVariant.Responsive"
                Elevation="6">
-        <NavMenu IsDarkMode="_isDarkMode" />
+        <NavMenu IsDarkMode="_isDarkMode" OnToggleDarkMode="ToggleDarkMode" />
     </MudDrawer>
 
     <MudMainContent>
@@ -155,7 +174,6 @@
 
     private void DrawerToggle() => _drawerOpen = !_drawerOpen;
     private bool IsWebOrDesktop() => FormFactor.GetFormFactor() == "Web" || FormFactor.GetPlatform().Contains("WinUI", StringComparison.OrdinalIgnoreCase);
-
 
     private async Task ToggleDarkMode()
     {

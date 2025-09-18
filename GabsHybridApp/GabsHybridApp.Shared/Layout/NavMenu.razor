@@ -47,6 +47,7 @@
                     <MudNavLink Href="https://mudblazor.com/getting-started/installation">Quick-Start Guide</MudNavLink>
                 </MudNavGroup>
                 <MudNavLink Href="https://github.com/hubert17/EdwillJSystem" Icon="@Icons.Custom.Brands.GitHub" Target="_blank">EdwillJSystem</MudNavLink>
+                <MudNavLink OnClick="OnToggleDarkMode" Icon="@(IsDarkMode? Icons.Material.Filled.WbSunny : Icons.Material.Filled.Brightness3)">Switch Dark Mode</MudNavLink>
             </MudHidden>
 
         </MudNavMenu>
@@ -55,8 +56,11 @@
 
 @code {
     [Parameter] public bool IsDarkMode { get; set; }
+    [Parameter] public EventCallback OnToggleDarkMode { get; set; }
 
     CounterState CounterState => GetState<CounterState>();
     private int currentCount => CounterState.Count;
+
+
 }
 
