@@ -3,9 +3,12 @@
 @using GabsHybridApp.Shared.Components
 @using GabsHybridApp.Shared.Layout
 
+@implements IAsyncDisposable
+
 @inject IFormFactor FormFactor
 @inject IHostCapabilities Caps
 @inject ILocalStorageService localStorage
+@inject IJSRuntime JS
 
  @inject NavigationManager NavManager
 
@@ -17,6 +20,20 @@
 <PageTitle>GabsHybridApp</PageTitle>
 
 <MudLayout>
+    <MudDrawer @bind-Open="_drawerOpen"
+               ClipMode="IsWebOrDesktop() ? DrawerClipMode.Always : DrawerClipMode.Never"
+               Variant="@DrawerVariant.Responsive"
+               Elevation="6"
+               >
+        <NavMenu IsDarkMode="_isDarkMode" OnToggleDarkMode="ToggleDarkMode" />
+    </MudDrawer>
+
+    <MudMainContent id="main-content-container" Class="mainlayout-with-bottom-bar-padding">
+        <MudContainer Class="@(IsWebOrDesktop() ? "mt-6 mb-6" : "mt-n5")">
+            @Body
+        </MudContainer>
+    </MudMainContent>
+
     @if (IsWebOrDesktop())
     {
         <MudAppBar Elevation="4">
@@ -107,8 +124,8 @@
                 </MudMenu>
             </AuthorizeView>
         </MudAppBar>
-        <MudAppBar Bottom Elevation="2" Dense="false" Class="d-flex justify-center align-center pa-0">
-            <MudNavLink Href="/" Match="NavLinkMatch.All" Class="mud-bottom-nav-item">
+        <MudAppBar id="bottom-app-bar" Bottom Elevation="2" Dense="false" Class="mainlayout-bottom-appbar d-flex justify-center align-center pa-0">
+            <MudNavLink Href="/" Match="NavLinkMatch.All" Class="mud-bottom-nav-item no-ripple">
                 <div class="d-flex flex-column align-center gap-1">
                     <MudIcon Icon="@Icons.Material.Filled.House" />
                     <span class="mud-typography-caption my-n1">Home</span>
@@ -140,25 +157,15 @@
             </MudNavLink>
         </MudAppBar>
 
-        <MudFab StartIcon="@Icons.Material.Filled.QrCodeScanner"
+        <MudFab id="main-fab"
+                StartIcon="@Icons.Material.Filled.QrCodeScanner"
                 Color="Color.Primary"
                 Size="Size.Large"
                 OnClick="@OnFabClick"
-                Class="mud-custom-fab-position" />
+                Class="mainlayout-fab-position mainlayout-fab-sync" />
     }
 
-    <MudDrawer @bind-Open="_drawerOpen"
-               ClipMode="IsWebOrDesktop() ? DrawerClipMode.Always : DrawerClipMode.Never"
-               Variant="@DrawerVariant.Responsive"
-               Elevation="6">
-        <NavMenu IsDarkMode="_isDarkMode" OnToggleDarkMode="ToggleDarkMode" />
-    </MudDrawer>
 
-    <MudMainContent>
-        <MudContainer Class="@(IsWebOrDesktop() ? "mt-6 mb-6" : "mt-n5 mb-20")">
-            @Body
-        </MudContainer>
-    </MudMainContent>
 </MudLayout>
 
 <!-- Global Error UI -->
@@ -175,6 +182,9 @@
     private void DrawerToggle() => _drawerOpen = !_drawerOpen;
     private bool IsWebOrDesktop() => FormFactor.GetFormFactor() == "Web" || FormFactor.GetPlatform().Contains("WinUI", StringComparison.OrdinalIgnoreCase);
 
+    private IJSObjectReference? _mod;
+    private IJSObjectReference? _handle;
+
     private async Task ToggleDarkMode()
     {
         _isDarkMode = !_isDarkMode;
@@ -186,6 +196,33 @@
     {
         _isDarkMode = await localStorage.GetItemAsync<bool>("isDarkMode");
         StorageConstants.IsDarkMode = _isDarkMode;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender) return;
+
+        if (!IsWebOrDesktop())
+        {
+            _mod = await JS.InvokeAsync<IJSObjectReference>("import", "/js/scroll-handler.js");
+            _handle = await _mod.InvokeAsync<IJSObjectReference>(
+                "registerScrollHandler",
+                "",                 // use window scroll (Hybrid)
+                "bottom-app-bar",   // bar id
+                "main-fab"          // FAB id
+            );
+        }
+
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (!IsWebOrDesktop())
+        {
+            try { if (_handle is not null) await _handle.InvokeVoidAsync("dispose"); }
+            catch { }
+            if (_mod is not null) await _mod.DisposeAsync();
+        }
     }
 
     void OnFabClick()

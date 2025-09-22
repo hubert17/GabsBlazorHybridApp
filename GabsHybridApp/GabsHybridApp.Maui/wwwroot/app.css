@@ -31,3 +31,69 @@
         height: auto; /* keep aspect ratio */
         display: block;
     }
+
+/* MainLayout Mobile */
+/* keep page content from being covered by the bottom bar */
+.mainlayout-with-bottom-bar-padding {
+    padding-bottom: calc(56px + env(safe-area-inset-bottom, 0px));
+}
+
+@media (min-width: 600px) {
+    .mainlayout-with-bottom-bar-padding {
+        padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px));
+    }
+}
+
+/* bottom bar */
+.mainlayout-bottom-appbar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: env(safe-area-inset-bottom, 0px);
+    transform: translateY(0);
+    opacity: 1;
+    transition: transform .28s ease, opacity .28s ease;
+}
+
+    .mainlayout-bottom-appbar.hide {
+        transform: translateY(calc(100% + env(safe-area-inset-bottom, 0px)));
+        opacity: 0; /* fade out */
+    }
+
+.mainlayout-fab-position {
+    position: fixed !important;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 20px);
+    z-index: 1301;
+    width: 56px;
+    height: 56px;
+    min-width: 56px;
+}
+
+/* sync slide+fade with the bar height (JS still updates --bottom-bar-h) */
+:root {
+    --bottom-bar-h: 56px;
+}
+
+.mainlayout-fab-sync {
+    --fab-offset: 0px;
+    transform: translateX(-50%) translateY(var(--fab-offset));
+    opacity: 1;
+    transition: transform .28s ease, opacity .28s ease;
+    will-change: transform, opacity;
+}
+
+    .mainlayout-fab-sync.hide {
+        --fab-offset: calc(var(--bottom-bar-h) + 8px);
+        opacity: 0; /* fade out */
+        pointer-events: none;
+    }
+
+/* optional: reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    .mainlayout-bottom-appbar,
+    .mainlayout-fab-sync {
+        transition: none;
+    }
+}
