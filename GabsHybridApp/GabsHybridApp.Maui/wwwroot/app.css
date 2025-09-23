@@ -97,3 +97,20 @@
         transition: none;
     }
 }
+
+.mainlayout-bottom-appbar .mud-nav-link.active .mud-typography-caption {
+    font-weight: 700;
+}
+
+.mud-bottom-nav-item {
+    flex: 1 1 0; /* share width evenly across items */
+    min-height: 56px;
+    padding: 0;
+    margin-left: 8px;
+    margin-right: 8px;
+}
+
+    .mud-bottom-nav-item .mud-nav-link-text {
+        margin-left: -1px;
+    }
+
