@@ -1,0 +1,135 @@
+﻿@page "/device-features"
+
+<style>
+    /* Horizontal, single-row chip scroller */
+    .chipset-nowrap {
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        gap: .5rem;
+        padding-inline: .5rem; /* prevents edge clipping */
+        scrollbar-width: none;
+        -webkit-overflow-scrolling: touch;
+    }
+
+        .chipset-nowrap::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Chips don’t shrink; keep labels intact */
+        .chipset-nowrap .mud-chip {
+            flex: 0 0 auto;
+        }
+
+            .chipset-nowrap .mud-chip .mud-chip-content {
+                white-space: nowrap;
+            }
+
+    .invert-select .mud-chip.mud-chip-selected {
+        border-color: transparent !important;
+        transition: background-color .15s ease, color .15s ease, border-color .15s ease;
+        color: var(--mud-palette-white) !important; 
+    }
+
+        .invert-select .mud-chip.mud-chip-selected span {
+            color: var(--mud-palette-white) !important;
+        }
+
+        .invert-select .mud-chip.mud-chip-selected svg {
+            color: var(--mud-palette-white) !important;
+        }
+
+        .invert-select .mud-chip.mud-chip-selected.mud-chip-color-primary {
+            background: var(--mud-palette-primary);
+        }
+
+        .invert-select .mud-chip.mud-chip-selected.mud-chip-color-secondary {
+            background: var(--mud-palette-secondary);
+        }
+
+        .invert-select .mud-chip.mud-chip-selected.mud-chip-color-info {
+            background: var(--mud-palette-info);
+        }
+
+        .invert-select .mud-chip.mud-chip-selected.mud-chip-color-success {
+            background: var(--mud-palette-success);
+        }
+
+        .invert-select .mud-chip.mud-chip-selected.mud-chip-color-warning {
+            background: var(--mud-palette-warning);
+        }
+
+        .invert-select .mud-chip.mud-chip-selected.mud-chip-color-error {
+            background: var(--mud-palette-error);
+        }
+
+        .invert-select .mud-chip.mud-chip-selected.mud-chip-color-dark {
+            background: var(--mud-palette-dark);
+        }
+</style>
+
+@if (IsDarkMode)
+{
+    <style>
+        .mud-chip.mud-chip-outlined {
+            color: var(--mud-palette-text-dark) !important;
+        }
+
+            .mud-chip.mud-chip-outlined > svg, .mud-chip.mud-chip-outlined > .mud-chip-content {
+                color: var(--mud-palette-text-dark) !important;
+            }
+    </style>
+}
+
+<h2>Device Features</h2>
+
+<MudText Typo="Typo.body2">
+    Current theme: @(IsDarkMode ? "Dark" : "Light")
+</MudText>
+
+<MudChipSet T="DeviceFeature"
+            @bind-SelectedValue="_selected"
+            SelectionMode="SelectionMode.SingleSelection"
+            Class="chipset-nowrap invert-select mt-5 mx-n10 px-10">
+    <MudChip Variant="Variant.Outlined" Color="Color.Primary" Icon="@Icons.Material.Filled.LocationOn" Value="DeviceFeature.Location">Location</MudChip>
+    <MudChip Variant="Variant.Outlined" Color="Color.Secondary" Icon="@Icons.Material.Filled.PhotoCamera" Value="DeviceFeature.Camera">Camera</MudChip>
+    <MudChip Variant="Variant.Outlined" Color="Color.Info" Icon="@Icons.Material.Filled.Mic" Value="DeviceFeature.Microphone">Microphone</MudChip>
+    <MudChip Variant="Variant.Outlined" Color="Color.Success" Icon="@Icons.Material.Filled.PhotoLibrary" Value="DeviceFeature.Photos">Photos</MudChip>
+    <MudChip Variant="Variant.Outlined" Color="Color.Warning" Icon="@Icons.Material.Filled.Folder" Value="DeviceFeature.Files">Files</MudChip>
+    <MudChip Variant="Variant.Outlined" Color="Color.Error" Icon="@Icons.Material.Filled.Contacts" Value="DeviceFeature.Contacts">Contacts</MudChip>
+    <MudChip Variant="Variant.Outlined" Color="Color.Dark" Icon="@Icons.Material.Filled.Notifications" Value="DeviceFeature.Notifications">Notifications</MudChip>
+    <MudChip Variant="Variant.Outlined" Color="Color.Primary" Icon="@Icons.Material.Filled.Bluetooth" Value="DeviceFeature.Bluetooth">Bluetooth</MudChip>
+    <MudChip Variant="Variant.Outlined" Color="Color.Secondary" Icon="@Icons.Material.Filled.Nfc" Value="DeviceFeature.Nfc">NFC</MudChip>
+    <MudChip Variant="Variant.Outlined" Color="Color.Info" Icon="@Icons.Material.Filled.Fingerprint" Value="DeviceFeature.Biometric">Biometric</MudChip>
+    <MudChip Variant="Variant.Outlined" Color="Color.Success" Icon="@Icons.Material.Filled.DirectionsRun" Value="DeviceFeature.MotionSensors">Motion</MudChip>
+    <MudChip Variant="Variant.Outlined" Color="Color.Warning" Icon="@Icons.Material.Filled.FlashOn" Value="DeviceFeature.Flashlight">Flashlight</MudChip>
+    <MudChip Variant="Variant.Outlined" Color="Color.Error" Icon="@Icons.Material.Filled.Vibration" Value="DeviceFeature.Vibration">Vibration</MudChip>
+    <MudChip Variant="Variant.Outlined" Color="Color.Dark" Icon="@Icons.Material.Filled.NetworkCheck" Value="DeviceFeature.Network">Network</MudChip>
+    <MudChip Variant="Variant.Outlined" Color="Color.Primary" Icon="@Icons.Material.Filled.ContentPaste" Value="DeviceFeature.Clipboard">Clipboard</MudChip>
+</MudChipSet>
+
+@code {
+    [CascadingParameter(Name = "IsDarkMode")]
+    public bool IsDarkMode { get; set; }
+
+    private DeviceFeature _selected = DeviceFeature.Location;
+
+    public enum DeviceFeature
+    {
+        Location,
+        Camera,
+        Microphone,
+        Photos,
+        Files,
+        Contacts,
+        Notifications,
+        Bluetooth,
+        Nfc,
+        Biometric,
+        MotionSensors,
+        Flashlight,
+        Vibration,
+        Network,
+        Clipboard
+    }
+}

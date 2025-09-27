@@ -1,5 +1,4 @@
 ﻿@inherits LayoutComponentBase
-
 @using GabsHybridApp.Shared.Components
 @using GabsHybridApp.Shared.Layout
 
@@ -9,8 +8,7 @@
 @inject IHostCapabilities Caps
 @inject ILocalStorageService localStorage
 @inject IJSRuntime JS
-
- @inject NavigationManager NavManager
+@inject NavigationManager NavManager
 
 <AntiforgeryToken />
 
@@ -19,6 +17,7 @@
 
 <PageTitle>GabsHybridApp</PageTitle>
 
+<CascadingValue Value="_isDarkMode" Name="IsDarkMode">
 <MudLayout>
     <MudDrawer @bind-Open="_drawerOpen"
                ClipMode="IsWebOrDesktop() ? DrawerClipMode.Always : DrawerClipMode.Never"
@@ -132,10 +131,17 @@
                 </div>
             </MudNavLink>
 
-            <MudNavLink Href="/counter" Match="NavLinkMatch.Prefix" Class="mud-bottom-nav-item">
+@*             <MudNavLink Href="/counter" Match="NavLinkMatch.Prefix" Class="mud-bottom-nav-item">
                 <div class="d-flex flex-column align-center gap-1">
                     <MudIcon Icon="@Icons.Material.Filled.PlusOne" />
                     <span class="mud-typography-caption my-n1">Counter</span>
+                </div>
+            </MudNavLink> *@
+
+            <MudNavLink Href="/device-features" Match="NavLinkMatch.Prefix" Class="mud-bottom-nav-item">
+                <div class="d-flex flex-column align-center gap-1">
+                    <MudIcon Icon="@Icons.Material.Filled.DeviceHub" />
+                    <span class="mud-typography-caption my-n1">Device</span>
                 </div>
             </MudNavLink>
 
@@ -167,6 +173,7 @@
 
 
 </MudLayout>
+</CascadingValue>
 
 <!-- Global Error UI -->
 <div id="blazor-error-ui">
@@ -180,7 +187,7 @@
     private bool _isDarkMode = false;
 
     private void DrawerToggle() => _drawerOpen = !_drawerOpen;
-    private bool IsWebOrDesktop() => FormFactor.GetFormFactor() == "Web" || FormFactor.GetPlatform().Contains("WinUI", StringComparison.OrdinalIgnoreCase);
+    private bool IsWebOrDesktop() => false;// FormFactor.GetFormFactor() == "Web" || FormFactor.GetPlatform().Contains("WinUI", StringComparison.OrdinalIgnoreCase);
 
     private IJSObjectReference? _mod;
     private IJSObjectReference? _handle;
