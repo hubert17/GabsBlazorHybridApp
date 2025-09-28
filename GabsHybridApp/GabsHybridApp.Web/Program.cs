@@ -35,6 +35,7 @@ builder.Services.AddSingleton<IFormFactor, FormFactor>();
 builder.Services.AddScoped<IHostCapabilities, WebHostCapabilities>();
 builder.Services.AddScoped<IAuthService, ServerCookieAuthService>();
 builder.Services.AddScoped<INotificationService, NotificationService>();
+builder.Services.AddScoped<ILocationService, WebLocationService>();
 
 var app = builder.Build();
 

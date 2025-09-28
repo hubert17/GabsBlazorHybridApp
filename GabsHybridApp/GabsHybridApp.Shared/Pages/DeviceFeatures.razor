@@ -1,4 +1,5 @@
 ﻿@page "/device-features"
+@using GabsHybridApp.Shared.Components.DeviceFeatures
 
 <style>
     /* Horizontal, single-row chip scroller */
@@ -7,7 +8,6 @@
         flex-wrap: nowrap;
         overflow-x: auto;
         gap: .5rem;
-        padding-inline: .5rem; /* prevents edge clipping */
         scrollbar-width: none;
         -webkit-overflow-scrolling: touch;
     }
@@ -108,6 +108,10 @@
     <MudChip Variant="Variant.Outlined" Color="Color.Primary" Icon="@Icons.Material.Filled.ContentPaste" Value="DeviceFeature.Clipboard">Clipboard</MudChip>
 </MudChipSet>
 
+@if (_selected == DeviceFeature.Location)
+{
+    <LocationDemo />
+}
 @code {
     [CascadingParameter(Name = "IsDarkMode")]
     public bool IsDarkMode { get; set; }

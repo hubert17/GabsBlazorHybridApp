@@ -37,6 +37,7 @@ public static class MauiProgram
         builder.Services.AddScoped<IAuthService, MauiLocalAuthService>();
         builder.Services.AddScoped<AuthenticationStateProvider, HostedAuthStateProvider>();
         builder.Services.AddScoped<INotificationService, NotificationService>();
+        builder.Services.AddScoped<ILocationService, MauiLocationService>();
 
 #if DEBUG
         builder.Services.AddBlazorWebViewDeveloperTools();

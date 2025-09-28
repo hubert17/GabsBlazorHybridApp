@@ -1,1 +1,3 @@
-﻿
+﻿.mud-layout {
+    overflow-x: clip; /* better than hidden for perf; falls back nicely */
+}

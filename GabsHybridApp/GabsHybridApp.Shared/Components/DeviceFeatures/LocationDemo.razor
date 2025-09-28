@@ -1,0 +1,60 @@
+﻿@page "/demo-location"
+@inject GabsHybridApp.Shared.Services.ILocationService LocationService
+
+<PageTitle>Location Demo</PageTitle>
+
+<MudStack Spacing="1" Class="mt-2">
+    <MudLoadingButton Loading="_loading" Variant="Variant.Filled" Color="Color.Primary" OnClick="GetLocation">
+        Get my location
+    </MudLoadingButton>
+
+    @if (_error is not null)
+    {
+        <MudAlert Severity="Severity.Warning">@_error</MudAlert>
+    }
+
+    @if (_point is not null)
+    {
+        <div class="mt-1">
+            <MudText Typo="Typo.subtitle1">Lat: @_point.Latitude.ToString("F6")</MudText>
+            <MudText Typo="Typo.subtitle1">Lng: @_point.Longitude.ToString("F6")</MudText>
+            @if (_point.AccuracyMeters is not null)
+            {
+                <MudText Typo="Typo.body2">Accuracy: ~@_point.AccuracyMeters m</MudText>
+            }
+            @if (_point.Timestamp is not null)
+            {
+                <MudText Typo="Typo.body2">Time: @_point.Timestamp</MudText>
+            }
+        </div>
+
+        <div class="map-frame mt-1">
+            <iframe title="map"
+                    width="100%" style="border:0;height:calc(100vh - 400px);"
+                    loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+                    src="@MapEmbedUrl(_point.Latitude, _point.Longitude)">
+            </iframe>
+        </div>
+    }
+</MudStack>
+
+    @code {
+    private GabsHybridApp.Shared.Services.GeoPoint? _point;
+    private string? _error;
+    private bool _loading = false;
+
+    private async Task GetLocation()
+    {
+		_loading = true;
+
+        _error = null;
+        _point = await LocationService.GetCurrentAsync();
+        if (_point is null)
+            _error = "Unable to get your location. Please allow location permission and try again.";
+
+		_loading = false;
+    }
+
+    private static string MapEmbedUrl(double lat, double lon, int zoom = 15)
+        => $"https://www.google.com/maps?q={lat.ToString(System.Globalization.CultureInfo.InvariantCulture)},{lon.ToString(System.Globalization.CultureInfo.InvariantCulture)}&z={zoom}&output=embed";
+}
