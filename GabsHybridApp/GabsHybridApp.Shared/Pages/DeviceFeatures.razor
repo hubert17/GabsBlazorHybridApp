@@ -93,7 +93,7 @@
             Class="chipset-nowrap invert-select mt-5 mx-n10 px-10">
     <MudChip Variant="Variant.Outlined" Color="Color.Primary" Icon="@Icons.Material.Filled.LocationOn" Value="DeviceFeature.Location">Location</MudChip>
     <MudChip Variant="Variant.Outlined" Color="Color.Secondary" Icon="@Icons.Material.Filled.PhotoCamera" Value="DeviceFeature.Camera">Camera</MudChip>
-    <MudChip Variant="Variant.Outlined" Color="Color.Info" Icon="@Icons.Material.Filled.Mic" Value="DeviceFeature.Microphone">Microphone</MudChip>
+    <MudChip Variant="Variant.Outlined" Color="Color.Info" Icon="@Icons.Material.Filled.FlashOn" Value="DeviceFeature.Flashlight">Flashlight</MudChip>
     <MudChip Variant="Variant.Outlined" Color="Color.Success" Icon="@Icons.Material.Filled.PhotoLibrary" Value="DeviceFeature.Photos">Photos</MudChip>
     <MudChip Variant="Variant.Outlined" Color="Color.Warning" Icon="@Icons.Material.Filled.Folder" Value="DeviceFeature.Files">Files</MudChip>
     <MudChip Variant="Variant.Outlined" Color="Color.Error" Icon="@Icons.Material.Filled.Contacts" Value="DeviceFeature.Contacts">Contacts</MudChip>
@@ -102,7 +102,7 @@
     <MudChip Variant="Variant.Outlined" Color="Color.Secondary" Icon="@Icons.Material.Filled.Nfc" Value="DeviceFeature.Nfc">NFC</MudChip>
     <MudChip Variant="Variant.Outlined" Color="Color.Info" Icon="@Icons.Material.Filled.Fingerprint" Value="DeviceFeature.Biometric">Biometric</MudChip>
     <MudChip Variant="Variant.Outlined" Color="Color.Success" Icon="@Icons.Material.Filled.DirectionsRun" Value="DeviceFeature.MotionSensors">Motion</MudChip>
-    <MudChip Variant="Variant.Outlined" Color="Color.Warning" Icon="@Icons.Material.Filled.FlashOn" Value="DeviceFeature.Flashlight">Flashlight</MudChip>
+    <MudChip Variant="Variant.Outlined" Color="Color.Warning" Icon="@Icons.Material.Filled.Mic" Value="DeviceFeature.Microphone">Microphone</MudChip>
     <MudChip Variant="Variant.Outlined" Color="Color.Error" Icon="@Icons.Material.Filled.Vibration" Value="DeviceFeature.Vibration">Vibration</MudChip>
     <MudChip Variant="Variant.Outlined" Color="Color.Dark" Icon="@Icons.Material.Filled.NetworkCheck" Value="DeviceFeature.Network">Network</MudChip>
     <MudChip Variant="Variant.Outlined" Color="Color.Primary" Icon="@Icons.Material.Filled.ContentPaste" Value="DeviceFeature.Clipboard">Clipboard</MudChip>
@@ -116,7 +116,10 @@ else if (_selected == DeviceFeature.Camera)
 {
     <CameraDemo />
 }
-
+else if (_selected == DeviceFeature.Flashlight)
+{
+    <FlashlightDemo />
+}
 
 @code {
     [CascadingParameter(Name = "IsDarkMode")]

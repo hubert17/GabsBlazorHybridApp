@@ -1,0 +1,28 @@
+﻿@page "/device/flashlight"
+@inject IFlashlightService Flashlight
+
+<MudStack Spacing="2" Class="mt-4">
+    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="Toggle">
+        Toggle Flashlight (@(Flashlight.IsOn ? "ON" : "OFF"))
+    </MudButton>
+
+    @if (!string.IsNullOrEmpty(_error))
+    {
+        <MudAlert Severity="Severity.Error" Dense="true">@_error</MudAlert>
+        <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.Settings"
+                   OnClick="OpenSettings">Open App Settings</MudButton>
+    }
+</MudStack>
+
+@code {
+    private string? _error;
+
+    private async Task Toggle()
+    {
+        _error = null;
+        try { await Flashlight.ToggleAsync(); }
+        catch (Exception ex) { _error = ex.Message; }
+    }
+
+    private void OpenSettings() => Flashlight.OpenSettingsAsync();
+}

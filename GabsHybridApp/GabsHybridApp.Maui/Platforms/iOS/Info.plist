@@ -36,5 +36,7 @@
 	<string>This app needs access to your photo library.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>This app saves selected or captured photos to your library.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>This app needs camera access to control the flashlight (torch).</string>
 </dict>
 </plist>

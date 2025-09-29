@@ -42,6 +42,7 @@ public static class MauiProgram
         builder.Services.AddScoped<INotificationService, NotificationService>();
         builder.Services.AddScoped<ILocationService, MauiLocationService>();
         builder.Services.AddSingleton<ICameraService, MauiCameraService>();
+        builder.Services.AddSingleton<IFlashlightService, MauiFlashlightService>();
 
 #if DEBUG
         builder.Services.AddBlazorWebViewDeveloperTools();

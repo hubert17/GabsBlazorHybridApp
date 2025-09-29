@@ -37,6 +37,7 @@ builder.Services.AddScoped<IAuthService, ServerCookieAuthService>();
 builder.Services.AddScoped<INotificationService, NotificationService>();
 builder.Services.AddScoped<ILocationService, WebLocationService>();
 builder.Services.AddScoped<ICameraService, WebCameraService>();
+builder.Services.AddSingleton<IFlashlightService, WebFlashlightService>();
 
 var app = builder.Build();
 

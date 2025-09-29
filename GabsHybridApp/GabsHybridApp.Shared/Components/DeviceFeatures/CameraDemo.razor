@@ -1,4 +1,5 @@
-﻿@inject ICameraService CameraService
+﻿@page "/device/camera"
+@inject ICameraService CameraService
 
 <MudStack Spacing="1" Class="mt-2">
     <MudLoadingButton Loading="_loading" Variant="Variant.Filled" Color="Color.Primary" OnClick="TakePhotoAsync">
