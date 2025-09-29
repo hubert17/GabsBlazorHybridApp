@@ -1,3 +1,40 @@
 ﻿.mud-layout {
     overflow-x: clip; /* better than hidden for perf; falls back nicely */
 }
+
+/* ========== LIGHT MODE ONLY ========== */
+
+/* Trigger (icon + optional text) */
+body:not(.mud-theme-dark) .mud-menu .mud-button-root,
+body:not(.mud-theme-dark) .mud-menu .mud-button-root .mud-icon-root,
+body:not(.mud-theme-dark) .mud-menu .mud-button-root .mud-typography {
+    color: var(--mud-palette-primary-text) !important;
+}
+
+/* Popover menu text + icons */
+body:not(.mud-theme-dark) .mud-popover .mud-menu-list,
+body:not(.mud-theme-dark) .mud-popover .mud-menu-list .mud-list-item,
+body:not(.mud-theme-dark) .mud-popover .mud-menu-list .mud-menu-item,
+body:not(.mud-theme-dark) .mud-popover .mud-typography,
+body:not(.mud-theme-dark) .mud-popover .mud-icon-root,
+body:not(.mud-theme-dark) .mud-popover .mud-svg-icon {
+    color: var(--mud-palette-primary-text) !important;
+}
+
+body:not(.mud-theme-dark) .mud-popover .mud-svg-icon {
+    fill: currentColor !important;
+}
+
+/* Hover background for both menu patterns */
+body:not(.mud-theme-dark) .mud-popover .mud-menu-list .mud-menu-item:hover,
+body:not(.mud-theme-dark) .mud-popover .mud-list .mud-list-item.mud-list-item-clickable:hover {
+    background-color: var(--mud-palette-primary) !important;
+    color: var(--mud-palette-primary-contrast-text) !important;
+}
+
+    /* Ensure inner text + icons follow contrast color on hover */
+    body:not(.mud-theme-dark) .mud-popover .mud-menu-list .mud-menu-item:hover .mud-typography,
+    body:not(.mud-theme-dark) .mud-popover .mud-list .mud-list-item.mud-list-item-clickable:hover .mud-typography {
+        color: var(--mud-palette-primary-contrast-text) !important;
+        fill: currentColor !important;
+    }

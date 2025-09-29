@@ -73,7 +73,7 @@
                                OnClick="ToggleDarkMode" />
             </MudTooltip>
 
-            <MudHidden Breakpoint="Breakpoint.SmAndUp" Invert="true">
+            <MudHidden Breakpoint="Breakpoint.SmAndUp" Invert>
                 <!-- 💻 GitHub Link -->
                 <MudTooltip Text="Github">
                     <MudIconButton Icon="@Icons.Custom.Brands.GitHub"
@@ -85,7 +85,7 @@
 
             <!-- 👤 User Menu -->
             <AuthorizeView>
-                <MudMenu AnchorOrigin="Origin.TopLeft" Dense="true" Class="mt-1 ml-4">
+                <MudMenu AnchorOrigin="Origin.TopLeft" Dense Class="mt-1 ml-4" >
                     <ActivatorContent>
                         <MudAvatar Size="Size.Medium">
                             <MudImage Src="https://avatars.githubusercontent.com/u/7923889?v=4" />
