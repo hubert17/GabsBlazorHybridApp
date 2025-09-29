@@ -36,6 +36,7 @@ builder.Services.AddScoped<IHostCapabilities, WebHostCapabilities>();
 builder.Services.AddScoped<IAuthService, ServerCookieAuthService>();
 builder.Services.AddScoped<INotificationService, NotificationService>();
 builder.Services.AddScoped<ILocationService, WebLocationService>();
+builder.Services.AddScoped<ICameraService, WebCameraService>();
 
 var app = builder.Build();
 
