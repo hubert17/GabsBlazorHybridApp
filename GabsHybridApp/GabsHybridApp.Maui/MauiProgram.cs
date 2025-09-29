@@ -1,4 +1,5 @@
-﻿using GabsHybridApp.Maui.Extensions;
+﻿using CommunityToolkit.Maui;
+using GabsHybridApp.Maui.Extensions;
 using GabsHybridApp.Maui.Services;
 using GabsHybridApp.Shared;
 using GabsHybridApp.Shared.Data;
@@ -33,11 +34,14 @@ public static class MauiProgram
 
         builder.Services.AddMauiBlazorWebView();
 
+        builder.UseMauiApp<App>().UseMauiCommunityToolkit().UseMauiCommunityToolkitCamera();
+
         builder.Services.AddAuthorizationCore(); // not AddAuthorization()
         builder.Services.AddScoped<IAuthService, MauiLocalAuthService>();
         builder.Services.AddScoped<AuthenticationStateProvider, HostedAuthStateProvider>();
         builder.Services.AddScoped<INotificationService, NotificationService>();
         builder.Services.AddScoped<ILocationService, MauiLocationService>();
+        builder.Services.AddSingleton<ICameraService, MauiCameraService>();
 
 #if DEBUG
         builder.Services.AddBlazorWebViewDeveloperTools();

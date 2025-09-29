@@ -112,6 +112,12 @@
 {
     <LocationDemo />
 }
+else if (_selected == DeviceFeature.Camera)
+{
+    <CameraDemo />
+}
+
+
 @code {
     [CascadingParameter(Name = "IsDarkMode")]
     public bool IsDarkMode { get; set; }
