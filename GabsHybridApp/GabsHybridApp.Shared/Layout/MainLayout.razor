@@ -28,14 +28,14 @@
     </MudDrawer>
 
     <MudMainContent id="main-content-container" Class="mainlayout-with-bottom-bar-padding">
-        <MudContainer Class="@(IsWebOrDesktop() ? "mt-6 mb-6" : "mt-n5")">
-            @Body
-        </MudContainer>
+            <MudContainer Class="@(IsWebOrDesktop() ? "mt-6 mb-6" : "")">
+                @Body
+            </MudContainer>
     </MudMainContent>
 
     @if (IsWebOrDesktop())
     {
-        <MudAppBar Elevation="4">
+        <MudAppBar id="top-app-bar" Elevation="4">
             <MudHidden Breakpoint="Breakpoint.SmAndDown">
                 <MudIcon Icon="@Icons.Custom.Brands.MudBlazor" Size="Size.Large" />
             </MudHidden>
@@ -145,7 +145,7 @@
             </MudNavLink>
 
             @* Placeholder for the FAB to keep the spacing right *@
-            <div style="width: 56px;"></div>
+            <div class="mainlayout-fab-dock" aria-hidden="true"></div>
 
             <MudNavLink Href="/products" Class="mud-bottom-nav-item">
                 <div class="d-flex flex-column align-center gap-1">
@@ -213,9 +213,11 @@
             _mod = await JS.InvokeAsync<IJSObjectReference>("import", "/js/scroll-handler.js");
             _handle = await _mod.InvokeAsync<IJSObjectReference>(
                 "registerScrollHandler",
-                "",                 // use window scroll (Hybrid)
-                "bottom-app-bar",   // bar id
-                "main-fab"          // FAB id
+                "",                 // window scroll (Hybrid)
+                "bottom-app-bar",   // bottom bar
+                "main-fab",         // FAB
+                "top-app-bar",      // <-- now exists
+                "main-content-container"
             );
         }
 

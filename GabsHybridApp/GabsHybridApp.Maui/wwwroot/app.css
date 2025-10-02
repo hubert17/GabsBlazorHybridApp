@@ -64,16 +64,28 @@
     position: fixed !important;
     left: 50%;
     transform: translateX(-50%);
-    bottom: calc(env(safe-area-inset-bottom, 0px) + 20px);
     z-index: 1301;
     width: 56px;
     height: 56px;
     min-width: 56px;
 }
 
+/* iOS WebKit Safari/WebView hack */
+@supports (-webkit-touch-callout: none) {
+    .mainlayout-fab-position {
+        bottom: 20px !important;
+    }
+}
+
+/* Android default */
+.mainlayout-fab-position {
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 20px);
+}
+
 /* sync slide+fade with the bar height (JS still updates --bottom-bar-h) */
 :root {
-    --bottom-bar-h: 56px;
+    --top-bar-h: 56px; /* default; JS will overwrite */
+    --bottom-bar-h: 56px; /* you already had this */
 }
 
 .mainlayout-fab-sync {
@@ -97,6 +109,22 @@
         transition: none;
     }
 }
+
+/* reserve center slot for the FAB */
+.mainlayout-fab-dock {
+    flex: 0 0 56px; /* don't grow, don't shrink, basis = 56px */
+    width: 56px; /* redundancy for older WebKit */
+    min-width: 56px; /* belt + suspenders for iOS */
+    pointer-events: none;
+}
+
+/* if you want to be extra-safe on iOS WebKit */
+@supports (-webkit-touch-callout: none) {
+    .mainlayout-fab-dock {
+        flex: 0 0 56px !important;
+    }
+}
+
 
 .mainlayout-bottom-appbar .mud-nav-link.active .mud-typography-caption {
     font-weight: 700;
