@@ -149,3 +149,24 @@
         margin-left: -1px;
     }
 
+/* iOS only (Safari / WKWebView) */
+@supports (-webkit-touch-callout: none) {
+    /* 1) Give the drawer a real viewport height and flex column */
+    .mud-drawer-content {
+        height: calc(100svh - env(safe-area-inset-bottom, 0px));
+        display: flex;
+        flex-direction: column;
+        overflow: hidden; /* prevent double scrollbars */
+    }
+        /* 2) Allow the immediate child to shrink inside the flex column */
+        .mud-drawer-content > * {
+            min-height: 0; /* critical for nested scrolling on iOS */
+        }
+    /* 3) Make your Paper the scroll container */
+    .mud-drawer .scroll-hidden {
+        flex: 1 1 auto; /* fill available drawer height */
+        min-height: 0;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch; /* momentum scrolling */
+    }
+}

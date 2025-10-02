@@ -7,8 +7,10 @@
     <style>
         .scroll-hidden {
             overflow: auto;
-            -ms-overflow-style: none; /* IE + Edge (legacy) */
-            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+            /* NEW: keep the last items above the home indicator & bottom bar */
+            padding-bottom: calc(env(safe-area-inset-bottom, 0px) + var(--bottom-bar-h, 56px) + 16px);
         }
 
             .scroll-hidden::-webkit-scrollbar {
