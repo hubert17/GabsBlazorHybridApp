@@ -38,7 +38,6 @@ public static class MauiProgram
 
         builder.Services.AddAuthorizationCore(); // not AddAuthorization()
         builder.Services.AddScoped<IAuthService, MauiLocalAuthService>();
-        builder.Services.AddScoped<AuthenticationStateProvider, HostedAuthStateProvider>();
         builder.Services.AddScoped<INotificationService, NotificationService>();
         builder.Services.AddScoped<ILocationService, MauiLocationService>();
         builder.Services.AddSingleton<ICameraService, MauiCameraService>();
