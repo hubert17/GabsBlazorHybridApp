@@ -84,8 +84,15 @@
 
 /* sync slide+fade with the bar height (JS still updates --bottom-bar-h) */
 :root {
-    --top-bar-h: 56px; /* default; JS will overwrite */
-    --bottom-bar-h: 56px; /* you already had this */
+    --bottom-bar-h: 56px;
+}
+
+/* iOS only (Safari/WKWebView) */
+@supports (-webkit-touch-callout: none) {
+    #main-content-container .mud-container {
+        /* use svh on iOS for stable viewport; vh also works if you prefer */
+        min-height: calc(100svh - 160px - env(safe-area-inset-bottom, 0px));
+    }
 }
 
 .mainlayout-fab-sync {
