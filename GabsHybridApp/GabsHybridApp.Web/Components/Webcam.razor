@@ -2,24 +2,28 @@
 @implements IAsyncDisposable
 
 <style>
+    /* Reset dialog paddings and hide overflow behind the edge-to-edge video */
     .mud-dialog .mud-dialog-content {
         padding: 0;
         margin: 0;
         overflow: hidden;
     }
 
+    /* Pin actions to the bottom and center the buttons */
     .mud-dialog .mud-dialog-actions {
-        padding: 0;
         position: absolute;
-        bottom: 16px;
-        left: 0;
-        width: 100%;
+        inset-inline: 0; /* left:0; right:0; */
+        inset-block-end: 16px; /* bottom:16px; */
+        padding: 0;
+        display: flex !important;
+        justify-content: center !important;
     }
 
+    /* Fullscreen camera surface */
     .webcam-fullscreen {
         position: relative;
         width: 100vw;
-        height: 100vh;
+        height: 100dvh; /* better than 100vh on mobile */
         background: #000;
         display: flex;
         align-items: center;
@@ -27,20 +31,24 @@
         overflow: hidden;
     }
 
-        .webcam-fullscreen video, .webcam-fullscreen canvas {
+        /* Video/preview canvas sizing */
+        .webcam-fullscreen video,
+        .webcam-fullscreen canvas {
             width: 100%;
             height: auto;
-            max-height: 100vh;
+            max-height: 100dvh;
             object-fit: contain;
             display: block;
         }
 
+    /* Action row spacing (inner wrapper can stay) */
     .webcam-actions {
         display: flex;
-        justify-content: center;
         gap: 20px;
         padding: 20px;
+        justify-content: center;
     }
+
 </style>
 
 <MudDialog>
