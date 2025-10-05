@@ -1,0 +1,59 @@
+﻿@using Microsoft.AspNetCore.Components.Forms
+@using GabsHybridApp.Shared.Services
+@inject IJSRuntime JS
+
+<style>
+    .mud-dialog:has(#image-browser-root),
+    .mud-dialog:has(#image-browser-root) .mud-dialog-content {
+        display: none;
+    }
+</style>
+
+<MudDialog>
+    <DialogContent>
+        <div id="image-browser-root">
+            <InputFile id="@_inputId" accept="image/*" OnChange="OnPicked" style="display:none" />
+        </div>
+    </DialogContent>
+</MudDialog>
+
+@code {
+    [CascadingParameter] private IMudDialogInstance MudDialog { get; set; } = default!;
+
+    private readonly string _inputId = $"pick_{Guid.NewGuid():N}";
+    private const long MaxRead = 10 * 1024 * 1024; // 10 MB
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // Trigger the hidden file input immediately
+            await JS.InvokeVoidAsync("gabsBrowse.clickById", _inputId);
+        }
+    }
+
+    private async Task OnPicked(InputFileChangeEventArgs e)
+    {
+        var file = e.File;
+        if (file is null)
+        {
+            MudDialog.Cancel();
+            return;
+        }
+
+        var bytes = await ReadAllAsync(file);
+        var contentType = string.IsNullOrWhiteSpace(file.ContentType) ? "image/jpeg" : file.ContentType;
+        var name = string.IsNullOrWhiteSpace(file.Name) ? $"photo_{DateTime.UtcNow:yyyyMMdd_HHmmss}.jpg" : file.Name;
+
+        var result = new PhotoResult(Path: null, FileName: name, ContentType: contentType, Bytes: bytes);
+        MudDialog.Close(DialogResult.Ok(result));
+    }
+
+    private static async Task<byte[]> ReadAllAsync(IBrowserFile file)
+    {
+        await using var stream = file.OpenReadStream(MaxRead);
+        using var ms = new MemoryStream((int)Math.Min(file.Size, MaxRead));
+        await stream.CopyToAsync(ms);
+        return ms.ToArray();
+    }
+}

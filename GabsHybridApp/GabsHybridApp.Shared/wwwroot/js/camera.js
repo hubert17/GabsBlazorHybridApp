@@ -44,3 +44,12 @@
         return canvas.toDataURL("image/png");
     };
 })();
+
+
+(function () {
+    if (!window.gabsBrowse) window.gabsBrowse = {};
+    window.gabsBrowse.clickById = function (id) {
+        var el = document.getElementById(id);
+        if (el && typeof el.click === "function") el.click();
+    };
+})();

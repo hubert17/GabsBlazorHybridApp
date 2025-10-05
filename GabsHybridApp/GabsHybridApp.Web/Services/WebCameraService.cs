@@ -30,10 +30,19 @@ public sealed class WebCameraService(IDialogService Dialog) : ICameraService
         return new PhotoResult(Path: null, FileName: fileName, ContentType: mime, Bytes: bytes);
     }
 
-    public Task<PhotoResult?> BrowsePhotoAsync(CancellationToken ct = default)
+    public async Task<PhotoResult?> BrowsePhotoAsync(CancellationToken ct = default)
     {
-        // TODO: implement InputFile picker conversion if needed
-        return Task.FromResult<PhotoResult?>(null);
+        var options = new DialogOptions
+        {
+            NoHeader = true,
+            MaxWidth = MaxWidth.False,
+            CloseOnEscapeKey = true,
+            BackdropClick = true
+        };
+
+        var dlg = await Dialog.ShowAsync<ImageBrowser>("", options);
+        var res = await dlg.Result;
+        return res!.Canceled ? null : res.Data as PhotoResult;
     }
 
     private static (string mime, byte[] bytes) ParseDataUrl(string dataUrl)
