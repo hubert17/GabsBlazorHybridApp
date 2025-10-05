@@ -1,4 +1,5 @@
 ﻿@page "/device/camera"
+@using GabsHybridApp.Shared.Services
 @inject ICameraService CameraService
 
 <MudStack Spacing="1" Class="mt-2">
@@ -14,71 +15,49 @@
         <MudCard>
             <MudImage Src="@_imageDataUrl" ObjectFit="ObjectFit.Cover" Style="width:100%;height:calc(100vh - 380px);" />
             <MudCardContent>
-                <MudText Typo="Typo.caption">@LastPhotoPath</MudText>
+                <MudText Typo="Typo.caption">@_caption</MudText>
             </MudCardContent>
         </MudCard>
     }
 </MudStack>
 
 @code {
-    public string? LastPhotoPath { get; private set; }
     private string? _imageDataUrl;
+    private string? _caption;
     private bool _loading;
 
-    public async Task TakePhotoAsync()
+    private async Task TakePhotoAsync()
+    {
+        await WithLoading(async () =>
+        {
+            var photo = await CameraService.CapturePhotoAsync();
+            if (photo is null) return;
+
+            _imageDataUrl = photo.ToDataUrl();
+            _caption = photo.FileName ?? photo.Path ?? "Captured photo";
+        });
+    }
+
+    private async Task PickPhotoAsync()
+    {
+        await WithLoading(async () =>
+        {
+            var photo = await CameraService.BrowsePhotoAsync();
+            if (photo is null) return;
+
+            _imageDataUrl = photo.ToDataUrl();
+            _caption = photo.FileName ?? photo.Path ?? "Selected photo";
+        });
+    }
+
+    private async Task WithLoading(Func<Task> action)
     {
         _loading = true;
-        try
-        {
-            var path = await CameraService.CapturePhotoAsync();
-            if (!string.IsNullOrWhiteSpace(path))
-            {
-                LastPhotoPath = path;
-                _imageDataUrl = await ToDataUrlAsync(path);
-            }
-        }
+        try { await action(); }
         finally
         {
             _loading = false;
             await InvokeAsync(StateHasChanged);
         }
     }
-
-    public async Task PickPhotoAsync()
-    {
-        _loading = true;
-        try
-        {
-            var path = await CameraService.BrowsePhotoAsync();
-            if (!string.IsNullOrWhiteSpace(path))
-            {
-                LastPhotoPath = path;
-                _imageDataUrl = await ToDataUrlAsync(path);
-            }
-        }
-        finally
-        {
-            _loading = false;
-            await InvokeAsync(StateHasChanged);
-        }
-    }
-
-    private static Task<string> ToDataUrlAsync(string path)
-    {
-        // Read synchronously is fine for small images; make async if you prefer
-        var bytes = File.ReadAllBytes(path);
-        var b64 = Convert.ToBase64String(bytes);
-        var mime = GetMimeFromExtension(Path.GetExtension(path));
-        return Task.FromResult($"data:{mime};base64,{b64}");
-    }
-
-    private static string GetMimeFromExtension(string? ext)
-        => ext?.ToLowerInvariant() switch
-        {
-            ".png" => "image/png",
-            ".gif" => "image/gif",
-            ".bmp" => "image/bmp",
-            ".webp" => "image/webp",
-            _ => "image/jpeg"
-        };
 }

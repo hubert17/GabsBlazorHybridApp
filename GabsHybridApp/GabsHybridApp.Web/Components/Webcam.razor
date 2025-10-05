@@ -1,0 +1,107 @@
+﻿@inject IJSRuntime JS
+@implements IAsyncDisposable
+
+<style>
+    .mud-dialog .mud-dialog-content {
+        padding: 0;
+        margin: 0;
+        overflow: hidden;
+    }
+
+    .mud-dialog .mud-dialog-actions {
+        padding: 0;
+        position: absolute;
+        bottom: 16px;
+        left: 0;
+        width: 100%;
+    }
+
+    .webcam-fullscreen {
+        position: relative;
+        width: 100vw;
+        height: 100vh;
+        background: #000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+
+        .webcam-fullscreen video, .webcam-fullscreen canvas {
+            width: 100%;
+            height: auto;
+            max-height: 100vh;
+            object-fit: contain;
+            display: block;
+        }
+
+    .webcam-actions {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        padding: 20px;
+    }
+</style>
+
+<MudDialog>
+    <DialogContent>
+        <div class="webcam-fullscreen">
+            <video id="@_videoId" playsinline autoplay muted style="display:@(!_captured ? "block" : "none")"></video>
+            <canvas id="@_canvasId" style="display:@(_captured ? "block" : "none")"></canvas>
+        </div>
+    </DialogContent>
+
+    <DialogActions>
+        <div class="webcam-actions">
+            @if (!_captured)
+            {
+                <MudFab OnClick="CaptureAsync" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Camera" />
+            }
+            else
+            {
+                <MudFab OnClick="AcceptAsync" Color="Color.Default" IconColor="Color.Success" StartIcon="@Icons.Material.Filled.Check" />
+            }
+            <MudFab OnClick="CancelAsync" Color="Color.Default" IconColor="Color.Error" StartIcon="@Icons.Material.Filled.Close" />
+        </div>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] private IMudDialogInstance MudDialog { get; set; } = default!;
+
+    private readonly string _videoId = $"vid_{Guid.NewGuid():N}";
+    private readonly string _canvasId = $"can_{Guid.NewGuid():N}";
+    private bool _captured;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+            await JS.InvokeVoidAsync("gabsCameraSimple.start", _videoId);
+    }
+
+    private async Task CaptureAsync()
+    {
+        // Draw current frame to canvas; do NOT return base64 here
+        await JS.InvokeVoidAsync("gabsCameraSimple.captureToCanvas", _videoId, _canvasId);
+        _captured = true;
+        StateHasChanged();
+    }
+
+    private async Task AcceptAsync()
+    {
+        // Now get base64 (compressed) and close dialog with data
+        var dataUrl = await JS.InvokeAsync<string>("gabsCameraSimple.canvasToDataUrl", _canvasId, "image/jpeg", 0.8);
+        MudDialog.Close(DialogResult.Ok(dataUrl));
+    }
+
+    private async Task CancelAsync()
+    {
+        try { await JS.InvokeVoidAsync("gabsCameraSimple.stop", _videoId); } catch { }
+        MudDialog.Cancel();
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        try { await JS.InvokeVoidAsync("gabsCameraSimple.stop", _videoId); } catch { }
+    }
+}
