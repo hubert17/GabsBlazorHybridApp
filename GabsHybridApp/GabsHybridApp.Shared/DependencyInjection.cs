@@ -21,6 +21,7 @@ public static class DependencyInjection
         services.AddBlazorState(opts => opts.Assemblies = new[] { typeof(CounterState).GetTypeInfo().Assembly });
 
         // Auth state provider (used by both hosts)
+        services.AddAuthorizationCore(); // not AddAuthorization()
         services.AddScoped<HostedAuthStateProvider>();
         services.AddScoped<AuthenticationStateProvider>(sp => sp.GetRequiredService<HostedAuthStateProvider>());
 

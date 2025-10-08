@@ -36,7 +36,6 @@ public static class MauiProgram
 
         builder.UseMauiApp<App>().UseMauiCommunityToolkit().UseMauiCommunityToolkitCamera();
 
-        builder.Services.AddAuthorizationCore(); // not AddAuthorization()
         builder.Services.AddScoped<IAuthService, MauiLocalAuthService>();
         builder.Services.AddScoped<INotificationService, NotificationService>();
         builder.Services.AddScoped<ILocationService, MauiLocationService>();
