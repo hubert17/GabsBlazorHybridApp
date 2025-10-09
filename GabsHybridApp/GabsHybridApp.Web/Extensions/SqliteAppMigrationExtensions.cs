@@ -2,7 +2,7 @@
 
 namespace GabsHybridApp.Web.Extensions;
 
-public static class AppMigrationExtensions
+public static class SqliteAppMigrationExtensions
 {
     public static WebApplication MigrateDb<TContext>(
         this WebApplication app,
@@ -19,14 +19,20 @@ public static class AppMigrationExtensions
     private static void Apply<TContext>(TContext db, bool enableWal, Action<TContext>? seed)
         where TContext : DbContext
     {
+        // Skip everything unless the provider is SQLite
+        if (!db.Database.IsSqlite())
+            return;
+
+        // Apply EF Core migrations
         db.Database.Migrate();
 
+        // Optional: enable WAL only for SQLite
         if (enableWal)
         {
-            try { db.Database.ExecuteSqlRaw("PRAGMA journal_mode=WAL;"); }
-            catch { /* non-SQLite provider — ignore */ }
+            db.Database.ExecuteSqlRaw("PRAGMA journal_mode=WAL;");
         }
 
+        // Optional: run seed only for SQLite
         seed?.Invoke(db);
     }
 }

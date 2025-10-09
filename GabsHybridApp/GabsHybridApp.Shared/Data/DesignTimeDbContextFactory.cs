@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore.Design;
 
 namespace GabsHybridApp.Shared.Data;
 
+#if SQLITE_DESIGNTIME
 public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<HybridAppDbContext>
 {
     public HybridAppDbContext CreateDbContext(string[] args)
@@ -14,3 +15,4 @@ public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<HybridAppD
         return new HybridAppDbContext(options);
     }
 }
+#endif

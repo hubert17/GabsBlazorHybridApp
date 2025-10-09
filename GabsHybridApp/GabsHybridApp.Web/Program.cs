@@ -1,4 +1,4 @@
-using GabsHybridApp.Shared;
+﻿using GabsHybridApp.Shared;
 using GabsHybridApp.Shared.Data;
 using GabsHybridApp.Shared.Services;
 using GabsHybridApp.Web.Components;
@@ -27,8 +27,10 @@ builder.Services
 builder.Services.AddAuthorization();
 builder.Services.AddCascadingAuthenticationState();
 
-builder.Services.AddDbContextFactory<HybridAppDbContext>(opt =>
-    opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"), builder.Environment.ContentRootPath));
+// NOTE: If you switch Sqlite ↔ SqlServer, delete the existing Migrations folder before running Add-Migration
+builder.Services.AddDbContextFactory<HybridAppDbContext>(option =>
+    option.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnectionSqlite"), builder.Environment.ContentRootPath));
+    //option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Add device-specific services used by the GabsHybridApp.Shared project
 builder.Services.AddSingleton<IFormFactor, FormFactor>();
