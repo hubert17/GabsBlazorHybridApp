@@ -53,12 +53,11 @@
 
     protected override async Task OnInitializedAsync()
     {
+        LoadProducts();
         if (!IsWeb)
         {
             await SyncNow();
-        }
-        else
-            LoadProducts();
+        }           
     }
 
     private void OnSearch(string text)
