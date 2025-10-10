@@ -3,6 +3,7 @@ using System;
 using GabsHybridApp.Shared.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GabsHybridApp.Shared.Migrations
 {
     [DbContext(typeof(HybridAppDbContext))]
-    partial class HybridAppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251010175315_AddedServerSaltUserAccount")]
+    partial class AddedServerSaltUserAccount
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.9");

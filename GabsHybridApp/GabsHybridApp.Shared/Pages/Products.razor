@@ -2,7 +2,10 @@
 @using GabsHybridApp.Shared.Data
 @using GabsHybridApp.Shared.Models
 @using Microsoft.EntityFrameworkCore
+@inject IFormFactor FormFactor
 @inject IDbContextFactory<HybridAppDbContext> DbFactory
+@inject ProductSyncService ProductSync
+@inject HttpClient Http
 
 <PageTitle>Products</PageTitle>
 <h1>Products</h1>
@@ -37,6 +40,8 @@
     Product product = new();
     string strSearch = string.Empty;
 
+    bool IsWeb => string.Equals(FormFactor.GetFormFactor(), "Web", StringComparison.OrdinalIgnoreCase);
+
     private void LoadProducts()
     {
         var _db = DbFactory.CreateDbContext();  
@@ -46,9 +51,14 @@
             products = _db.Products.ToList();
     }
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        LoadProducts();
+        if (!IsWeb)
+        {
+            await SyncNow();
+        }
+        else
+            LoadProducts();
     }
 
     private void OnSearch(string text)
@@ -57,4 +67,21 @@
         LoadProducts();
     }
 
+    const string ApiBase = "https://localhost:7034";
+    bool _syncing;
+    private async Task SyncNow()
+    {
+        if (_syncing) return;
+        _syncing = true;
+        try
+        {
+            await ProductSync.SyncAsync(ApiBase);
+            LoadProducts();
+        }
+        finally
+        {
+            _syncing = false;
+            StateHasChanged();
+        }
+    }
 }

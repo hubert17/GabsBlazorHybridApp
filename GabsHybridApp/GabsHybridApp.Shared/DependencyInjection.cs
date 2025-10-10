@@ -27,6 +27,7 @@ public static class DependencyInjection
 
         // App services that are host-agnostic
         services.AddScoped<UserService>();
+        services.AddScoped<ProductSyncService>();
 
         // UI libs
         services.AddMudServices();

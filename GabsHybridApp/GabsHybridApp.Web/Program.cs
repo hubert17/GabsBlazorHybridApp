@@ -2,12 +2,16 @@
 using GabsHybridApp.Shared.Data;
 using GabsHybridApp.Shared.Services;
 using GabsHybridApp.Web.Components;
+using GabsHybridApp.Web.Endpoints;
 using GabsHybridApp.Web.Extensions;
 using GabsHybridApp.Web.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,20 +22,43 @@ builder.Services.AddRazorComponents()
 builder.Services.AddSharedCore();
 
 builder.Services.AddHttpContextAccessor();
+
 builder.Services
     .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(o =>
+    .AddCookie(o => { o.LoginPath = "/account/login"; o.LogoutPath = "/account/logout"; })
+    .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, opt =>
     {
-        o.LoginPath = "/account/login";
-        o.LogoutPath = "/account/logout";
+        opt.RequireHttpsMetadata = true;
+        opt.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!)),
+            ClockSkew = TimeSpan.Zero
+        };
     });
-builder.Services.AddAuthorization();
+
+// Authorization
+builder.Services.AddAuthorization(options =>
+{
+    // Only API JWT (Bearer) + role MobileSync can access sync endpoints
+    options.AddPolicy("SyncAccess", policy =>
+    {
+        policy.RequireAuthenticatedUser();
+        policy.RequireRole("MobileSync");
+        policy.AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme);
+    });
+});
+
 builder.Services.AddCascadingAuthenticationState();
 
 // NOTE: If you switch Sqlite ↔ SqlServer, delete the existing Migrations folder before running Add-Migration
 builder.Services.AddDbContextFactory<HybridAppDbContext>(option =>
-    option.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnectionSqlite"), builder.Environment.ContentRootPath));
-    //option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    //option.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnectionSqlite"), builder.Environment.ContentRootPath));
+    option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Add device-specific services used by the GabsHybridApp.Shared project
 builder.Services.AddSingleton<IFormFactor, FormFactor>();
@@ -41,6 +68,10 @@ builder.Services.AddScoped<INotificationService, NotificationService>();
 builder.Services.AddScoped<ILocationService, WebLocationService>();
 builder.Services.AddScoped<ICameraService, WebCameraService>();
 builder.Services.AddSingleton<IFlashlightService, WebFlashlightService>();
+
+builder.Services.AddMemoryCache();
+builder.Services.AddSingleton<INonceCache, MemoryNonceCache>();
+builder.Services.AddSingleton<ApiJwtIssuer>();
 
 var app = builder.Build();
 
@@ -78,6 +109,9 @@ app.MapPost("/_internal/logout", async (HttpContext ctx) =>
     await ctx.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
     return Results.Redirect("/account/login");
 }).AllowAnonymous().DisableAntiforgery();
+
+app.MapAuthExchangeEndpoints();
+app.MapSyncEndpoints();
 
 app.MapHub<NotificationHub>("/notificationhub");
 

@@ -220,6 +220,9 @@ namespace GabsHybridApp.Shared.Models
         public DateTime? LastLogin { get; set; }
         public bool IsActive { get; set; }
         public string? Roles { get; set; } // comma-separated
+
+        // NEW: per-user revocation / rotation for HMAC derivation
+        public string? ServerSalt { get; set; }
     }
 }
 
