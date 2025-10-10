@@ -7,33 +7,74 @@
 
     public static MudTheme MyTheme => new()
     {
-        PaletteLight = new PaletteLight()
+        // PaletteLight = new PaletteLight()
+        // {
+        //     Primary = Colors.BlueGray.Default,
+        //     Secondary = Colors.DeepPurple.Accent2,
+        //     Background = Colors.Gray.Lighten5,
+        //     AppbarBackground = Colors.BlueGray.Default,
+        //     DrawerBackground = Colors.BlueGray.Lighten1,
+        //     DrawerText = Colors.Shades.White,
+        //     DrawerIcon = Colors.Shades.White,
+        //     Success = Colors.Green.Darken3,
+
+        //     ActionDefault = Colors.BlueGray.Darken1,
+        //     ActionDisabled = Colors.BlueGray.Lighten2,
+        //     ActionDisabledBackground = Colors.BlueGray.Lighten4,
+
+        // },
+        // PaletteDark = new PaletteDark()
+        // {
+        //     Primary = Colors.BlueGray.Darken1,
+        //     Secondary = Colors.DeepPurple.Darken2,
+        //     Success = Colors.Teal.Darken4,
+        //     Error = Colors.Pink.Default,
+
+        //     ActionDefault = Colors.BlueGray.Darken1,
+        //     ActionDisabled = Colors.BlueGray.Lighten2,
+        //     ActionDisabledBackground = Colors.BlueGray.Default,
+        // },
+
+        PaletteLight = new PaletteLight
         {
-            Primary = Colors.BlueGray.Default,
-            Secondary = Colors.DeepPurple.Accent2,
+            Primary = Colors.Indigo.Accent3,
+            Secondary = Colors.BlueGray.Lighten1,
+            Success = Colors.Green.Darken2, 
+            Info = Colors.Cyan.Lighten1,
+            Warning = Colors.Amber.Default,
+            Error = Colors.Red.Darken2,
+            Dark = Colors.Gray.Darken4,
+
             Background = Colors.Gray.Lighten5,
-            AppbarBackground = Colors.BlueGray.Default,
-            DrawerBackground = Colors.BlueGray.Lighten1, // "#FFF",
-            DrawerText = "#FFF", //"rgba(0,0,0, 0.7)",
-            DrawerIcon = "#FFF",
-            Success = Colors.Green.Darken3,
+            AppbarBackground = Colors.Indigo.Accent3,
+            AppbarText = Colors.Shades.White,
+            DrawerBackground = Colors.Indigo.Accent2,                                             
+            DrawerText = Colors.Shades.White,
+            DrawerIcon = Colors.Shades.White,
 
-            ActionDefault = Colors.BlueGray.Darken1,
-            ActionDisabled = Colors.BlueGray.Lighten2,
-            ActionDisabledBackground = Colors.BlueGray.Lighten4,
-
+            ActionDefault = Colors.Gray.Darken1,  
+            ActionDisabled = Colors.Gray.Lighten1,  
+            ActionDisabledBackground = Colors.Gray.Lighten3, 
         },
-        PaletteDark = new PaletteDark()
+        PaletteDark = new PaletteDark
         {
-            Primary = Colors.BlueGray.Darken1,
-            Secondary = Colors.DeepPurple.Darken2,
-            Success = Colors.Teal.Darken4,
-            Error = Colors.Pink.Default,
+            Primary = Colors.Indigo.Accent3,
+            Secondary = Colors.BlueGray.Lighten1,
+            Success = Colors.Green.Darken2,
+            Info = Colors.Cyan.Lighten1,
+            Warning = Colors.Amber.Default,
+            Error = Colors.Red.Darken2,
 
-            ActionDefault = Colors.BlueGray.Darken1,
-            ActionDisabled = Colors.BlueGray.Lighten2,
-            ActionDisabledBackground = Colors.BlueGray.Default,
+            Background = Colors.Gray.Darken4,  
+            Surface = Colors.BlueGray.Darken3, 
+            TextPrimary = Colors.Shades.White, 
+            TextSecondary = Colors.Gray.Lighten1,
+
+            ActionDefault = Colors.Gray.Lighten1,
+            ActionDisabled = Colors.Gray.Darken1,
+            ActionDisabledBackground = Colors.BlueGray.Darken2,
         },
+
         LayoutProperties = new LayoutProperties()
         {
             DefaultBorderRadius = "3px"
