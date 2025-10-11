@@ -24,6 +24,7 @@ public static class DependencyInjection
         services.AddAuthorizationCore(); // not AddAuthorization()
         services.AddScoped<HostedAuthStateProvider>();
         services.AddScoped<AuthenticationStateProvider>(sp => sp.GetRequiredService<HostedAuthStateProvider>());
+        services.AddScoped<HmacAuthTokenProvider>();
 
         // App services that are host-agnostic
         services.AddScoped<UserService>();

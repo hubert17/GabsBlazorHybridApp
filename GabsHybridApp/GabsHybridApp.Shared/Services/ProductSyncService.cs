@@ -1,6 +1,7 @@
 ﻿using GabsHybridApp.Shared.Data;
 using GabsHybridApp.Shared.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
 using System.Net.Http.Json;
 
 namespace GabsHybridApp.Shared.Services;
@@ -10,84 +11,80 @@ public sealed class ProductSyncService
     private readonly IDbContextFactory<HybridAppDbContext> _dbFactory;
     private readonly HttpClient _http;
     private readonly IFormFactor _formFactor;
+    private readonly HmacAuthTokenProvider _auth;
 
     public ProductSyncService(
         IDbContextFactory<HybridAppDbContext> dbFactory,
         HttpClient http,
-        IFormFactor formFactor)
+        IFormFactor formFactor,
+        HmacAuthTokenProvider auth)
     {
         _dbFactory = dbFactory;
         _http = http;
         _formFactor = formFactor;
+        _auth = auth;
     }
 
-    // Pull-all + AddRange; skip by name; swallow errors. No deletes, no versioning.
-    public async Task<int> SyncAsync(string apiBaseUrl, CancellationToken ct = default)
+    /// <summary>
+    /// Pull-all + AddRange; skip by name; swallow errors. No deletes, no versioning.
+    /// </summary>
+    public async Task<int> SyncAsync(string apiBaseUrl, string username, CancellationToken ct = default)
     {
-        // Only do network sync off the Web host (i.e., MAUI/WinUI)
+        // Only perform sync on MAUI/WinUI (not on Web host)
         if (string.Equals(_formFactor.GetFormFactor(), "Web", StringComparison.OrdinalIgnoreCase))
             return 0;
 
-        List<Product> list;
-        try
-        {
-            list = await _http.GetFromJsonAsync<List<Product>>($"{apiBaseUrl}/api/sync/products/all", ct)
-                   ?? new List<Product>();
-        }
-        catch
-        {
-            // network/deserialize failure → swallow
+        var baseUrl = apiBaseUrl.TrimEnd('/');
+        var deviceId = _formFactor.GetFormFactor(); // keep simple; replace with persisted GUID later
+
+        // Ensure Bearer token (no-op if cached and fresh)
+        if (string.IsNullOrEmpty(await _auth.EnsureAccessTokenAsync(baseUrl, username, deviceId, ct)))
             return 0;
+
+        // Download products (retry once on 401)
+        var list = await DownloadProductsAsync(baseUrl, ct);
+        if (list is null)
+        {
+            // try once more after clearing token (handles expired/invalid token)
+            _auth.Clear();
+            if (string.IsNullOrEmpty(await _auth.EnsureAccessTokenAsync(baseUrl, username, deviceId, ct)))
+                return 0;
+
+            list = await DownloadProductsAsync(baseUrl, ct);
+            if (list is null) return 0;
         }
 
-        int applied = 0;
+        // Nothing to apply
+        if (list.Count == 0) return 0;
 
+        // Apply locally (skip existing names, case-insensitive)
         try
         {
             await using var db = await _dbFactory.CreateDbContextAsync(ct);
 
-            HashSet<string> existingNames;
-            try
-            {
-                existingNames = new HashSet<string>(
-                    await db.Products.AsNoTracking()
-                        .Where(x => x.Name != null && x.Name != "")
-                        .Select(x => x.Name!.Trim())
-                        .ToListAsync(ct),
-                    StringComparer.OrdinalIgnoreCase);
-            }
-            catch
-            {
-                // if reading existing names fails, proceed as if none exist
-                existingNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-            }
+            var existingNames = new HashSet<string>(
+                await db.Products.AsNoTracking()
+                    .Where(x => x.Name != null && x.Name != "")
+                    .Select(x => x.Name!.Trim())
+                    .ToListAsync(ct),
+                StringComparer.OrdinalIgnoreCase);
 
-            var toInsert = new List<Product>();
+            var toInsert = new List<Product>(list.Count);
             foreach (var p in list)
             {
-                try
-                {
-                    var name = p.Name?.Trim();
-                    if (string.IsNullOrWhiteSpace(name)) continue;
-                    if (existingNames.Contains(name)) continue;
+                var name = p.Name?.Trim();
+                if (string.IsNullOrWhiteSpace(name)) continue;
+                if (!existingNames.Add(name)) continue; // skip duplicates/in-batch dupes
 
-                    existingNames.Add(name); // also dedupe within the same batch
-
-                    toInsert.Add(new Product
-                    {
-                        // If you want to keep server IDs, uncomment the next line:
-                        // Id = p.Id,
-                        Name = name,
-                        Description = p.Description,
-                        UnitPrice = p.UnitPrice,
-                        Unit = p.Unit,
-                        PictureFilename = p.PictureFilename
-                    });
-                }
-                catch
+                toInsert.Add(new Product
                 {
-                    // swallow row-shaping error and move on
-                }
+                    // Id = p.Id, // keep commented to let local DB autogen
+                    Name = name,
+                    Description = p.Description,
+                    UnitPrice = p.UnitPrice,
+                    Unit = p.Unit,
+                    PictureFilename = p.PictureFilename
+                });
             }
 
             if (toInsert.Count == 0) return 0;
@@ -95,11 +92,12 @@ public sealed class ProductSyncService
             try
             {
                 await db.Products.AddRangeAsync(toInsert, ct);
-                applied = await db.SaveChangesAsync(ct);
+                return await db.SaveChangesAsync(ct);
             }
             catch
             {
-                // If bulk insert fails, fall back to per-row insert and swallow errors
+                // Fall back to per-row insert; swallow on conflicts
+                var applied = 0;
                 foreach (var p in toInsert)
                 {
                     try
@@ -109,40 +107,38 @@ public sealed class ProductSyncService
                     }
                     catch
                     {
-                        // swallow (likely PK/constraint). No update-on-duplicate here by request.
+                        // swallow
                     }
                 }
+                return applied;
             }
         }
         catch
         {
-            // any DB factory/context failure → swallow
+            // swallow DB factory/context issues
             return 0;
         }
-
-        return applied;
     }
 
-    // Query from the same context (MAUI uses local SQLite; Web uses its own DB if called there)
-    public async Task<List<Product>> GetProductsAsync(string? search = null, CancellationToken ct = default)
+    private async Task<List<Product>?> DownloadProductsAsync(string baseUrl, CancellationToken ct)
     {
         try
         {
-            await using var db = await _dbFactory.CreateDbContextAsync(ct);
-            var q = db.Products.AsQueryable();
+            // If you set HttpClient.BaseAddress externally, you can just call "/api/..."
+            var url = $"{baseUrl}/api/sync/products/all";
+            var resp = await _http.GetAsync(url, ct);
 
-            if (!string.IsNullOrWhiteSpace(search))
-            {
-                var s = search.ToLowerInvariant();
-                q = q.Where(p => p.Name != null && p.Name.ToLower().Contains(s));
-            }
+            if (resp.StatusCode == HttpStatusCode.Unauthorized)
+                return null; // signal caller to refresh token and retry once
 
-            return await q.OrderBy(p => p.Id).ToListAsync(ct);
+            if (!resp.IsSuccessStatusCode)
+                return new List<Product>(); // treat as empty; keep things simple
+
+            return await resp.Content.ReadFromJsonAsync<List<Product>>(cancellationToken: ct) ?? new List<Product>();
         }
         catch
         {
-            // swallow and return empty on any failure
-            return new List<Product>();
+            return new List<Product>(); // swallow network/JSON failures
         }
     }
 }

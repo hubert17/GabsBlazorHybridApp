@@ -1,4 +1,5 @@
-﻿using global::GabsHybridApp.Shared.Data;
+﻿using GabsHybridApp.Shared.States;
+using global::GabsHybridApp.Shared.Data;
 using global::GabsHybridApp.Shared.Models;
 using global::GabsHybridApp.Web.Services;
 using Microsoft.EntityFrameworkCore;
@@ -29,12 +30,11 @@ public static class AuthExchangeEndpoints
                 await db.SaveChangesAsync();
             }
             return Results.Text(user.ServerSalt!, "text/plain");
-        }).AllowAnonymous();
+        }).AllowAnonymous().DisableAntiforgery();
 
         // POST /api/auth/exchange-hmac
         app.MapPost("/api/auth/exchange-hmac", async (
             ExchangeRequest req,
-            IConfiguration cfg,
             IDbContextFactory<HybridAppDbContext> factory,
             INonceCache nonces,
             ApiJwtIssuer issuer) =>
@@ -59,7 +59,7 @@ public static class AuthExchangeEndpoints
             if (user is null || string.IsNullOrWhiteSpace(user.ServerSalt))
                 return Results.Unauthorized();
 
-            var master = cfg["AuthExchange:AppMasterSecret"]!;
+            var master = StorageConstants.AppMasterSecret; // (ensure this is not leaked to clients if possible)
             var derivedKey = AuthExchangeKeyDerivation.DeriveUserDeviceKey(master, username!, deviceId!, user.ServerSalt);
 
             var parms = new TokenValidationParameters
@@ -69,15 +69,15 @@ public static class AuthExchangeEndpoints
                 ValidateAudience = true,
                 ValidAudience = "GabsHybridApp.Web.AuthExchange",
                 ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Convert.ToBase64String(derivedKey))),
+                IssuerSigningKey = new SymmetricSecurityKey(derivedKey),
+                RequireSignedTokens = true,
+                RequireExpirationTime = true,
                 ValidateLifetime = true,
-                ClockSkew = TimeSpan.FromSeconds(10)
+                ClockSkew = TimeSpan.Zero
             };
 
             try
             {
-                // Recreate the same key object without re-base64 (either way is fine as long as both sides match).
-                parms.IssuerSigningKey = new SymmetricSecurityKey(derivedKey);
                 handler.ValidateToken(req.Assertion, parms, out _);
 
                 if (!await nonces.TryConsumeAsync(nonce!, TimeSpan.FromMinutes(2)))
@@ -87,7 +87,8 @@ public static class AuthExchangeEndpoints
                 {
                     new(ClaimTypes.Name, username!),
                     new("device_id", deviceId!),
-                    new(ClaimTypes.Role, "MobileSync")
+                    new(ClaimTypes.Role, "MobileSync"),
+                    new(JwtRegisteredClaimNames.Jti, nonce!) // optional, mirrors assertion's nonce
                 };
 
                 var (tokenStr, expUtc) = issuer.Issue(claims, TimeSpan.FromHours(8));
@@ -97,7 +98,7 @@ public static class AuthExchangeEndpoints
             {
                 return Results.Unauthorized();
             }
-        }).AllowAnonymous();
+        }).AllowAnonymous().DisableAntiforgery();
 
         return app;
     }

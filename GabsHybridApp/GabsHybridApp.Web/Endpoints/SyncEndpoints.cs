@@ -13,9 +13,9 @@ public static class SyncEndpoints
             [Authorize(Policy = "SyncAccess")] async (IDbContextFactory<HybridAppDbContext> factory) =>
         {
             await using var db = await factory.CreateDbContextAsync();
-            var products = await db.Set<Product>().ToListAsync();
+            var products = await db.Products.AsNoTracking().ToListAsync();
             return Results.Ok(products);
-        }).AllowAnonymous().DisableAntiforgery();
+        }).DisableAntiforgery();
 
         return app;
 
