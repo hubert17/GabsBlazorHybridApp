@@ -1,5 +1,6 @@
 ﻿using GabsHybridApp.Shared.Data;
 using GabsHybridApp.Shared.Models;
+using GabsHybridApp.Shared.States;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
 using System.Net.Http.Json;
@@ -28,13 +29,13 @@ public sealed class ProductSyncService
     /// <summary>
     /// Pull-all + AddRange; skip by name; swallow errors. No deletes, no versioning.
     /// </summary>
-    public async Task<int> SyncAsync(string apiBaseUrl, string username, CancellationToken ct = default)
+    public async Task<int> SyncAsync(string username, CancellationToken ct = default)
     {
         // Only perform sync on MAUI/WinUI (not on Web host)
         if (string.Equals(_formFactor.GetFormFactor(), "Web", StringComparison.OrdinalIgnoreCase))
             return 0;
 
-        var baseUrl = apiBaseUrl.TrimEnd('/');
+        var baseUrl = StorageConstants.AppWebUrl.TrimEnd('/');
         var deviceId = _formFactor.GetFormFactor(); // keep simple; replace with persisted GUID later
 
         // Ensure Bearer token (no-op if cached and fresh)

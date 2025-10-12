@@ -61,7 +61,7 @@
             </MudHidden>
 
             <!-- 🔔 Notification Panel (handles SignalR & user data internally) -->
-            <NotificationPanel IncludeSample="true" NotificationHubUrl="" />
+            <NotificationPanel IncludeSample="true" NotificationHubUrl="@(StorageConstants.AppWebUrl + "/notificationhub")" />
 
             <!-- 🌙 Dark Mode Toggle -->
             <MudTooltip Text="Toggle Dark Mode">

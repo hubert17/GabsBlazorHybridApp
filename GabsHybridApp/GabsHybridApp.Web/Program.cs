@@ -66,7 +66,8 @@ builder.Services.AddScoped<IAuthService, ServerCookieAuthService>();
 builder.Services.AddScoped<INotificationService, NotificationService>();
 builder.Services.AddScoped<ILocationService, WebLocationService>();
 builder.Services.AddScoped<ICameraService, WebCameraService>();
-builder.Services.AddSingleton<IFlashlightService, WebFlashlightService>();
+builder.Services.AddSingleton<IFlashlightService, NullFlashlightService>();
+builder.Services.AddSingleton<INetworkService, NullNetworkService>();
 
 builder.Services.AddMemoryCache();
 builder.Services.AddSingleton<INonceCache, MemoryNonceCache>();

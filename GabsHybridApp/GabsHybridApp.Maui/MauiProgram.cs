@@ -30,7 +30,7 @@ public static class MauiProgram
         // Add device-specific services used by the GabsHybridApp.Shared project
         builder.Services.AddSingleton<IFormFactor, FormFactor>();
         builder.Services.AddScoped<IHostCapabilities, MauiHostCapabilities>();
-        builder.UseStatusBarTheme("#607D8B", lightContent: true);
+        builder.UseStatusBarTheme("#0d6efd", lightContent: true);
 
         builder.Services.AddMauiBlazorWebView();
 
@@ -41,6 +41,7 @@ public static class MauiProgram
         builder.Services.AddScoped<ILocationService, MauiLocationService>();
         builder.Services.AddSingleton<ICameraService, MauiCameraService>();
         builder.Services.AddSingleton<IFlashlightService, MauiFlashlightService>();
+        builder.Services.AddSingleton<INetworkService, MauiNetworkService>();
 
 #if DEBUG
         builder.Services.AddBlazorWebViewDeveloperTools();

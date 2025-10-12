@@ -66,7 +66,6 @@
         LoadProducts();
     }
 
-    const string ApiBase = "https://localhost:7034";
     bool _syncing;
     private async Task SyncNow()
     {
@@ -74,7 +73,7 @@
         _syncing = true;
         try
         {
-            await ProductSync.SyncAsync(ApiBase, "admin");
+            await ProductSync.SyncAsync("admin");
             LoadProducts();
         }
         finally

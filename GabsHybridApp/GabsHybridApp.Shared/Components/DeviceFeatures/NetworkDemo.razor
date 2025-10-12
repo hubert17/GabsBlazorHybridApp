@@ -1,0 +1,45 @@
+﻿@page "/device/connectivity"
+@using GabsHybridApp.Shared.Services
+@inject INetworkService Net
+
+<MudStack Spacing="2" Class="mt-4">
+    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="Refresh">
+        Is @(Net.IsOnline ? "Online" : "Offline") (@(Net.IsWifi ? "Wi-Fi" : Net.IsCellular ? "Cellular" : "Other"))
+    </MudButton>
+
+    @if (!Net.IsOnline)
+    {
+        <MudAlert Severity="Severity.Warning" Dense="true">
+            You’re offline. You can open app settings to check permissions/network.
+        </MudAlert>
+        <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.Settings"
+                   OnClick="OpenSettings">Open App Settings</MudButton>
+    }
+
+    @if (!string.IsNullOrEmpty(_error))
+    {
+        <MudAlert Severity="Severity.Error" Dense="true">@_error</MudAlert>
+    }
+</MudStack>
+
+@code {
+    private string? _error;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await Refresh();
+            StateHasChanged();
+        }
+    }
+
+    private async Task Refresh()
+    {
+        _error = null;
+        try { await Net.RefreshAsync(); }
+        catch (Exception ex) { _error = ex.Message; }
+    }
+
+    private Task OpenSettings() => Net.OpenSettingsAsync();
+}

@@ -12,7 +12,7 @@
         }
         else
         {
-            <MudMenu Icon="@Icons.Material.Filled.Notifications" Color="Color.Inherit" Dense="true" AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight" @onmouseenter="@(() => { _hasNewNotification = false; })">
+            <MudMenu Class="no-background" Icon="@Icons.Material.Filled.Notifications" Color="Color.Inherit" Dense="true" AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight" @onmouseenter="@(() => { _hasNewNotification = false; })">
                 @if (_notifications.Any())
                 {
                     @foreach (var notif in _notifications.Take(5))
