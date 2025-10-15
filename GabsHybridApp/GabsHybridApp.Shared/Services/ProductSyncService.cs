@@ -31,24 +31,44 @@ public sealed class ProductSyncService
     /// </summary>
     public async Task<int> SyncAsync(string username, CancellationToken ct = default)
     {
+        throw new Exception();
         // Only perform sync on MAUI/WinUI (not on Web host)
         if (string.Equals(_formFactor.GetFormFactor(), "Web", StringComparison.OrdinalIgnoreCase))
             return 0;
 
         var baseUrl = StorageConstants.AppWebUrl.TrimEnd('/');
-        var deviceId = _formFactor.GetFormFactor(); // keep simple; replace with persisted GUID later
+        var deviceId = _formFactor.GetFormFactor(); // simple for now
 
-        // Ensure Bearer token (no-op if cached and fresh)
-        if (string.IsNullOrEmpty(await _auth.EnsureAccessTokenAsync(baseUrl, username, deviceId, ct)))
+        // --- Ensure Bearer token; guard network failures ---
+        string? token = null;
+        try
+        {
+            token = await _auth.EnsureAccessTokenAsync(baseUrl, username, deviceId, ct);
+        }
+        catch
+        {
+            // URL unreachable / DNS / timeout / HttpRequestException
+            return 0;
+        }
+        if (string.IsNullOrEmpty(token))
             return 0;
 
-        // Download products (retry once on 401)
+        // --- Download products (retry once on 401) ---
         var list = await DownloadProductsAsync(baseUrl, ct);
         if (list is null)
         {
-            // try once more after clearing token (handles expired/invalid token)
+            // clear + retry BUT guard token call again
             _auth.Clear();
-            if (string.IsNullOrEmpty(await _auth.EnsureAccessTokenAsync(baseUrl, username, deviceId, ct)))
+
+            try
+            {
+                token = await _auth.EnsureAccessTokenAsync(baseUrl, username, deviceId, ct);
+            }
+            catch
+            {
+                return 0;
+            }
+            if (string.IsNullOrEmpty(token))
                 return 0;
 
             list = await DownloadProductsAsync(baseUrl, ct);
@@ -58,7 +78,7 @@ public sealed class ProductSyncService
         // Nothing to apply
         if (list.Count == 0) return 0;
 
-        // Apply locally (skip existing names, case-insensitive)
+        // --- Apply locally (skip existing names, case-insensitive) ---
         try
         {
             await using var db = await _dbFactory.CreateDbContextAsync(ct);
@@ -75,11 +95,10 @@ public sealed class ProductSyncService
             {
                 var name = p.Name?.Trim();
                 if (string.IsNullOrWhiteSpace(name)) continue;
-                if (!existingNames.Add(name)) continue; // skip duplicates/in-batch dupes
+                if (!existingNames.Add(name)) continue; // skip dups
 
                 toInsert.Add(new Product
                 {
-                    // Id = p.Id, // keep commented to let local DB autogen
                     Name = name,
                     Description = p.Description,
                     UnitPrice = p.UnitPrice,
@@ -97,7 +116,7 @@ public sealed class ProductSyncService
             }
             catch
             {
-                // Fall back to per-row insert; swallow on conflicts
+                // Fallback per-row; swallow conflicts
                 var applied = 0;
                 foreach (var p in toInsert)
                 {
@@ -106,10 +125,7 @@ public sealed class ProductSyncService
                         await db.Products.AddAsync(p, ct);
                         applied += await db.SaveChangesAsync(ct);
                     }
-                    catch
-                    {
-                        // swallow
-                    }
+                    catch { /* swallow */ }
                 }
                 return applied;
             }
@@ -125,21 +141,23 @@ public sealed class ProductSyncService
     {
         try
         {
-            // If you set HttpClient.BaseAddress externally, you can just call "/api/..."
             var url = $"{baseUrl}/api/sync/products/all";
             var resp = await _http.GetAsync(url, ct);
 
             if (resp.StatusCode == HttpStatusCode.Unauthorized)
-                return null; // signal caller to refresh token and retry once
+                return null; // signal retry
 
             if (!resp.IsSuccessStatusCode)
-                return new List<Product>(); // treat as empty; keep things simple
+                return new List<Product>(); // treat as empty
 
-            return await resp.Content.ReadFromJsonAsync<List<Product>>(cancellationToken: ct) ?? new List<Product>();
+            return await resp.Content.ReadFromJsonAsync<List<Product>>(cancellationToken: ct)
+                   ?? new List<Product>();
         }
         catch
         {
-            return new List<Product>(); // swallow network/JSON failures
+            // swallow network/JSON failures
+            return new List<Product>();
         }
     }
+
 }

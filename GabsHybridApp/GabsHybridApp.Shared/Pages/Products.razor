@@ -71,15 +71,32 @@
     {
         if (_syncing) return;
         _syncing = true;
+
         try
         {
-            await ProductSync.SyncAsync("admin");
-            LoadProducts();
+            // Keep the operation bounded so we never hang the UI
+            using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(10));
+
+            // Swallows its own network errors and returns 0 on failure
+            await ProductSync.SyncAsync("admin", cts.Token);
+        }
+        catch (OperationCanceledException)
+        {
+            // Optional: show a non-blocking toast/snackbar like "Sync timed out"
+        }
+        catch (Exception)
+        {
+            // Optional: show a non-blocking toast/snackbar like "Sync failed"
+            // Don't rethrow—just log if you have logging
         }
         finally
         {
             _syncing = false;
+
+            // Always refresh local view; even if sync failed, this won’t crash
+            LoadProducts();
             StateHasChanged();
         }
     }
+
 }
