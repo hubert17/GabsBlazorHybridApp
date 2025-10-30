@@ -56,8 +56,9 @@ builder.Services.AddAuthorization(options =>
 builder.Services.AddCascadingAuthenticationState();
 
 builder.Services.AddDbContextFactory<HybridAppDbContext>(option =>
-    option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), sqlServer => sqlServer.MigrationsAssembly("GabsHybridApp.Web")));
-    //option.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnectionSqlite"), builder.Environment.ContentRootPath));
+        option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), sqlServer => sqlServer.MigrationsAssembly("GabsHybridApp.Web")));
+        //option.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnectionPostgreSQL")));
+        //option.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnectionSqlite"), builder.Environment.ContentRootPath));
 
 // Add device-specific services used by the GabsHybridApp.Shared project
 builder.Services.AddSingleton<IFormFactor, FormFactor>();

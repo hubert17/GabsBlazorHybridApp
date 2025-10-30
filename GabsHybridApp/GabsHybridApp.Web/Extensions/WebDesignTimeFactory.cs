@@ -25,9 +25,9 @@ public sealed class WebDesignTimeFactory : IDesignTimeDbContextFactory<HybridApp
             ?? throw new InvalidOperationException("Missing ConnectionStrings:DefaultConnection in appsettings.");
 
         var options = new DbContextOptionsBuilder<HybridAppDbContext>()
-            .UseSqlServer(connString, sql =>
-                sql.MigrationsAssembly(typeof(WebDesignTimeFactory).Assembly.GetName().Name))
-            .Options;
+            .UseSqlServer(connString,
+            //.UseNpgsql(connString,
+                sql => sql.MigrationsAssembly(typeof(WebDesignTimeFactory).Assembly.GetName().Name)).Options;
 
         // If your DbContext ctor takes a contentRoot path, pass basePath here.
         return new HybridAppDbContext(options);
