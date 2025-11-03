@@ -55,9 +55,14 @@ builder.Services.AddAuthorization(options =>
 builder.Services.AddCascadingAuthenticationState();
 
 builder.Services.AddDbContextFactory<HybridAppDbContext>(option =>
-        option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), sqlServer => sqlServer.MigrationsAssembly("GabsHybridApp.Web")));
-        //option.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnectionPostgreSQL")));
-        //option.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnectionSqlite"), builder.Environment.ContentRootPath));
+        option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), sql =>
+        //option.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"), sql =>
+        {
+            sql.MigrationsAssembly(typeof(WebDesignTimeFactory).Assembly.GetName().Name);
+            var schema = builder.Configuration.GetConnectionString("Schema");
+            if (!string.IsNullOrWhiteSpace(schema)) sql.MigrationsHistoryTable("__EFMigrationsHistory", schema);
+        }));
+//option.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnectionSqlite"), builder.Environment.ContentRootPath));
 
 // Add device-specific services used by the GabsHybridApp.Shared project
 builder.Services.AddSingleton<IFormFactor, FormFactor>();
@@ -97,7 +102,7 @@ app.MapStaticAssets();
 
 app.UseAntiforgery();
 
-app.UseAuthentication(); 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapRazorComponents<App>()

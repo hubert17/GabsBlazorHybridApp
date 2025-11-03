@@ -13,8 +13,12 @@ namespace GabsHybridApp.Web.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.EnsureSchema(
+                name: "GabsHybridApp");
+
             migrationBuilder.CreateTable(
                 name: "Products",
+                schema: "GabsHybridApp",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -32,6 +36,7 @@ namespace GabsHybridApp.Web.Migrations
 
             migrationBuilder.CreateTable(
                 name: "UserAccounts",
+                schema: "GabsHybridApp",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -51,6 +56,7 @@ namespace GabsHybridApp.Web.Migrations
 
             migrationBuilder.CreateTable(
                 name: "Notifications",
+                schema: "GabsHybridApp",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -68,11 +74,13 @@ namespace GabsHybridApp.Web.Migrations
                     table.ForeignKey(
                         name: "FK_Notifications_UserAccounts_UserId",
                         column: x => x.UserId,
+                        principalSchema: "GabsHybridApp",
                         principalTable: "UserAccounts",
                         principalColumn: "Id");
                 });
 
             migrationBuilder.InsertData(
+                schema: "GabsHybridApp",
                 table: "Products",
                 columns: new[] { "Id", "Description", "Name", "PictureFilename", "Unit", "UnitPrice" },
                 values: new object[,]
@@ -96,6 +104,7 @@ namespace GabsHybridApp.Web.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_Notifications_UserId",
+                schema: "GabsHybridApp",
                 table: "Notifications",
                 column: "UserId");
         }
@@ -104,13 +113,16 @@ namespace GabsHybridApp.Web.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Notifications");
+                name: "Notifications",
+                schema: "GabsHybridApp");
 
             migrationBuilder.DropTable(
-                name: "Products");
+                name: "Products",
+                schema: "GabsHybridApp");
 
             migrationBuilder.DropTable(
-                name: "UserAccounts");
+                name: "UserAccounts",
+                schema: "GabsHybridApp");
         }
     }
 }

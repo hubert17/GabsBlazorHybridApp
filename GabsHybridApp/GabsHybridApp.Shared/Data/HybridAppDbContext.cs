@@ -1,15 +1,22 @@
 ﻿using GabsHybridApp.Shared.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.Extensions.Configuration;
 
 namespace GabsHybridApp.Shared.Data;
 
 public class HybridAppDbContext : DbContext
 {
-    public HybridAppDbContext(DbContextOptions<HybridAppDbContext> options)
-        : base(options) { }
+    public HybridAppDbContext(DbContextOptions<HybridAppDbContext> options) : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        var schema = this.GetService<IConfiguration>().GetConnectionString("Schema");
+        if (!string.IsNullOrWhiteSpace(schema) && !Database.IsSqlite())
+        {
+            modelBuilder.HasDefaultSchema(schema);
+        }
+
         // Product config
         modelBuilder.Entity<Product>(e =>
         {

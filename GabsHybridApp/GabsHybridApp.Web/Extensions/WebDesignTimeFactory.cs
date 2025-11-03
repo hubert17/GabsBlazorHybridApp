@@ -13,7 +13,7 @@ public sealed class WebDesignTimeFactory : IDesignTimeDbContextFactory<HybridApp
         var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";
         var basePath = Directory.GetCurrentDirectory(); // when PMC Default Project is the Web project
 
-        var cfg = new ConfigurationBuilder()
+        var configuration = new ConfigurationBuilder()
             .SetBasePath(basePath)
             .AddJsonFile("appsettings.json", optional: false, reloadOnChange: false)
             .AddJsonFile($"appsettings.{env}.json", optional: true, reloadOnChange: false)
@@ -21,13 +21,24 @@ public sealed class WebDesignTimeFactory : IDesignTimeDbContextFactory<HybridApp
             .AddEnvironmentVariables()
             .Build();
 
-        var connString = cfg.GetConnectionString("DefaultConnection")
+        // Build a minimal service provider that contains IConfiguration
+        var services = new ServiceCollection()
+            .AddSingleton<IConfiguration>(configuration)
+            .BuildServiceProvider();
+
+        var connString = configuration.GetConnectionString("DefaultConnection")
             ?? throw new InvalidOperationException("Missing ConnectionStrings:DefaultConnection in appsettings.");
 
+        var schema = configuration.GetConnectionString("Schema");
+
         var options = new DbContextOptionsBuilder<HybridAppDbContext>()
-            .UseSqlServer(connString,
-            //.UseNpgsql(connString,
-                sql => sql.MigrationsAssembly(typeof(WebDesignTimeFactory).Assembly.GetName().Name)).Options;
+            .UseSqlServer(connString, sql =>
+            //.UseNpgsql(connString, sql =>
+            {
+                sql.MigrationsAssembly(typeof(WebDesignTimeFactory).Assembly.GetName().Name);
+                if (!string.IsNullOrWhiteSpace(schema))
+                    sql.MigrationsHistoryTable("__EFMigrationsHistory", schema);
+            }).UseApplicationServiceProvider(services).Options;
 
         // If your DbContext ctor takes a contentRoot path, pass basePath here.
         return new HybridAppDbContext(options);

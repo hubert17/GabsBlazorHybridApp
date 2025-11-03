@@ -17,6 +17,7 @@ namespace GabsHybridApp.Web.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
+                .HasDefaultSchema("GabsHybridApp")
                 .HasAnnotation("ProductVersion", "9.0.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
@@ -54,7 +55,7 @@ namespace GabsHybridApp.Web.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Notifications");
+                    b.ToTable("Notifications", "GabsHybridApp");
                 });
 
             modelBuilder.Entity("GabsHybridApp.Shared.Models.Product", b =>
@@ -85,7 +86,7 @@ namespace GabsHybridApp.Web.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", "GabsHybridApp");
 
                     b.HasData(
                         new
@@ -244,7 +245,7 @@ namespace GabsHybridApp.Web.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("UserAccounts");
+                    b.ToTable("UserAccounts", "GabsHybridApp");
                 });
 
             modelBuilder.Entity("GabsHybridApp.Shared.Models.Notification", b =>
