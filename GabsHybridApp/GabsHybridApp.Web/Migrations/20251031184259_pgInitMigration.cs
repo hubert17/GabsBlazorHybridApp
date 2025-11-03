@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
@@ -8,22 +9,26 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace GabsHybridApp.Web.Migrations
 {
     /// <inheritdoc />
-    public partial class initMigration : Migration
+    public partial class pgInitMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.EnsureSchema(
+                name: "GabsHybridApp");
+
             migrationBuilder.CreateTable(
                 name: "Products",
+                schema: "GabsHybridApp",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UnitPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Unit = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
-                    PictureFilename = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: true),
+                    UnitPrice = table.Column<decimal>(type: "numeric", nullable: false),
+                    Unit = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: true),
+                    PictureFilename = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -32,17 +37,18 @@ namespace GabsHybridApp.Web.Migrations
 
             migrationBuilder.CreateTable(
                 name: "UserAccounts",
+                schema: "GabsHybridApp",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Username = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    PasswordHash = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
-                    PasswordSalt = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
-                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastLogin = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    Roles = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ServerSalt = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Username = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    PasswordHash = table.Column<byte[]>(type: "bytea", nullable: true),
+                    PasswordSalt = table.Column<byte[]>(type: "bytea", nullable: true),
+                    CreatedOn = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastLogin = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    IsActive = table.Column<bool>(type: "boolean", nullable: false),
+                    Roles = table.Column<string>(type: "text", nullable: true),
+                    ServerSalt = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -51,16 +57,17 @@ namespace GabsHybridApp.Web.Migrations
 
             migrationBuilder.CreateTable(
                 name: "Notifications",
+                schema: "GabsHybridApp",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    Content = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    NotificationType = table.Column<int>(type: "int", nullable: false),
-                    NavigateToUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Title = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
+                    Content = table.Column<string>(type: "text", nullable: true),
+                    NotificationType = table.Column<int>(type: "integer", nullable: false),
+                    NavigateToUrl = table.Column<string>(type: "text", nullable: true),
+                    CreatedOn = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -68,11 +75,13 @@ namespace GabsHybridApp.Web.Migrations
                     table.ForeignKey(
                         name: "FK_Notifications_UserAccounts_UserId",
                         column: x => x.UserId,
+                        principalSchema: "GabsHybridApp",
                         principalTable: "UserAccounts",
                         principalColumn: "Id");
                 });
 
             migrationBuilder.InsertData(
+                schema: "GabsHybridApp",
                 table: "Products",
                 columns: new[] { "Id", "Description", "Name", "PictureFilename", "Unit", "UnitPrice" },
                 values: new object[,]
@@ -96,6 +105,7 @@ namespace GabsHybridApp.Web.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_Notifications_UserId",
+                schema: "GabsHybridApp",
                 table: "Notifications",
                 column: "UserId");
         }
@@ -104,13 +114,16 @@ namespace GabsHybridApp.Web.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Notifications");
+                name: "Notifications",
+                schema: "GabsHybridApp");
 
             migrationBuilder.DropTable(
-                name: "Products");
+                name: "Products",
+                schema: "GabsHybridApp");
 
             migrationBuilder.DropTable(
-                name: "UserAccounts");
+                name: "UserAccounts",
+                schema: "GabsHybridApp");
         }
     }
 }
