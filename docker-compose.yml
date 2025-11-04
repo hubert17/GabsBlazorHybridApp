@@ -1,0 +1,22 @@
+version: "3.9"
+
+services:
+  web:
+    container_name: gabshybridapp-web
+    build:
+      context: .
+      dockerfile: Dockerfile
+      platforms:
+        - linux/arm64
+    image: gabshybridapp-web:aspnet9-arm64
+    platform: linux/arm64
+    ports:
+      - "9081:8080"   # host:container
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Production"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:8080/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
