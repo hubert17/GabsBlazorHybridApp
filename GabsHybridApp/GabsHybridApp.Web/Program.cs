@@ -62,7 +62,7 @@ builder.Services.AddDbContextFactory<HybridAppDbContext>(option =>
             var schema = builder.Configuration.GetConnectionString("Schema");
             if (!string.IsNullOrWhiteSpace(schema)) sql.MigrationsHistoryTable("__EFMigrationsHistory", schema);
         }));
-//option.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnectionSqlite"), builder.Environment.ContentRootPath));
+        //option.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnectionSqlite"), builder.Environment.ContentRootPath));
 
 // Add device-specific services used by the GabsHybridApp.Shared project
 builder.Services.AddSingleton<IFormFactor, FormFactor>();

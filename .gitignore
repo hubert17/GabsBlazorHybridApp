@@ -98,6 +98,9 @@ wwwroot/dist/
 wwwroot/**/bundle*
 wwwroot/**/*.map
 
+# Ignore all development appsettings across projects
+**/appsettings.Development.json
+
 # User secrets (dotnet user-secrets lives outside repo, but keep this if you mirror)
 secrets.json
 
