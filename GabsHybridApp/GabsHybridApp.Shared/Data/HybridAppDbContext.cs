@@ -23,6 +23,21 @@ public class HybridAppDbContext : DbContext
             // Seed data (uses your static SeedData() list)
             e.HasData(Product.SeedData());
         });
+
+        modelBuilder.Entity<NatureIncidentIllness>(e =>
+        {
+            e.HasData(NatureIncidentIllness.SeedData());
+        });
+
+        modelBuilder.Entity<Team>(e =>
+        {
+            e.HasData(Team.SeedData());
+        });
+
+        modelBuilder.Entity<Responder>(e =>
+        {
+            e.HasData(Responder.SeedData());
+        });
     }
 
     public DbSet<UserAccount> UserAccounts { get; set; }
