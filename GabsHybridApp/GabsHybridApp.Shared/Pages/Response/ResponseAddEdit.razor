@@ -1,0 +1,211 @@
+﻿@page "/response"
+
+<style>
+    .mud-expand-panel .mud-expand-panel-header .mud-expand-panel-text {
+        font-weight: bold;
+    }
+</style>
+
+<EditForm Model="@Response" OnValidSubmit="Save">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <MudExpansionPanels MultiExpansion Elevation="1">
+
+        <!-- 1) Call / Request Details -->
+        <MudExpansionPanel Text="Call / Request Details" Expanded>
+            <MudGrid>
+                <MudItem xs="12" sm="6"><MudDatePicker @bind-Date="DatePart" Label="Date" Variant="Variant.Outlined" Margin="Margin.Dense" /></MudItem>
+                <MudItem xs="12" sm="6"><MudTimePicker @bind-Time="TimePart" Label="Time of Call/Visit" Variant="Variant.Outlined" Margin="Margin.Dense" /></MudItem>
+                <MudItem xs="12" sm="6"><MudTextField @bind-Value="Response.NatureOfRequest" Label="Nature of Request" Variant="Variant.Outlined" Margin="Margin.Dense" /></MudItem>
+                <MudItem xs="12" sm="6">
+                    <MudSelect T="RequestBy" @bind-Value="Response.RequestBy" Label="Caller/Walk-in" Variant="Variant.Outlined" Margin="Margin.Dense">
+                        @foreach (var val in Enum.GetValues<RequestBy>())
+                        {
+                            <MudSelectItem Value="val">@val</MudSelectItem>
+                        }
+                    </MudSelect>
+                </MudItem>
+            </MudGrid>
+        </MudExpansionPanel>
+
+        <!-- 2) Patient/s Details -->
+        <MudExpansionPanel Text="Patient/s Details" Expanded>
+            <MudGrid GutterSize="2" Class="mt-2">
+                @for (int i = 0; i < Response.Patients.Count; i++)
+                {
+                    var p = Response.Patients[i];
+                    <MudItem xs="12"><MudText Typo="Typo.subtitle2" Class="mt-2">Patient @(@i + 1)</MudText></MudItem>
+                    <MudItem xs="12" sm="6"><MudTextField @bind-Value="p.Name" Label="Name" Variant="Variant.Outlined" Margin="Margin.Dense" /></MudItem>
+                    <MudItem xs="12" sm="6"><MudTextField @bind-Value="p.Age" Label="Age" Variant="Variant.Outlined" Margin="Margin.Dense" InputType="InputType.Number" /></MudItem>
+                    <MudItem xs="12"><MudTextField @bind-Value="p.Address" Label="Address" Variant="Variant.Outlined" Margin="Margin.Dense" /></MudItem>
+                    <MudItem xs="12" sm="6"><MudTextField @bind-Value="p.Gender" Label="Gender" Variant="Variant.Outlined" Margin="Margin.Dense" /></MudItem>
+                    <MudItem xs="12" sm="6" Class="d-flex align-center"><MudButton Color="Color.Error" Variant="Variant.Outlined" OnClick="@(() => RemovePatient(i))">Remove</MudButton></MudItem>
+                    <MudItem xs="12"><MudDivider Class="my-2" /></MudItem>
+                }
+                <MudItem xs="12"><MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="AddPatient">Add Patient</MudButton></MudItem>
+            </MudGrid>
+        </MudExpansionPanel>
+
+        <!-- 3) Incident/Illness Details -->
+        <MudExpansionPanel Text="Incident/Illness Details" Expanded>
+            <MudGrid GutterSize="2" Class="mt-2">
+                <MudItem xs="12" sm="6"><MudTextField @bind-Value="Response.NatureOfIncidentId" Label="Nature of Incident/Illness (Id)" Variant="Variant.Outlined" Margin="Margin.Dense" InputType="InputType.Number" /></MudItem>
+                <MudItem xs="12" sm="6"><MudTextField @bind-Value="Response.IncidentLocationId" Label="Location of Incident/Patient (Id)" Variant="Variant.Outlined" Margin="Margin.Dense" InputType="InputType.Number" /></MudItem>
+                <MudItem xs="12"><MudTextField @bind-Value="Response.IncidentLocationDescription" Label="Incident Location Description" Variant="Variant.Outlined" Margin="Margin.Dense" /></MudItem>
+                <MudItem xs="12" sm="6"><MudTextField @bind-Value="Response.Purok" Label="Purok" Variant="Variant.Outlined" Margin="Margin.Dense" /></MudItem>
+                <MudItem xs="12" sm="6"><MudTextField @bind-Value="Response.Barangay" Label="Barangay" Variant="Variant.Outlined" Margin="Margin.Dense" /></MudItem>
+                <MudItem xs="12" sm="6"><MudTextField @bind-Value="Response.MunicipalityCity" Label="Municipality/City" Variant="Variant.Outlined" Margin="Margin.Dense" /></MudItem>
+                <MudItem xs="12" sm="6"><MudTextField @bind-Value="Response.Province" Label="Province" Variant="Variant.Outlined" Margin="Margin.Dense" /></MudItem>
+                <MudItem xs="12"><MudTextField @bind-Value="Response.GeoLocationAddress" Label="Geo Location Address" Variant="Variant.Outlined" Margin="Margin.Dense" /></MudItem>
+                <MudItem xs="12"><MudTextField @bind-Value="Response.GeoLocationCoordinate" Label="Geo Location Coordinate" Variant="Variant.Outlined" Margin="Margin.Dense" /></MudItem>
+                <MudItem xs="12" sm="6"><MudTextField @bind-Value="Response.ChiefComplaintInjury" Label="Chief Complaint/Injury" Variant="Variant.Outlined" Margin="Margin.Dense" /></MudItem>
+                <MudItem xs="12" sm="6"><MudTextField Value="@(Response.Patients?.Count ?? 0)" Label="Number of Victim/s or Patient/s" ReadOnly="true" Variant="Variant.Outlined" Margin="Margin.Dense" /></MudItem>
+            </MudGrid>
+        </MudExpansionPanel>
+
+        <!-- 4) Response Time Details -->
+        <MudExpansionPanel Text="Response Time Details" Expanded>
+            <MudGrid GutterSize="2" Class="mt-2">
+                <MudItem xs="12" sm="6"><MudDateWheelPicker @bind-Date="Response.Enroute" Label="Enroute" Variant="Variant.Outlined" Margin="Margin.Dense" DateView="DateView.Both" DateFormat="M/d/yyyy hh:mm tt" ShowHeader SubmitOnClose /></MudItem>
+                <MudItem xs="12" sm="6"><MudDatePicker  @bind-Date="Response.FromDestination" Label="From Destination" Variant="Variant.Outlined" Margin="Margin.Dense" /></MudItem>
+                <MudItem xs="12" sm="6"><MudDatePicker @bind-Date="Response.AtScene" Label="At Scene" Variant="Variant.Outlined" Margin="Margin.Dense" /></MudItem>
+                <MudItem xs="12" sm="6"><MudDatePicker @bind-Date="Response.InService" Label="In Service" Variant="Variant.Outlined" Margin="Margin.Dense" /></MudItem>
+                <MudItem xs="12" sm="6"><MudDatePicker @bind-Date="Response.FromScene" Label="From Scene" Variant="Variant.Outlined" Margin="Margin.Dense" /></MudItem>
+                <MudItem xs="12" sm="6"><MudTextField @bind-Value="Response.ResponseTime" Label="Response Time (mins)" Variant="Variant.Outlined" Margin="Margin.Dense" InputType="InputType.Number" /></MudItem>
+                <MudItem xs="12" sm="6"><MudDatePicker @bind-Date="Response.AtDestination" Label="At Destination" Variant="Variant.Outlined" Margin="Margin.Dense" /></MudItem>
+            </MudGrid>
+        </MudExpansionPanel>
+
+        <!-- 5) Transportation Details -->
+        <MudExpansionPanel Text="Transportation Details" Expanded>
+            <MudGrid GutterSize="2" Class="mt-2">
+                <MudItem xs="12" sm="6"><MudTextField @bind-Value="Response.HandoverLocationFrom" Label="From" Variant="Variant.Outlined" Margin="Margin.Dense" /></MudItem>
+                <MudItem xs="12" sm="6"><MudTextField @bind-Value="Response.HandoverLocationTo" Label="To" Variant="Variant.Outlined" Margin="Margin.Dense" /></MudItem>
+            </MudGrid>
+        </MudExpansionPanel>
+
+        <!-- 6) Drivers and Responders -->
+        <MudExpansionPanel Text="Drivers and Responders" Expanded>
+            <MudGrid GutterSize="2" Class="mt-2">
+                <MudItem xs="12" sm="6"><MudTextField @bind-Value="Response.RespondingTeamId" Label="Responding Team (Id)" Variant="Variant.Outlined" Margin="Margin.Dense" InputType="InputType.Number" /></MudItem>
+
+                <MudItem xs="12" sm="6">
+                    <MudText Typo="Typo.subtitle2" Class="mb-2">Driver/s</MudText>
+                    @for (int i = 0; i < Response.Drivers.Count; i++)
+                    {
+                        var d = Response.Drivers[i];
+                        <MudStack Row="true" Spacing="1" Class="mb-2">
+                            <MudTextField @bind-Value="d.Name" Label="Driver Name" Variant="Variant.Outlined" Margin="Margin.Dense" Class="w-100" />
+                            <MudIconButton Icon="@Icons.Material.Filled.Clear" Color="Color.Error" OnClick="@(() => RemoveDriver(i))" />
+                        </MudStack>
+                    }
+                    <MudButton Size="Size.Small" OnClick="AddDriver">Add Driver</MudButton>
+                </MudItem>
+
+                <MudItem xs="12" sm="6">
+                    <MudText Typo="Typo.subtitle2" Class="mb-2">Responder/s</MudText>
+                    @for (int i = 0; i < Response.Responders.Count; i++)
+                    {
+                        var r = Response.Responders[i];
+                        <MudStack Row="true" Spacing="1" Class="mb-2">
+                            <MudTextField @bind-Value="r.ResponserId" Label="Responder (Id)" Variant="Variant.Outlined" Margin="Margin.Dense" InputType="InputType.Number" Class="w-100" />
+                            <MudIconButton Icon="@Icons.Material.Filled.Clear" Color="Color.Error" OnClick="@(() => RemoveResponder(i))" />
+                        </MudStack>
+                    }
+                    <MudButton Size="Size.Small" OnClick="AddResponder">Add Responder</MudButton>
+                </MudItem>
+            </MudGrid>
+        </MudExpansionPanel>
+
+        <!-- 7) Vehicle/s -->
+        <MudExpansionPanel Text="Vehicle/s" Expanded>
+            <MudGrid GutterSize="2" Class="mt-2">
+                @for (int i = 0; i < Response.EmergencyVehicles.Count; i++)
+                {
+                    var v = Response.EmergencyVehicles[i];
+                    <MudItem xs="12" sm="6"><MudTextField @bind-Value="v.Name" Label="EV Name" Variant="Variant.Outlined" Margin="Margin.Dense" /></MudItem>
+                    <MudItem xs="12" sm="6"><MudTextField @bind-Value="v.PlateNumber" Label="EV No. / Plate Number" Variant="Variant.Outlined" Margin="Margin.Dense" /></MudItem>
+                    <MudItem xs="12" Class="d-flex justify-end mb-2"><MudButton Color="Color.Error" Variant="Variant.Outlined" OnClick="@(() => RemoveVehicle(i))">Remove Vehicle</MudButton></MudItem>
+                    <MudItem xs="12"><MudDivider Class="my-1" /></MudItem>
+                }
+                <MudItem xs="12"><MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="AddVehicle">Add Vehicle</MudButton></MudItem>
+            </MudGrid>
+        </MudExpansionPanel>
+
+    </MudExpansionPanels>
+
+    <MudStack Row="true" Justify="Justify.Center" Class="mt-6"><MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="px-8">Save</MudButton></MudStack>
+</EditForm>
+@code {
+    // Backing model
+    public Response Response { get; set; } = new Response
+    {
+        ResponseDate = DateTime.Now,
+        Patients = new List<ResponsePatient> { new() { Name = "", Address = "", Age = 0, Gender = "" } },
+        Drivers = new List<ResponseDriver>(),
+        Responders = new List<ResponseResponder>(),
+        EmergencyVehicles = new List<ResponseEmergencyVehicle>()
+    };
+
+    // ----- Date/Time helpers that write into Response.ResponseDate -----
+    private DateTime? DatePart
+    {
+        get => Response.ResponseDate;
+        set
+        {
+            if (value.HasValue)
+            {
+                var t = Response.ResponseDate.TimeOfDay;
+                Response.ResponseDate = value.Value.Date + t;
+            }
+        }
+    }
+
+    private TimeSpan? TimePart
+    {
+        get => Response.ResponseDate.TimeOfDay;
+        set
+        {
+            if (value.HasValue)
+            {
+                var d = Response.ResponseDate.Date;
+                Response.ResponseDate = d + value.Value;
+            }
+        }
+    }
+
+    // ----- Collections helpers -----
+    private void AddPatient() => Response.Patients.Add(new ResponsePatient());
+    private void RemovePatient(int index)
+    {
+        if (index >= 0 && index < Response.Patients.Count) Response.Patients.RemoveAt(index);
+    }
+
+    private void AddDriver() => Response.Drivers.Add(new ResponseDriver());
+    private void RemoveDriver(int index)
+    {
+        if (index >= 0 && index < Response.Drivers.Count) Response.Drivers.RemoveAt(index);
+    }
+
+    private void AddResponder() => Response.Responders.Add(new ResponseResponder());
+    private void RemoveResponder(int index)
+    {
+        if (index >= 0 && index < Response.Responders.Count) Response.Responders.RemoveAt(index);
+    }
+
+    private void AddVehicle() => Response.EmergencyVehicles.Add(new ResponseEmergencyVehicle());
+    private void RemoveVehicle(int index)
+    {
+        if (index >= 0 && index < Response.EmergencyVehicles.Count) Response.EmergencyVehicles.RemoveAt(index);
+    }
+
+    // ----- Submit -----
+    private Task Save()
+    {
+        // At this point Response contains all bound values.
+        // TODO: persist Response (API call / DB save)
+        Console.WriteLine($"Submitting Response Id={Response.Id}, Patients={Response.Patients?.Count ?? 0}");
+        return Task.CompletedTask;
+    }
+}
