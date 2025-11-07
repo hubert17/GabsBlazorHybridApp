@@ -18,10 +18,10 @@
 <CascadingValue Value="_isDarkMode" Name="IsDarkMode">
 <MudLayout>
     <MudDrawer @bind-Open="_drawerOpen"
-               ClipMode="IsWebOrDesktop() ? DrawerClipMode.Always : DrawerClipMode.Never"
-               Variant="@DrawerVariant.Responsive"
-               Elevation="6"
-               >
+
+                ClipMode="IsWebOrDesktop() ? DrawerClipMode.Always : DrawerClipMode.Never"
+                Variant="@DrawerVariant.Responsive"
+                Elevation="6">
         <NavMenu IsDarkMode="_isDarkMode" OnToggleDarkMode="ToggleDarkMode" IsWebOrDesktop="IsWebOrDesktop()" />
     </MudDrawer>
 
@@ -50,9 +50,10 @@
             <!-- Support Links -->
             <MudHidden Breakpoint="Breakpoint.SmAndUp" Invert="true">
                 <MudMenu EndIcon="@Icons.Material.Filled.KeyboardArrowDown"
-                         Label="Support"
-                         Dense="true"
-                         AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight">
+                            Color="Color.Inherit"
+                            Label="Support"
+                            Dense="true"
+                            AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight">
                     <MudText Typo="Typo.body2" Class="px-4 py-2"><b>Community</b></MudText>
                     <MudText Typo="Typo.body2" Class="px-4 py-2"><b>Resources</b></MudText>
                     <MudMenuItem Href="https://mudblazor.com/docs/overview" Target="_blank">MudBlazor Documentation</MudMenuItem>
