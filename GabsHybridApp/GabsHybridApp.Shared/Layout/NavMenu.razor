@@ -19,71 +19,48 @@
     </style>
 }
 
-@if (IsDarkMode)
-{
-    <style>
-        .mud-paper {
-            background-color: var(--mud-palette-drawer-background);
-            color: var(--mud-palette-text-primary);
-        }
+<style>
+    .mud-nav-link.mud-ripple.active, .mud-nav-link.mud-ripple:hover {
+        background-color: @(IsDarkMode ? "var(--mud-palette-dark-lighten)" : "var(--mud-palette-primary)");
+    }
+</style>
 
-        .mud-nav-link.mud-ripple.active, .mud-nav-link.mud-ripple:hover {
-            background-color: var(--mud-palette-dark-lighten);
-        }
-    </style>
-}
-else
-{
-    <style>
-        .mud-paper {
-            background-color: var(--mud-palette-drawer-background);
-            color: var(--mud-palette-text-dark);
-        }
+<MudNavMenu Class="pa-3" Rounded Margin="Margin.Normal" Color="Color.Inherit">
+    <MudNavLink Href="/" Match="NavLinkMatch.All" Icon="@Icons.Material.Outlined.Home" Class="rounded">Home</MudNavLink>
+    <MudNavLink Href="weather" Match="NavLinkMatch.All" Icon="@Icons.Material.Outlined.WaterDrop" Class="rounded">Weather</MudNavLink>
+    <MudNavLink Href="counter" Match="NavLinkMatch.All" Icon="@Icons.Material.Outlined.PlusOne" Class="rounded">Counter (@currentCount)</MudNavLink>
+    <MudNavLink Href="device-features" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Sensors" Class="rounded">Device Features</MudNavLink>
+    <MudNavLink Href="auth" Match="NavLinkMatch.All" Icon="@Icons.Material.Outlined.VerifiedUser" Class="rounded">Auth</MudNavLink>
+    <MudNavLink Href="products" Match="NavLinkMatch.All" Icon="@Icons.Material.Outlined.ShoppingBag" Class="rounded">Products</MudNavLink>
+    <MudNavLink Href="orders" Match="NavLinkMatch.All" Icon="@Icons.Material.Outlined.PointOfSale" Class="rounded">Orders</MudNavLink>
+    <MudNavLink Href="purchases" Match="NavLinkMatch.All" Icon="@Icons.Material.Outlined.MonetizationOn" Class="rounded">Purchases</MudNavLink>
+    <MudDivider Class="mb-4" />
 
-        .mud-nav-link.mud-ripple.active, .mud-nav-link.mud-ripple:hover {
-            background-color: var(--mud-palette-primary);
-        }
-    </style>
-}
+    <MudText Typo="Typo.subtitle2" Color="Color.Inherit" Class="ml-4 my-3">Links</MudText>
+    <MudNavLink Href="https://mudblazor.com" Icon="@Icons.Custom.Brands.MudBlazor" Target="_blank">MudBlazor</MudNavLink>
+    <MudNavLink Href="https://dotnet.microsoft.com/en-us/apps/aspnet/web-apps/blazor" Icon="@Icons.Custom.Brands.MicrosoftVisualStudio" Target="_blank">Blazor</MudNavLink>
+    <MudNavLink Href="https://dotnet.microsoft.com/en-us/apps/aspnet" Icon="@Icons.Custom.Brands.Microsoft" Target="_blank">ASP.NET</MudNavLink>
 
-<MudPaper Class="ma-3 scroll-hidden" Elevation="0">
-    <MudNavMenu Class="my-custom-navmenu" Rounded Margin="Margin.Normal" Color="Color.Surface">
-        <MudNavLink Href="/" Match="NavLinkMatch.All" Icon="@Icons.Material.Outlined.Home" Class="rounded">Home</MudNavLink>
-        <MudNavLink Href="weather" Match="NavLinkMatch.All" Icon="@Icons.Material.Outlined.WaterDrop" Class="rounded">Weather</MudNavLink>
-        <MudNavLink Href="counter" Match="NavLinkMatch.All" Icon="@Icons.Material.Outlined.PlusOne" Class="rounded">Counter (@currentCount)</MudNavLink>
-        <MudNavLink Href="device-features" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Sensors" Class="rounded">Device Features</MudNavLink>
-        <MudNavLink Href="auth" Match="NavLinkMatch.All" Icon="@Icons.Material.Outlined.VerifiedUser" Class="rounded">Auth</MudNavLink>
-        <MudNavLink Href="products" Match="NavLinkMatch.All" Icon="@Icons.Material.Outlined.ShoppingBag" Class="rounded">Products</MudNavLink>
-        <MudNavLink Href="orders" Match="NavLinkMatch.All" Icon="@Icons.Material.Outlined.PointOfSale" Class="rounded">Orders</MudNavLink>
-        <MudNavLink Href="purchases" Match="NavLinkMatch.All" Icon="@Icons.Material.Outlined.MonetizationOn" Class="rounded">Purchases</MudNavLink>
-        <MudDivider Class="mb-4" />
+    <MudNavGroup Title="About Me" Icon="@Icons.Material.Outlined.Person" HideExpandIcon="true">
+        <MudNavLink Href="https://github.com/hubert17" Icon="@Icons.Material.Outlined.Code">Github</MudNavLink>
+        <MudNavLink Href="https://bernardgabon.com" Icon="@Icons.Material.Outlined.Web">BernardGabon.com</MudNavLink>
+    </MudNavGroup>
+    <MudDivider Class="mb-4" />
 
-        <MudText Typo="Typo.subtitle2" Color="Color.Inherit" Class="ml-4 my-3">Links</MudText>
-        <MudNavLink Href="https://mudblazor.com" Icon="@Icons.Custom.Brands.MudBlazor" Target="_blank">MudBlazor</MudNavLink>
-        <MudNavLink Href="https://dotnet.microsoft.com/en-us/apps/aspnet/web-apps/blazor" Icon="@Icons.Custom.Brands.MicrosoftVisualStudio" Target="_blank">Blazor</MudNavLink>
-        <MudNavLink Href="https://dotnet.microsoft.com/en-us/apps/aspnet" Icon="@Icons.Custom.Brands.Microsoft" Target="_blank">ASP.NET</MudNavLink>
-
-        <MudNavGroup Title="About Me" Icon="@Icons.Material.Outlined.Person" HideExpandIcon="true">
-            <MudNavLink Href="https://github.com/hubert17" Icon="@Icons.Material.Outlined.Code">Github</MudNavLink>
-            <MudNavLink Href="https://bernardgabon.com" Icon="@Icons.Material.Outlined.Web">BernardGabon.com</MudNavLink>
+    <MudHidden Breakpoint="Breakpoint.SmAndUp">
+        <MudText Typo="Typo.subtitle2" Color="Color.Inherit" Class="ml-4 my-3">Small Screen Menu</MudText>
+        <MudNavGroup Title="Support" Icon="@Icons.Material.Filled.KeyboardArrowDown" HideExpandIcon="true">
+            <MudNavLink>Community</MudNavLink>
+            <MudNavLink>Resources</MudNavLink>
+            <MudNavLink Href="https://mudblazor.com/docs/overview">MudBlazor Documentation</MudNavLink>
+            <MudNavLink Href="https://mudblazor.com/getting-started/installation">Quick-Start Guide</MudNavLink>
         </MudNavGroup>
-        <MudDivider Class="mb-4" />
+        <MudNavLink Href="https://github.com/hubert17/EdwillJSystem" Icon="@Icons.Custom.Brands.GitHub" Target="_blank">EdwillJSystem</MudNavLink>
+        <MudNavLink OnClick="OnToggleDarkMode" Icon="@(IsDarkMode? Icons.Material.Filled.WbSunny : Icons.Material.Filled.Brightness3)">Switch Dark Mode</MudNavLink>
+    </MudHidden>
 
-        <MudHidden Breakpoint="Breakpoint.SmAndUp">
-            <MudText Typo="Typo.subtitle2" Color="Color.Inherit" Class="ml-4 my-3">Small Screen Menu</MudText>
-            <MudNavGroup Title="Support" Icon="@Icons.Material.Filled.KeyboardArrowDown" HideExpandIcon="true">
-                <MudNavLink>Community</MudNavLink>
-                <MudNavLink>Resources</MudNavLink>
-                <MudNavLink Href="https://mudblazor.com/docs/overview">MudBlazor Documentation</MudNavLink>
-                <MudNavLink Href="https://mudblazor.com/getting-started/installation">Quick-Start Guide</MudNavLink>
-            </MudNavGroup>
-            <MudNavLink Href="https://github.com/hubert17/EdwillJSystem" Icon="@Icons.Custom.Brands.GitHub" Target="_blank">EdwillJSystem</MudNavLink>
-            <MudNavLink OnClick="OnToggleDarkMode" Icon="@(IsDarkMode? Icons.Material.Filled.WbSunny : Icons.Material.Filled.Brightness3)">Switch Dark Mode</MudNavLink>
-        </MudHidden>
+</MudNavMenu>
 
-    </MudNavMenu>
-
-</MudPaper>
 
 @code {
     [Parameter] public bool IsDarkMode { get; set; }
