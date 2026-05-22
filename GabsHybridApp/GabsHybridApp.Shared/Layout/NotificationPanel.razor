@@ -48,7 +48,7 @@
                Class="mud-dialog-scrollable"
                Style="height: 100dvh; max-height: 100dvh;">
         <TitleContent>
-            <MudGrid AlignItems="Center" Class="px-2" Style="min-height: 48px;">
+            <MudGrid Justify="Justify.Center" Class="px-2" Style="min-height: 48px;">
                 <MudItem xs="3" Class="d-flex align-center">
                     <MudIconButton Icon="@Icons.Material.Filled.ArrowBack"
                                    Color="Color.Inherit"
@@ -66,7 +66,7 @@
             <MudList T="string">
                 @foreach (var notif in _notifications.OrderByDescending(n => n.CreatedOn))
                 {
-                    <MudListItem Button="true" OnClick="@(() => NavigateTo(notif.NavigateToUrl))">
+                    <MudListItem OnClick="@(() => NavigateTo(notif.NavigateToUrl))">
                         <MudText Typo="Typo.subtitle2" Color="@GetColor(notif.NotificationType)">
                             @notif.Title
                         </MudText>
