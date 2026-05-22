@@ -82,12 +82,14 @@
             </MudHidden>
 
             <!-- 👤 User Menu -->
-            <AuthorizeView>
+            <AuthorizeView Context="authState">
                 <MudMenu AnchorOrigin="Origin.TopLeft" Dense Class="mt-1 ml-4" >
                     <ActivatorContent>
-                        <MudAvatar Size="Size.Medium">
-                            <MudImage Src="https://avatars.githubusercontent.com/u/7923889?v=4" />
-                        </MudAvatar>
+                        <div @onclick="@context.ToggleAsync" style="cursor: pointer">
+                            <MudAvatar Size="Size.Medium">
+                                <MudImage Src="https://avatars.githubusercontent.com/u/7923889?v=4" />
+                            </MudAvatar>
+                        </div>
                     </ActivatorContent>
                     <ChildContent>
                         <MudListItem T="string" Text="My Account" Icon="@Icons.Material.Outlined.Person" Href="/account/changepassword" />
@@ -105,12 +107,14 @@
         <MudAppBar Fixed Dense Color="Color.Transparent" Class="pt-2" Elevation="0">
             <MudSpacer />
             <NotificationPanel IncludeSample="true" NotificationHubUrl="" />
-            <AuthorizeView>
+            <AuthorizeView Context="authState">
                 <MudMenu AnchorOrigin="Origin.TopLeft" Dense>
                     <ActivatorContent>
-                        <MudAvatar Size="Size.Medium" Elevation="2">
-                            <MudImage Src="https://avatars.githubusercontent.com/u/7923889?v=4" />
-                        </MudAvatar>
+                        <div @onclick="@context.ToggleAsync" style="cursor: pointer">
+                            <MudAvatar Size="Size.Medium" Elevation="2">
+                                <MudImage Src="https://avatars.githubusercontent.com/u/7923889?v=4" />
+                            </MudAvatar>
+                        </div>
                     </ActivatorContent>
                     <ChildContent>
                         <MudListItem T="string" Text="My Account" Icon="@Icons.Material.Outlined.Person" Href="/account/changepassword" />
