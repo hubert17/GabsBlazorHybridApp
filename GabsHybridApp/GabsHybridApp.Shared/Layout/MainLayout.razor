@@ -1,4 +1,4 @@
-﻿@inherits LayoutComponentBase
+@inherits LayoutComponentBase
 @using GabsHybridApp.Shared.Components
 @using GabsHybridApp.Shared.Layout
 
@@ -84,7 +84,7 @@
             <!-- 👤 User Menu -->
             <AuthorizeView>
                 <MudMenu AnchorOrigin="Origin.TopLeft" Dense Class="mt-1 ml-4" >
-                    <ActivatorContent>
+                    <ActivatorContent Context="userMenuContext">
                         <MudAvatar Size="Size.Medium">
                             <MudImage Src="https://avatars.githubusercontent.com/u/7923889?v=4" />
                         </MudAvatar>
@@ -107,7 +107,7 @@
             <NotificationPanel IncludeSample="true" NotificationHubUrl="" />
             <AuthorizeView>
                 <MudMenu AnchorOrigin="Origin.TopLeft" Dense>
-                    <ActivatorContent>
+                    <ActivatorContent Context="userMenuMobileContext">
                         <MudAvatar Size="Size.Medium" Elevation="2">
                             <MudImage Src="https://avatars.githubusercontent.com/u/7923889?v=4" />
                         </MudAvatar>

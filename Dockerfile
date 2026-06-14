@@ -3,7 +3,7 @@
 ###
 # Build stage (Apple Silicon ready)
 ###
-FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:9.0-alpine AS build
+FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:10.0-alpine AS build
 ARG TARGETARCH
 WORKDIR /src
 
@@ -30,7 +30,7 @@ RUN dotnet publish GabsHybridApp/GabsHybridApp.Web/GabsHybridApp.Web.csproj \
 ###
 # Runtime stage
 ###
-FROM mcr.microsoft.com/dotnet/aspnet:9.0-alpine AS runtime
+FROM mcr.microsoft.com/dotnet/aspnet:10.0-alpine AS runtime
 
 RUN apk add --no-cache icu-libs tzdata libgcc \
     && adduser -D -H -u 10001 appuser
