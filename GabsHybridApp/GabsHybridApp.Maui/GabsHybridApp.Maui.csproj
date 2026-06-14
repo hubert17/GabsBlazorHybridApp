@@ -20,6 +20,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <EnableDefaultCssItems>false</EnableDefaultCssItems>
     <Nullable>enable</Nullable>
+    <BlazorDisableThrowNavigationException>true</BlazorDisableThrowNavigationException>
 
     <!-- Display name -->
     <ApplicationTitle>GabsHybridApp.Maui</ApplicationTitle>
