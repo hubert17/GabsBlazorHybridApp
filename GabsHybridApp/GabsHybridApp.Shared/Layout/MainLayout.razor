@@ -85,7 +85,7 @@
             <AuthorizeView>
                 <MudMenu AnchorOrigin="Origin.TopLeft" Dense Class="mt-1 ml-4" >
                     <ActivatorContent Context="userMenuContext">
-                        <MudAvatar Size="Size.Medium">
+                        <MudAvatar Size="Size.Medium" Style="cursor: pointer;" @onclick="userMenuContext.ToggleAsync">
                             <MudImage Src="https://avatars.githubusercontent.com/u/7923889?v=4" />
                         </MudAvatar>
                     </ActivatorContent>
@@ -108,7 +108,7 @@
             <AuthorizeView>
                 <MudMenu AnchorOrigin="Origin.TopLeft" Dense>
                     <ActivatorContent Context="userMenuMobileContext">
-                        <MudAvatar Size="Size.Medium" Elevation="2">
+                        <MudAvatar Size="Size.Medium" Elevation="2" Style="cursor: pointer;" @onclick="userMenuMobileContext.ToggleAsync">
                             <MudImage Src="https://avatars.githubusercontent.com/u/7923889?v=4" />
                         </MudAvatar>
                     </ActivatorContent>
