@@ -1,5 +1,6 @@
-﻿@page "/device-features"
+@page "/device-features"
 @using GabsHybridApp.Shared.Components.DeviceFeatures
+@inject IJSRuntime JS
 
 <style>
     /* Horizontal, single-row chip scroller */
@@ -88,6 +89,7 @@
 </MudText>
 
 <MudChipSet T="DeviceFeature"
+            id="device-features-chipset"
             @bind-SelectedValue="_selected"
             SelectionMode="SelectionMode.SingleSelection"
             Class="chipset-nowrap invert-select mt-5 mx-n10 px-10">
@@ -130,6 +132,14 @@ else if (_selected == DeviceFeature.Network)
     public bool IsDarkMode { get; set; }
 
     private DeviceFeature _selected = DeviceFeature.Location;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JS.InvokeVoidAsync("gabsScroll.initHorizontalScroll", "device-features-chipset");
+        }
+    }
 
     public enum DeviceFeature
     {
