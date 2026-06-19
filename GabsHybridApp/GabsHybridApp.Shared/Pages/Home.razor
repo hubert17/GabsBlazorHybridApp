@@ -1,132 +1,501 @@
-﻿@page "/"
+@page "/"
 @using GabsHybridApp.Shared.Services
 @inject IFormFactor FormFactor
 
-<PageTitle>Home</PageTitle>
+<PageTitle>Home - .NET 10 Hybrid App</PageTitle>
 
-<MudContainer MaxWidth="MaxWidth.Medium">
-    <MudText Typo="Typo.h3" GutterBottom="true">Hello, world!</MudText>
-    <MudText Class="mb-8">Welcome to your new hybrid app running on <em>@FormFactor.GetFormFactor()</em> using <em>@FormFactor.GetPlatform()</em>.</MudText>
-    <MudText Class="mb-6">
-        This app is powered by <MudLink Href="https://learn.microsoft.com/en-us/aspnet/core/blazor/?view=aspnetcore-8.0" Target="_blank" Color="Color.Primary">Blazor</MudLink> and styled with <MudLink Href="https://mudblazor.com" Target="_blank" Color="Color.Primary">MudBlazor</MudLink>, making modern, fast, and beautiful web applications easier than ever.
-    </MudText>
+<style>
+    .hero-banner {
+        background: linear-gradient(135deg, #1e88e5 0%, #1565c0 100%);
+        color: white;
+        border-radius: 12px;
+        padding: 3rem 2rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 8px 24px rgba(21, 101, 192, 0.15);
+        position: relative;
+        overflow: hidden;
+    }
 
-    <MudDivider Class="mb-4" />
+    .hero-banner::before {
+        content: "";
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
+        pointer-events: none;
+    }
 
-    <MudText Typo="Typo.h5" GutterBottom="true">What is Blazor?</MudText>
+    .glass-badge {
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        color: white;
+        font-weight: 500;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
 
-    <MudText Typo="Typo.body2" Class="mb-4">
-        Blazor is a framework for building interactive web UIs using C# instead of JavaScript. It enables full-stack web development with .NET, allowing you to share code, libraries, and APIs between client and server.
-        <br /><br />
-        Blazor supports multiple hosting models:
-        <ul>
-            <li><b>Blazor Server</b>: Components are rendered on the server, with UI interactions handled over SignalR.</li>
-            <li><b>Blazor WebAssembly (WASM)</b>: Runs client-side directly in the browser using WebAssembly.</li>
-            <li><b>Blazor Hybrid</b>: Embed Blazor into native apps via .NET MAUI or WPF/WinForms.</li>
-            <li><b>Blazor Web App (New in .NET 8)</b>: A flexible project type for creating SSR-enabled apps that can light up interactivity progressively.</li>
-        </ul>
-    </MudText>
+    .feature-card {
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+        border-radius: 8px;
+    }
 
-    <MudDivider Class="mb-4" />
+    .feature-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--mud-elevation-4);
+    }
 
-    <MudText Typo="Typo.h5" GutterBottom="true">Why Use Blazor?</MudText>
+    .doc-card {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        transition: transform 0.2s ease, border-color 0.2s ease;
+        border: 1px solid var(--mud-palette-lines-inputs);
+    }
 
-    <MudText Typo="Typo.body2" Class="mb-4">
-        <ul>
-            <li><b>Full Stack Development with .NET</b> — no need to rely on JavaScript frameworks.</li>
-            <li><b>Code Sharing</b> between client, server, and mobile apps (MAUI).</li>
-            <li><b>Modern Web Standards</b> — leverage WebAssembly, SignalR, and HTTP/2.</li>
-            <li><b>Productivity Boost</b> — use existing .NET libraries, tools, and IDEs.</li>
-            <li><b>Great Performance</b> with improved prerendering and streaming rendering in .NET 8.</li>
-        </ul>
-    </MudText>
+    .doc-card:hover {
+        transform: translateY(-2px);
+        border-color: var(--mud-palette-primary);
+    }
 
-    <MudDivider Class="mb-4" />
+    .code-box {
+        background-color: var(--mud-palette-background-grey);
+        border-radius: 6px;
+        padding: 12px;
+        font-family: 'Consolas', 'Courier New', Courier, monospace;
+        font-size: 0.85rem;
+        border: 1px solid var(--mud-palette-lines-inputs);
+        overflow-x: auto;
+    }
+</style>
 
-    <MudText Typo="Typo.h5" GutterBottom="true">What's New in Blazor with .NET 8</MudText>
+<MudContainer MaxWidth="MaxWidth.Large" Class="mt-4 pb-12">
+    <!-- Hero Banner -->
+    <div class="hero-banner">
+        <div class="d-flex flex-column gap-3">
+            <div class="d-flex flex-wrap gap-2 mb-2">
+                <span class="glass-badge">
+                    <MudIcon Icon="@Icons.Material.Filled.Verified" Size="Size.Small" /> .NET 10.0 LTS
+                </span>
+                <span class="glass-badge">
+                    <MudIcon Icon="@Icons.Material.Filled.Bolt" Size="Size.Small" /> C# 14
+                </span>
+                <span class="glass-badge">
+                    <MudIcon Icon="@Icons.Material.Filled.DesktopMac" Size="Size.Small" /> @FormFactor.GetFormFactor()
+                </span>
+                <span class="glass-badge">
+                    <MudIcon Icon="@Icons.Material.Filled.SettingsSuggest" Size="Size.Small" /> @FormFactor.GetPlatform()
+                </span>
+            </div>
+            
+            <MudText Typo="Typo.h3" Class="font-weight-bold" Style="font-size: clamp(1.8rem, 4vw, 2.8rem); line-height: 1.2;">
+                Next-Gen Blazor Hybrid with .NET 10
+            </MudText>
+            
+            <MudText Typo="Typo.subtitle1" Style="opacity: 0.9; max-width: 700px; font-weight: 300;">
+                Experience state-of-the-art JIT compiler performance, native device integration with improved HybridWebView, and AI-ready architectures in this high-performance cross-platform application.
+            </MudText>
+        </div>
+    </div>
 
-    <MudText Typo="Typo.h6" GutterBottom="true">Unified Blazor Web App Project</MudText>
+    <!-- Main Content & Feature Explorer -->
+    <MudGrid>
+        <MudItem xs="12" md="8">
+            <MudCard Outlined="true" Class="pa-2">
+                <MudCardContent>
+                    <div class="d-flex align-center gap-2 mb-4">
+                        <MudIcon Icon="@Icons.Material.Filled.Explore" Color="Color.Primary" Size="Size.Medium" />
+                        <MudText Typo="Typo.h5" Class="font-weight-bold">Feature Explorer</MudText>
+                    </div>
+                    
+                    <MudTabs Elevation="0" Rounded="true" Centered="false" Color="Color.Primary" ActivePanelIndexChanged="OnTabChanged">
+                        <!-- Tab 1: .NET 10 Core & C# 14 -->
+                        <MudTabPanel Text="Core & C# 14" Icon="@Icons.Material.Outlined.Terminal">
+                            <div class="pt-4">
+                                <MudText Typo="Typo.subtitle1" Class="font-weight-bold mb-2">Long-Term Support (LTS) & Language Refinements</MudText>
+                                <MudText Typo="Typo.body2" Class="mb-4">
+                                    .NET 10 is the recommended LTS release, supported until 2028. Coupled with C# 14, it introduces optimizations that streamline codebase complexity and runtime efficiency.
+                                </MudText>
+                                
+                                <MudAlert Severity="Severity.Info" Variant="Variant.Outlined" Class="mb-4">
+                                    C# 14 brings features like field-backed properties (`field` keyword) to simplify automatic properties without boilerplate backend storage, and improved collection initializers.
+                                </MudAlert>
 
-    <MudText Typo="Typo.body2" Class="mb-4">
-        .NET 8 introduces a new default project template called "Blazor Web App".<br /><br />
-        This template combines server-side rendering (SSR) and client-side interactivity, offering flexibility to dynamically decide how pages and components are rendered.<br /><br />
-        You can prerender content on the server for fast page loads, then optionally enable interactivity either through SignalR (server) or WebAssembly (client).
-    </MudText>
+                                <MudText Typo="Typo.body2" Class="font-weight-bold mb-1">C# 14 Field-Backed Properties (Proposed/Supported syntax):</MudText>
+                                <pre class="code-box"><code>public string DisplayName
+{
+    get => field;
+    set => field = value?.Trim() ?? throw new ArgumentNullException();
+}</code></pre>
+                            </div>
+                        </MudTabPanel>
 
-    <MudText Typo="Typo.h6" GutterBottom="true">New Render Modes</MudText>
+                        <!-- Tab 2: Blazor HybridWebView & Interop -->
+                        <MudTabPanel Text="Blazor Hybrid & MAUI" Icon="@Icons.Material.Outlined.Phonelink">
+                            <div class="pt-4">
+                                <MudText Typo="Typo.subtitle1" Class="font-weight-bold mb-2">Advanced Native Device Integration</MudText>
+                                <MudText Typo="Typo.body2" Class="mb-4">
+                                    .NET 10 upgrades the .NET MAUI / Blazor Hybrid interop suite, offering robust, direct APIs to communicate between native device platforms and web pages.
+                                </MudText>
+                                
+                                <MudGrid Class="mb-2">
+                                    <MudItem xs="12" sm="6">
+                                        <div class="d-flex align-start gap-2 mb-3">
+                                            <MudIcon Icon="@Icons.Material.Filled.SwapHoriz" Color="Color.Secondary" Size="Size.Small" />
+                                            <div>
+                                                <MudText Typo="Typo.body2" Class="font-weight-bold">Two-Way JS Interop</MudText>
+                                                <MudText Typo="Typo.caption" Color="Color.Secondary">Invoke JavaScript asynchronously directly from native contexts using `HybridWebView` and wait for execution results.</MudText>
+                                            </div>
+                                        </div>
+                                    </MudItem>
+                                    <MudItem xs="12" sm="6">
+                                        <div class="d-flex align-start gap-2 mb-3">
+                                            <MudIcon Icon="@Icons.Material.Filled.Security" Color="Color.Secondary" Size="Size.Small" />
+                                            <div>
+                                                <MudText Typo="Typo.body2" Class="font-weight-bold">Request Interception</MudText>
+                                                <MudText Typo="Typo.caption" Color="Color.Secondary">Easily intercept and handle internal Web requests within your hybrid container for added security and local asset loading.</MudText>
+                                            </div>
+                                        </div>
+                                    </MudItem>
+                                    <MudItem xs="12" sm="6">
+                                        <div class="d-flex align-start gap-2 mb-3">
+                                            <MudIcon Icon="@Icons.Material.Filled.Layers" Color="Color.Secondary" Size="Size.Small" />
+                                            <div>
+                                                <MudText Typo="Typo.body2" Class="font-weight-bold">Modular Workloads</MudText>
+                                                <MudText Typo="Typo.caption" Color="Color.Secondary">MAUI features ship as decoupled NuGet packages and workloads, enabling faster updates and smaller runtime sizes.</MudText>
+                                            </div>
+                                        </div>
+                                    </MudItem>
+                                    <MudItem xs="12" sm="6">
+                                        <div class="d-flex align-start gap-2 mb-3">
+                                            <MudIcon Icon="@Icons.Material.Filled.VideoLabel" Color="Color.Secondary" Size="Size.Small" />
+                                            <div>
+                                                <MudText Typo="Typo.body2" Class="font-weight-bold">Upgraded MediaPicker</MudText>
+                                                <MudText Typo="Typo.caption" Color="Color.Secondary">Native media selection supports multi-file choices and automatic image compression out of the box.</MudText>
+                                            </div>
+                                        </div>
+                                    </MudItem>
+                                </MudGrid>
+                            </div>
+                        </MudTabPanel>
 
-    <MudText Typo="Typo.body2" Class="mb-4">
-        You can now choose specific render modes per component or page:
-        <ul>
-            <li><b>Static SSR</b> — Render-only, no interactivity.</li>
-            <li><b>Interactive SSR</b> — Server interactivity using SignalR.</li>
-            <li><b>Interactive WebAssembly</b> — Download and run on browser.</li>
-            <li><b>Auto</b> — Smart switch between modes for best performance.</li>
-        </ul>
-        These fine-grained options give you maximum control over performance and user experience.
-    </MudText>
+                        <!-- Tab 3: Blazor Web Capabilities -->
+                        <MudTabPanel Text="Web Capabilities" Icon="@Icons.Material.Outlined.Web">
+                            <div class="pt-4">
+                                <MudText Typo="Typo.subtitle1" Class="font-weight-bold mb-2">Unified State, Routing & Reconnection</MudText>
+                                <MudText Typo="Typo.body2" Class="mb-3">
+                                    Blazor in .NET 10 emphasizes developer lifecycle quality, security compliance, and static resource delivery optimization.
+                                </MudText>
+                                
+                                <ul style="padding-left: 1.5rem; margin-bottom: 1rem;">
+                                    <li class="mb-2">
+                                        <b>`MapStaticAssets`</b>: The unified convention introduced in .NET 9 and refined in .NET 10 handles automatic asset compression (Brotli/Gzip) and cache fingerprinting for instant loading.
+                                    </li>
+                                    <li class="mb-2">
+                                        <b>Customizable Reconnection Modal</b>: Easily override the WebSocket reconnect UI (`ReconnectModal`) for Blazor Server workloads, fully supporting Content Security Policy (CSP).
+                                    </li>
+                                    <li class="mb-2">
+                                        <b>HybridCache Abstraction</b>: Modern high-performance hybrid (memory + distributed) caching that prevents L2 cache stampedes and simplifies application caching strategies.
+                                    </li>
+                                </ul>
+                            </div>
+                        </MudTabPanel>
 
-    <MudText Typo="Typo.h6" GutterBottom="true">Improved Streaming Rendering</MudText>
+                        <!-- Tab 4: AI & Intelligent Apps -->
+                        <MudTabPanel Text="AI Readiness" Icon="@Icons.Material.Outlined.Psychology">
+                            <div class="pt-4">
+                                <MudText Typo="Typo.subtitle1" Class="font-weight-bold mb-2">Intelligent Application Architecture</MudText>
+                                <MudText Typo="Typo.body2" Class="mb-4">
+                                    With .NET 10, the platform reaches full maturity for artificial intelligence integration through standardized abstractions.
+                                </MudText>
 
-    <MudText Typo="Typo.body2" Class="mb-4">
-        Components can now stream HTML chunks while rendering, improving perceived load time.<br /><br />
-        This is especially beneficial for dynamic, data-heavy pages and when working with slow backend responses.
-    </MudText>
+                                <div class="d-flex flex-column gap-3 mb-4">
+                                    <div class="d-flex align-start gap-2">
+                                        <MudIcon Icon="@Icons.Material.Filled.AutoAwesome" Color="Color.Info" Size="Size.Small" />
+                                        <div>
+                                            <MudText Typo="Typo.body2" Class="font-weight-bold">Microsoft.Extensions.AI</MudText>
+                                            <MudText Typo="Typo.caption" Color="Color.Secondary">Unified C# interface for interacting with large language models, embedders, and semantic search engines, regardless of provider.</MudText>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-start gap-2">
+                                        <MudIcon Icon="@Icons.Material.Filled.Memory" Color="Color.Info" Size="Size.Small" />
+                                        <div>
+                                            <MudText Typo="Typo.body2" Class="font-weight-bold">Local Model Support</MudText>
+                                            <MudText Typo="Typo.caption" Color="Color.Secondary">Run open source LLMs locally via Ollama or ONNX Runtime directly from your .NET applications with zero cloud dependency.</MudText>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </MudTabPanel>
+                    </MudTabs>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
 
-    <MudText Typo="Typo.h6" GutterBottom="true">Enhanced Authentication & Authorization</MudText>
+        <MudItem xs="12" md="4">
+            <!-- Sandbox Simulation Widget -->
+            <MudCard Outlined="true" Style="height: 100%; display: flex; flex-direction: column;">
+                <MudCardHeader>
+                    <CardHeaderContent>
+                        <div class="d-flex align-center gap-2">
+                            <MudIcon Icon="@Icons.Material.Filled.DashboardCustomize" Color="Color.Secondary" />
+                            <MudText Typo="Typo.h6" Class="font-weight-bold">Compiler Sandbox</MudText>
+                        </div>
+                        <MudText Typo="Typo.caption">Interactive JIT & GC optimization visualizer</MudText>
+                    </CardHeaderContent>
+                </MudCardHeader>
+                <MudCardContent Style="flex-grow: 1;" Class="d-flex flex-column justify-space-between gap-4">
+                    <div>
+                        <MudSelect T="string" Label="Select Benchmark Workload" @bind-Value="_selectedBenchmark" Class="mb-4" Dense="true" Margin="Margin.Dense">
+                            <MudSelectItem Value="@("Loop Unrolling")" />
+                            <MudSelectItem Value="@("Interface Devirtualization")" />
+                            <MudSelectItem Value="@("Memory Allocations (GC)")" />
+                        </MudSelect>
 
-    <MudText Typo="Typo.body2" Class="mb-4">
-        Blazor Web Apps now support authentication directly with ASP.NET Core Identity.<br /><br />
-        New built-in templates streamline setting up secure login, logout, and authentication flows across server and client.
-    </MudText>
+                        @if (_isSimulating)
+                        {
+                            <div class="d-flex flex-column align-center justify-center py-6 gap-2">
+                                <MudProgressCircular Color="Color.Primary" Indeterminate="true" Size="Size.Medium" />
+                                <MudText Typo="Typo.caption" Color="Color.Secondary">Analyzing JIT optimizations...</MudText>
+                            </div>
+                        }
+                        else if (_simulationFinished)
+                        {
+                            <div class="d-flex flex-column gap-3">
+                                <div>
+                                    <div class="d-flex justify-space-between align-center">
+                                        <MudText Typo="Typo.caption" Class="font-weight-bold">.NET 8 (LTS)</MudText>
+                                        <MudText Typo="Typo.caption" Color="Color.Error">@_net8Time</MudText>
+                                    </div>
+                                    <MudProgressLinear Color="Color.Error" Value="@_net8Percent" Class="my-1" Size="Size.Medium" />
+                                </div>
 
-    <MudDivider Class="mb-4" />
+                                <div>
+                                    <div class="d-flex justify-space-between align-center">
+                                        <MudText Typo="Typo.caption" Class="font-weight-bold">.NET 9</MudText>
+                                        <MudText Typo="Typo.caption" Color="Color.Warning">@_net9Time</MudText>
+                                    </div>
+                                    <MudProgressLinear Color="Color.Warning" Value="@_net9Percent" Class="my-1" Size="Size.Medium" />
+                                </div>
 
-    <MudText Typo="Typo.h5" GutterBottom="true">Introduction to MudBlazor</MudText>
+                                <div>
+                                    <div class="d-flex justify-space-between align-center">
+                                        <MudText Typo="Typo.caption" Class="font-weight-bold">.NET 10 (LTS)</MudText>
+                                        <MudText Typo="Typo.caption" Color="Color.Success">@_net10Time</MudText>
+                                    </div>
+                                    <MudProgressLinear Color="Color.Success" Value="@_net10Percent" Class="my-1" Size="Size.Medium" />
+                                </div>
 
-    <MudText Typo="Typo.body2" Class="mb-4">
-        MudBlazor is a Blazor component library built entirely in C# and based on Google's Material Design specification.<br /><br />
-        It focuses on simplicity, clean API, and performance — helping you quickly create beautiful and consistent UIs without complex setup.
-    </MudText>
+                                <MudText Typo="Typo.caption" Class="mt-2 text-justify" Style="display: block; font-style: italic;">
+                                    @_benchmarkExplanation
+                                </MudText>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="d-flex flex-column align-center justify-center py-8 text-center">
+                                <MudIcon Icon="@Icons.Material.Filled.PlayCircleFilled" Size="Size.Large" Color="Color.Primary" Style="opacity: 0.5; font-size: 3rem;" />
+                                <MudText Typo="Typo.body2" Color="Color.Secondary" Class="mt-2">Select a workload and click execute to simulate JIT runtime optimizations.</MudText>
+                            </div>
+                        }
+                    </div>
 
-    <MudDivider Class="mb-4" />
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="RunBenchmarkSimulation" Disabled="@_isSimulating" FullWidth="true">
+                        @(_simulationFinished ? "Re-Run Simulation" : "Execute Workload")
+                    </MudButton>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+    </MudGrid>
 
-    <MudText Typo="Typo.h5" GutterBottom="true">Why Use MudBlazor?</MudText>
+    <MudDivider Class="my-8" />
 
-    <MudText Typo="Typo.body2" Class="mb-4">
-        <ul>
-            <li><b>Fast and Lightweight</b> — minimal JavaScript dependencies.</li>
-            <li><b>Fully Open Source</b> — actively maintained and community-driven.</li>
-            <li><b>Consistent Look and Feel</b> — adheres to Material Design.</li>
-            <li><b>Huge Range of Components</b> — everything from simple buttons to complex data tables, charts, and dialogs.</li>
-            <li><b>SSR-Ready</b> — built with Server-Side Rendering scenarios in mind.</li>
-        </ul>
-    </MudText>
+    <!-- MudBlazor Spotlight Section -->
+    <div class="d-flex align-center gap-2 mb-4">
+        <MudIcon Icon="@Icons.Custom.Brands.MudBlazor" Color="Color.Primary" Size="Size.Medium" />
+        <MudText Typo="Typo.h5" Class="font-weight-bold">MudBlazor Component Library</MudText>
+    </div>
 
-    <MudDivider Class="mb-4" />
+    <MudGrid>
+        <MudItem xs="12" sm="6" md="3">
+            <MudCard Class="feature-card" Outlined="true">
+                <MudCardContent>
+                    <MudIcon Icon="@Icons.Material.Filled.Speed" Color="Color.Primary" Size="Size.Medium" Class="mb-2" />
+                    <MudText Typo="Typo.body1" Class="font-weight-bold">Fast & Lightweight</MudText>
+                    <MudText Typo="Typo.body2" Color="Color.Secondary" Class="mt-1">
+                        Built entirely in C# with minimal external JavaScript references for quick load times and high responsiveness.
+                    </MudText>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+        <MudItem xs="12" sm="6" md="3">
+            <MudCard Class="feature-card" Outlined="true">
+                <MudCardContent>
+                    <MudIcon Icon="@Icons.Material.Filled.Palette" Color="Color.Secondary" Size="Size.Medium" Class="mb-2" />
+                    <MudText Typo="Typo.body1" Class="font-weight-bold">Material Design</MudText>
+                    <MudText Typo="Typo.body2" Color="Color.Secondary" Class="mt-1">
+                        Adheres strictly to Material Design principles, supporting fluid light/dark transitions and dynamic layout themes.
+                    </MudText>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+        <MudItem xs="12" sm="6" md="3">
+            <MudCard Class="feature-card" Outlined="true">
+                <MudCardContent>
+                    <MudIcon Icon="@Icons.Material.Filled.Widgets" Color="Color.Info" Size="Size.Medium" Class="mb-2" />
+                    <MudText Typo="Typo.body1" Class="font-weight-bold">Huge Component Grid</MudText>
+                    <MudText Typo="Typo.body2" Color="Color.Secondary" Class="mt-1">
+                        Offers a comprehensive component catalogue, including complex charts, responsive grids, dialogs, and popovers.
+                    </MudText>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+        <MudItem xs="12" sm="6" md="3">
+            <MudCard Class="feature-card" Outlined="true">
+                <MudCardContent>
+                    <MudIcon Icon="@Icons.Material.Filled.Code" Color="Color.Success" Size="Size.Medium" Class="mb-2" />
+                    <MudText Typo="Typo.body1" Class="font-weight-bold">SSR & Static Ready</MudText>
+                    <MudText Typo="Typo.body2" Color="Color.Secondary" Class="mt-1">
+                        Tailored for modern rendering strategies like static server-side rendering, streaming rendering, and full interactivity.
+                    </MudText>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+    </MudGrid>
 
-    <MudText Typo="Typo.h5" GutterBottom="true">Getting Started with MudBlazor</MudText>
+    <MudDivider Class="my-8" />
 
-    <MudText Typo="Typo.body2" Class="mb-4">
-        <ul>
-            <li>Install MudBlazor NuGet Package: <b>Install-Package MudBlazor</b>.</li>
-            <li>Register MudServices in your <b>Program.cs</b> via <code>builder.Services.AddMudServices();</code>.</li>
-            <li>Add providers (Popover, Dialog, Snackbar) to your layout or app shell.</li>
-            <li>Start building beautiful and functional UI components rapidly!</li>
-        </ul>
-    </MudText>
+    <!-- Help & Learning Center -->
+    <MudText Typo="Typo.h5" Class="font-weight-bold mb-4">Official Resources & Documentation</MudText>
+    <MudGrid>
+        <MudItem xs="12" sm="6" md="4">
+            <div class="doc-card pa-4 rounded">
+                <div>
+                    <div class="d-flex align-center gap-2 mb-2">
+                        <MudIcon Icon="@Icons.Material.Filled.Book" Color="Color.Primary" />
+                        <MudText Typo="Typo.body1" Class="font-weight-bold">Blazor Learn Center</MudText>
+                    </div>
+                    <MudText Typo="Typo.body2" Color="Color.Secondary">
+                        Explore the official documentation on Microsoft Learn covering hosting models, state, and rendering modes.
+                    </MudText>
+                </div>
+                <MudButton Href="https://learn.microsoft.com/en-us/aspnet/core/blazor/?view=aspnetcore-10.0" Target="_blank" Variant="Variant.Text" Color="Color.Primary" EndIcon="@Icons.Material.Filled.ArrowForward" Class="mt-4 pa-0 align-self-start">
+                    Read Blazor Docs
+                </MudButton>
+            </div>
+        </MudItem>
 
-    <MudDivider Class="mb-4" />
+        <MudItem xs="12" sm="6" md="4">
+            <div class="doc-card pa-4 rounded">
+                <div>
+                    <div class="d-flex align-center gap-2 mb-2">
+                        <MudIcon Icon="@Icons.Material.Filled.Campaign" Color="Color.Secondary" />
+                        <MudText Typo="Typo.body1" Class="font-weight-bold">ASP.NET Core 10.0</MudText>
+                    </div>
+                    <MudText Typo="Typo.body2" Color="Color.Secondary">
+                        Read the release logs detailing what's new in the web engine, security updates, and performance optimizations.
+                    </MudText>
+                </div>
+                <MudButton Href="https://learn.microsoft.com/en-us/aspnet/core/release-notes/aspnetcore-10.0" Target="_blank" Variant="Variant.Text" Color="Color.Secondary" EndIcon="@Icons.Material.Filled.ArrowForward" Class="mt-4 pa-0 align-self-start">
+                    Read Release Notes
+                </MudButton>
+            </div>
+        </MudItem>
 
-    <MudText Typo="Typo.h5" GutterBottom="true">Helpful Links</MudText>
-
-    <MudText Typo="Typo.body2">
-        <ul>
-            <li><MudLink Href="https://learn.microsoft.com/en-us/aspnet/core/blazor/?view=aspnetcore-8.0" Target="_blank" Color="Color.Primary">Blazor Documentation (.NET 8)</MudLink></li>
-            <li><MudLink Href="https://learn.microsoft.com/en-us/aspnet/core/release-notes/aspnetcore-8.0?view=aspnetcore-8.0" Target="_blank" Color="Color.Primary">What's New in ASP.NET Core 8.0</MudLink></li>
-            <li><MudLink Href="https://medium.com/dogus-teknoloji/blazor-the-net-worlds-shining-star-or-just-a-fleeting-fad-a-detailed-review-06e6495dce3e" Target="_blank" Color="Color.Primary">Why Blazor?</MudLink></li>
-            <li><MudLink Href="https://mudblazor.com/" Target="_blank" Color="Color.Primary">MudBlazor Official Website</MudLink></li>
-            <li><MudLink Href="https://mudblazor.com/mud/introduction" Target="_blank" Color="Color.Primary">MudBlazor Introduction</MudLink></li>
-        </ul>
-    </MudText>
+        <MudItem xs="12" sm="6" md="4">
+            <div class="doc-card pa-4 rounded">
+                <div>
+                    <div class="d-flex align-center gap-2 mb-2">
+                        <MudIcon Icon="@Icons.Material.Filled.ArtTrack" Color="Color.Info" />
+                        <MudText Typo="Typo.body1" Class="font-weight-bold">MudBlazor Component Hub</MudText>
+                    </div>
+                    <MudText Typo="Typo.body2" Color="Color.Secondary">
+                        Browse interactive code playground samples and API descriptions for the complete MudBlazor Material component list.
+                    </MudText>
+                </div>
+                <MudButton Href="https://mudblazor.com/" Target="_blank" Variant="Variant.Text" Color="Color.Info" EndIcon="@Icons.Material.Filled.ArrowForward" Class="mt-4 pa-0 align-self-start">
+                    Explore MudBlazor
+                </MudButton>
+            </div>
+        </MudItem>
+    </MudGrid>
 </MudContainer>
+
+@code {
+    private string _selectedBenchmark = "Loop Unrolling";
+    private bool _isSimulating = false;
+    private bool _simulationFinished = false;
+
+    private string _net8Time = "";
+    private string _net9Time = "";
+    private string _net10Time = "";
+    
+    private int _net8Percent = 100;
+    private int _net9Percent = 100;
+    private int _net10Percent = 100;
+
+    private string _benchmarkExplanation = "";
+
+    private void OnTabChanged(int index)
+    {
+        // Smooth tab switching interaction callback if needed
+    }
+
+    private async Task RunBenchmarkSimulation()
+    {
+        _isSimulating = true;
+        _simulationFinished = false;
+        StateHasChanged();
+
+        // Simulate workload processing time
+        await Task.Delay(1000);
+
+        if (_selectedBenchmark == "Loop Unrolling")
+        {
+            _net8Time = "124ms";
+            _net9Time = "82ms";
+            _net10Time = "31ms (4.0x faster)";
+
+            _net8Percent = 100;
+            _net9Percent = 66;
+            _net10Percent = 25;
+
+            _benchmarkExplanation = "In .NET 10, the JIT compiler implements advanced loop unrolling strategies and vectorization heuristics. It expands short, fixed loops into linear instructions to eliminate branch-prediction overhead.";
+        }
+        else if (_selectedBenchmark == "Interface Devirtualization")
+        {
+            _net8Time = "215ms";
+            _net9Time = "143ms";
+            _net10Time = "54ms (3.9x faster)";
+
+            _net8Percent = 100;
+            _net9Percent = 66;
+            _net10Percent = 25;
+
+            _benchmarkExplanation = "Dynamic devirtualization in the .NET 10 JIT automatically resolves interface method calls to direct method invocations. This enables the compiler to inline methods that were previously blocked by polymorphism.";
+        }
+        else // Memory Allocations (GC)
+        {
+            _net8Time = "4.2 KB (18 allocs)";
+            _net9Time = "1.8 KB (8 allocs)";
+            _net10Time = "0 B (0 allocations!)";
+
+            _net8Percent = 100;
+            _net9Percent = 43;
+            _net10Percent = 0;
+
+            _benchmarkExplanation = "Memory allocation tracking in .NET 10 benefits from aggressive stack allocation analysis. Small buffers and temporary arrays are allocated directly to stack memory instead of heap memory, generating zero GC pressure.";
+        }
+
+        _isSimulating = false;
+        _simulationFinished = true;
+        StateHasChanged();
+    }
+}
