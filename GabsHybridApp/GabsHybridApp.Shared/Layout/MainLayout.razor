@@ -1,4 +1,4 @@
-﻿@inherits LayoutComponentBase
+@inherits LayoutComponentBase
 @using GabsHybridApp.Shared.Components
 @using GabsHybridApp.Shared.Layout
 
@@ -84,12 +84,10 @@
             <!-- 👤 User Menu -->
             <AuthorizeView Context="authState">
                 <MudMenu AnchorOrigin="Origin.TopLeft" Dense Class="mt-1 ml-4" >
-                    <ActivatorContent>
-                        <div @onclick="@context.ToggleAsync" style="cursor: pointer">
-                            <MudAvatar Size="Size.Medium">
-                                <MudImage Src="https://avatars.githubusercontent.com/u/7923889?v=4" />
-                            </MudAvatar>
-                        </div>
+                    <ActivatorContent Context="userMenuContext">
+                        <MudAvatar Size="Size.Medium" Style="cursor: pointer;" @onclick="userMenuContext.ToggleAsync">
+                            <MudImage Src="https://avatars.githubusercontent.com/u/7923889?v=4" />
+                        </MudAvatar>
                     </ActivatorContent>
                     <ChildContent>
                         <MudListItem T="string" Text="My Account" Icon="@Icons.Material.Outlined.Person" Href="/account/changepassword" />
@@ -109,12 +107,10 @@
             <NotificationPanel IncludeSample="true" NotificationHubUrl="" />
             <AuthorizeView Context="authState">
                 <MudMenu AnchorOrigin="Origin.TopLeft" Dense>
-                    <ActivatorContent>
-                        <div @onclick="@context.ToggleAsync" style="cursor: pointer">
-                            <MudAvatar Size="Size.Medium" Elevation="2">
-                                <MudImage Src="https://avatars.githubusercontent.com/u/7923889?v=4" />
-                            </MudAvatar>
-                        </div>
+                    <ActivatorContent Context="userMenuMobileContext">
+                        <MudAvatar Size="Size.Medium" Elevation="2" Style="cursor: pointer;" @onclick="userMenuMobileContext.ToggleAsync">
+                            <MudImage Src="https://avatars.githubusercontent.com/u/7923889?v=4" />
+                        </MudAvatar>
                     </ActivatorContent>
                     <ChildContent>
                         <MudListItem T="string" Text="My Account" Icon="@Icons.Material.Outlined.Person" Href="/account/changepassword" />
