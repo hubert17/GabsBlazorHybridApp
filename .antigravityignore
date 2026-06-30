@@ -1,0 +1,169 @@
+# ==============================================================================
+# Gemini/Antigravity Agent Ignore Strategy File
+# Purpose: Optimize AI context size, reduce token usage, and speed up indexing.
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# 1. Version Control & IDE Files
+# ------------------------------------------------------------------------------
+.git/
+.github/
+.vs/
+.idea/
+.vscode/
+*.suo
+*.user
+*Launch.user
+*.userosscache
+*.rsuser
+*.sln.docstates
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# ------------------------------------------------------------------------------
+# 2. Build & Execution Artifacts
+# ------------------------------------------------------------------------------
+# Ignore all bin and obj folders recursively across the solution
+**/[Bb]in/
+**/[Oo]bj/
+**/[Rr]elease*/
+**/[Dd]ebug*/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+**/publish/
+artifacts/
+out/
+dist/
+
+# ------------------------------------------------------------------------------
+# 3. WebView2 Cache & Runtime Environments (CRITICAL)
+# ------------------------------------------------------------------------------
+# Blazor Hybrid/MAUI on Windows uses WebView2, which creates a huge, deep cache
+# directory under bin/ or build output. Ignoring this prevents deep file indexing
+# and long path error exceptions.
+**/EBWebView/
+**/GabsHybridApp.Maui.exe.WebView2/
+
+# ------------------------------------------------------------------------------
+# 4. Platform-Specific Cache & Configurations
+# ------------------------------------------------------------------------------
+# MAUI Android build cache
+**/local.properties
+**/.gradle/
+**/captures/
+
+# MAUI iOS & Mac Catalyst build outputs
+**/DerivedData/
+**/build/
+**/xcuserdata/
+
+# ------------------------------------------------------------------------------
+# 5. Dependency Directories & Packages
+# ------------------------------------------------------------------------------
+node_modules/
+bower_components/
+packages/
+.nuget/
+
+# ------------------------------------------------------------------------------
+# 6. Database Files & Backups
+# ------------------------------------------------------------------------------
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
+*.db3
+*.bak
+*.old
+*.tmp
+*.temp
+
+# ------------------------------------------------------------------------------
+# 7. Environment & Sensitive Configs (Security & Context Protection)
+# ------------------------------------------------------------------------------
+.env
+.env.*
+*.local
+secrets.json
+**/Properties/PublishProfiles/
+*.publishsettings
+*.pfx
+*.p12
+*.keystore
+*.jks
+*.key
+*.pem
+google-services.json
+
+# ------------------------------------------------------------------------------
+# 8. Large Assets & Binary File Formats (Non-code files)
+# ------------------------------------------------------------------------------
+# Images
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.ico
+*.tiff
+*.webp
+*.psd
+
+# Fonts
+*.ttf
+*.woff
+*.woff2
+*.eot
+*.otf
+
+# Audio / Video
+*.mp3
+*.wav
+*.aac
+*.mp4
+*.mov
+*.avi
+*.mkv
+*.webm
+
+# Archives
+*.zip
+*.tar
+*.gz
+*.rar
+*.7z
+
+# Documents (keep .md unless explicitly ignored, but ignore heavy documents)
+*.pdf
+*.docx
+*.xlsx
+*.pptx
+*.zip
+
+# Platform Installers/Packages
+*.exe
+*.dll
+*.so
+*.dylib
+*.msi
+*.apk
+*.aab
+*.ipa
+*.msix
+*.msixbundle
+*.appx
+*.appxbundle
+
+# ------------------------------------------------------------------------------
+# 9. Logs & Test Reports
+# ------------------------------------------------------------------------------
+*.log
+logs/
+TestResults/
+coverage/
+.coverage*
+*.trx
+*.coveragexml
