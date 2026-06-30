@@ -1,4 +1,4 @@
-# syntax=docker/dockerfile:1.7
+# syntax=docker/dockerfile:1
 
 ###
 # Build stage (Apple Silicon ready)
@@ -24,8 +24,10 @@ COPY GabsHybridApp/GabsHybridApp.Shared/ GabsHybridApp/GabsHybridApp.Shared/
 # Publish
 RUN dotnet publish GabsHybridApp/GabsHybridApp.Web/GabsHybridApp.Web.csproj \
     -c Release -o /app/out \
+    --no-restore \
+    --arch $TARGETARCH \
     -p:UseAppHost=false \
-    -p:PublishReadyToRun=true
+    -p:PublishReadyToRun=false
 
 ###
 # Runtime stage
