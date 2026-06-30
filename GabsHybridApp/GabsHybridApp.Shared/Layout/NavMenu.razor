@@ -1,4 +1,4 @@
-﻿@inherits BlazorStateComponent
+@inherits BlazorStateComponent
 @using BlazorState
 @using GabsHybridApp.Shared.States
 
@@ -21,7 +21,58 @@
 
 <style>
     .mud-nav-link.mud-ripple.active, .mud-nav-link.mud-ripple:hover {
-        background-color: @(IsDarkMode ? "var(--mud-palette-dark-lighten)" : "var(--mud-palette-primary)");
+        background-color: @(IsDarkMode ? "var(--mud-palette-dark-lighten)" : "rgba(255, 255, 255, 0.15)");
+    }
+
+    /* Light mode sidebar specific overrides */
+    .app-nav-drawer {
+        background-color: var(--mud-palette-primary) !important;
+    }
+
+    .app-nav-drawer .mud-nav-link {
+        color: rgba(255, 255, 255, 0.75) !important;
+        transition: background-color 0.15s, color 0.15s;
+    }
+
+    .app-nav-drawer .mud-nav-link .mud-icon-root {
+        color: rgba(255, 255, 255, 0.75) !important;
+        transition: color 0.15s;
+    }
+
+    .app-nav-drawer .mud-nav-link:hover {
+        background-color: rgba(255, 255, 255, 0.1) !important;
+        color: #ffffff !important;
+    }
+
+    .app-nav-drawer .mud-nav-link:hover .mud-icon-root {
+        color: #ffffff !important;
+    }
+
+    .app-nav-drawer .mud-nav-link.active {
+        background-color: rgba(255, 255, 255, 0.2) !important;
+        color: #ffffff !important;
+        font-weight: 500;
+    }
+
+    .app-nav-drawer .mud-nav-link.active .mud-icon-root {
+        color: #ffffff !important;
+    }
+
+    .app-nav-drawer .mud-divider {
+        border-color: rgba(255, 255, 255, 0.15) !important;
+    }
+
+    .app-nav-drawer .mud-nav-group .mud-nav-group-heading {
+        color: rgba(255, 255, 255, 0.75) !important;
+    }
+
+    .app-nav-drawer .mud-nav-group .mud-nav-group-heading:hover {
+        background-color: rgba(255, 255, 255, 0.1) !important;
+        color: #ffffff !important;
+    }
+
+    .app-nav-drawer .mud-typography-subtitle2 {
+        color: rgba(255, 255, 255, 0.6) !important;
     }
 </style>
 
@@ -30,6 +81,7 @@
     <MudNavLink Href="weather" Match="NavLinkMatch.All" Icon="@Icons.Material.Outlined.WaterDrop" Class="rounded">Weather</MudNavLink>
     <MudNavLink Href="counter" Match="NavLinkMatch.All" Icon="@Icons.Material.Outlined.PlusOne" Class="rounded">Counter (@currentCount)</MudNavLink>
     <MudNavLink Href="device-features" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Sensors" Class="rounded">Device Features</MudNavLink>
+    <MudNavLink Href="components-demo" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Widgets" Class="rounded">Component Demo</MudNavLink>
     <MudNavLink Href="auth" Match="NavLinkMatch.All" Icon="@Icons.Material.Outlined.VerifiedUser" Class="rounded">Auth</MudNavLink>
     <MudNavLink Href="products" Match="NavLinkMatch.All" Icon="@Icons.Material.Outlined.ShoppingBag" Class="rounded">Products</MudNavLink>
     <MudNavLink Href="orders" Match="NavLinkMatch.All" Icon="@Icons.Material.Outlined.PointOfSale" Class="rounded">Orders</MudNavLink>

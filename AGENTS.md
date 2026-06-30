@@ -13,13 +13,17 @@ These guidelines govern how the AI agent handles Git commands in this workspace 
 ## 🟢 Token-Light Git Commands (Allowed Automatically)
 The agent is authorized to run or propose the following lightweight commands directly:
 * `git status` — To check current changes and file states.
-* `git add <file>` / `git add .` — To stage changes.
-* `git commit -m "<message>"` — To record staged changes.
 * `git checkout <branch>` / `git checkout -b <new-branch>` — To switch/create branches.
 * `git branch` — To list local branches.
 * `git restore <file>` / `git reset <file>` — To discard uncommitted changes.
 * `git stash` / `git stash pop` — To temporarily shelter changes.
 * `git fetch` — To fetch updates from remote.
+
+---
+
+## 🚫 Git Commit / Add Policy (Do NOT run or propose commits)
+- **User Managed:** The user manages all git staging, diff reviews, and commits directly in the Visual Studio 2026 Git Changes panel.
+- **Protocol:** The agent must **NEVER** execute `git add`, `git commit`, `git push`, or any staging/committing commands. The agent does not need to present git diffs or prompt the user for permission to commit changes.
 
 ---
 
@@ -55,3 +59,8 @@ To optimize token usage and keep build feedback concise:
   - For Docker / Docker Compose, run in standard or quiet modes rather than verbose debugging modes.
 - **On Failure:** If the build or debug run fails, rerun with normal/detailed verbosity (e.g., `-v n` or `-v d`) to output verbose logging for troubleshooting.
 
+---
+
+## 🎨 Component Styling Policy
+- **Prefer Standard MudBlazor Styling:** Avoid introducing custom styling/custom CSS classes/custom `<style>` tags when standard MudBlazor styling options (e.g., helper classes, components, variables, elevation, padding attributes) can achieve the same outcome.
+- **Goal:** Minimize custom CSS to facilitate smooth, future upgrades of MudBlazor and CodeBeam extensions without breaking overrides.

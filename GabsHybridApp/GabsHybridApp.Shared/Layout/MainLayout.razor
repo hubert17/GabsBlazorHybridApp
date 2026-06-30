@@ -21,6 +21,7 @@
                ClipMode="IsWebOrDesktop() ? DrawerClipMode.Always : DrawerClipMode.Never"
                Variant="@DrawerVariant.Responsive"
                Elevation="6"
+               Class="@(_isDarkMode ? "" : "app-nav-drawer")"
                >
         <NavMenu IsDarkMode="_isDarkMode" OnToggleDarkMode="ToggleDarkMode" IsWebOrDesktop="IsWebOrDesktop()" />
     </MudDrawer>
